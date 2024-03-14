@@ -1,0 +1,5 @@
+.bg-menu-theme.menu-vertical .menu-item.active>.menu-link:not(.menu-toggle) {
+  background: linear-gradient(72.47deg, #218e5a 22.16%, rgba(33, 142, 90, 0.7) 76.47%);
+  box-shadow: 0px 2px 6px 0px rgba(33, 142, 90, 0.48);
+  color: #fff !important;
+}
