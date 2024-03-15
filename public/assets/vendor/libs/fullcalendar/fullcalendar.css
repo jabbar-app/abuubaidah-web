@@ -169,7 +169,7 @@ html:not([dir=rtl]) .fc .fc-view-harness .fc-scrollgrid-section-header > * {
   background-color: #fff !important;
 }
 .light-style .fc .fc-popover .fc-popover-header {
-  background: #f8f7fa;
+  background: #f7faf7;
 }
 .light-style .fc .fc-list .fc-list-table {
   border-top: 1px solid #dbdade;
@@ -188,7 +188,7 @@ html:not([dir=rtl]) .fc .fc-view-harness .fc-scrollgrid-section-header > * {
   border-color: #dbdade;
 }
 .light-style .fc .fc-list .fc-list-empty {
-  background-color: #f8f7fa;
+  background-color: #f7faf7;
 }
 .light-style .fc table,
 .light-style .fc tbody,
@@ -203,11 +203,11 @@ html:not([dir=rtl]) .fc .fc-view-harness .fc-scrollgrid-section-header > * {
   background-color: rgba(75, 70, 92, 0.16);
 }
 .light-style .fc-event-primary:not(.fc-list-event) {
-  background-color: #c4ead8 !important;
-  color: #218e5a !important;
+  background-color: #e8fdf9 !important;
+  color: #1D8E5A !important;
 }
 .light-style .fc-event-primary.fc-list-event .fc-list-event-dot {
-  border-color: #218e5a !important;
+  border-color: #1D8E5A !important;
 }
 .light-style .fc-event-secondary:not(.fc-list-event) {
   background-color: #f2f2f3 !important;
@@ -340,13 +340,13 @@ html:not([dir=rtl]) .fc .fc-view-harness .fc-scrollgrid-section-header > * {
 }
 .dark-style .fc-event-primary:not(.fc-list-event) {
   background-color: #3a3b64 !important;
-  color: #218e5a !important;
+  color: #1D8E5A !important;
 }
 .dark-style .fc-event-primary:not(.fc-list-event) {
   box-shadow: none;
 }
 .dark-style .fc-event-primary.fc-list-event .fc-list-event-dot {
-  border-color: #218e5a !important;
+  border-color: #1D8E5A !important;
 }
 .dark-style .fc-event-secondary:not(.fc-list-event) {
   background-color: #424659 !important;

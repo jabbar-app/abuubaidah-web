@@ -28,13 +28,13 @@ html[data-bs-theme=dark] table.dataTable.fixedHeader-locked {
 }
 
 .light-style .dtfh-floatingparenthead {
-  border-bottom: 2px solid #f8f7fa;
+  border-bottom: 2px solid #f7faf7;
 }
 .light-style .dt-fixedheader.fixedHeader-floating.table.dataTable thead > tr > th,
 .light-style .dt-fixedheader.fixedHeader-locked.table.dataTable thead > tr > th {
   background-color: #fff;
   border-bottom-width: 1px;
-  border-color: #f8f7fa;
+  border-color: #f7faf7;
 }
 
 .dark-style .dtfh-floatingparenthead {

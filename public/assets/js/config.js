@@ -10,7 +10,7 @@
 // JS global variables
 window.config = {
   colors: {
-    primary: '#218e5a',
+    primary: '#7367f0',
     secondary: '#a8aaae',
     success: '#28c76f',
     info: '#00cfe8',
@@ -20,14 +20,14 @@ window.config = {
     black: '#000',
     white: '#fff',
     cardColor: '#fff',
-    bodyBg: '#f8f7fa',
+    bodyBg: '#f7faf7',
     bodyColor: '#6f6b7d',
     headingColor: '#5d596c',
     textMuted: '#a5a3ae',
     borderColor: '#dbdade'
   },
   colors_label: {
-    primary: '#218e5a29',
+    primary: '#7367f029',
     secondary: '#a8aaae29',
     success: '#28c76f29',
     info: '#00cfe829',
@@ -91,7 +91,7 @@ if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
     cssPath: assetsPath + 'vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
     themesPath: assetsPath + 'vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
-    displayCustomizer: true,
+    displayCustomizer: false,
     lang: localStorage.getItem('templateCustomizer-' + templateName + '--Lang') || 'en', // Set default language here
     // defaultTheme: 2,
     // defaultStyle: 'system',

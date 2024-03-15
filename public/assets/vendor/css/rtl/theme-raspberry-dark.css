@@ -764,23 +764,23 @@ button.list-group-item-primary.active {
 
 .jstree-default .jstree-wholerow-hovered,
 .jstree-default .jstree-hovered {
-  background: rgba(115, 103, 240, 0.08);
-  color: #218e5a;
+  background: rgb(103 240 151 / 8%);
+  color: #1D8E5A;
 }
 .jstree-default .jstree-wholerow-clicked,
 .jstree-default .jstree-clicked {
-  background: #218e5a;
+  background: #1D8E5A;
   color: #fff;
 }
 
 .jstree-default-dark .jstree-wholerow-hovered,
 .jstree-default-dark .jstree-hovered {
-  background: rgba(115, 103, 240, 0.08);
-  color: #218e5a;
+  background: rgb(103 240 151 / 8%);
+  color: #1D8E5A;
 }
 .jstree-default-dark .jstree-wholerow-clicked,
 .jstree-default-dark .jstree-clicked {
-  background: #218e5a;
+  background: #1D8E5A;
   color: #fff;
 }
 
