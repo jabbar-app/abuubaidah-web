@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Seleksi;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Xendit\Configuration;
@@ -23,11 +24,123 @@ class PaymentController extends Controller
 
   public function __construct()
   {
-    // Configuration::setXenditKey(config('xendit.secret_key'));
-    Configuration::setXenditKey(config('xendit.test_key'));
+    Configuration::setXenditKey(config('xendit.secret_key'));
+    // Configuration::setXenditKey(config('xendit.test_key'));
 
     // Instansiasi InvoiceApi
     $this->invoiceApi = new InvoiceApi();
+  }
+
+  public function index()
+  {
+    return view('admin.payments.index', [
+      'payments' => Payment::with('program')->orderBy('created_at', 'desc')->get(),
+    ]);
+  }
+
+  public function create()
+  {
+    $programs = Program::all();
+    $kelas = Kelas::all();
+    $users = User::all();
+    return view('admin.payments.create', compact('programs', 'kelas', 'users'));
+  }
+
+  public function store(Request $request)
+  {
+    $user = User::where('id', $request->user_id)->first();
+    $program = Program::where('id', $request->program_id)->first();
+
+    try {
+      if ($request->method == 'Offline') {
+        Payment::create([
+          'program_id' => $request->program_id,
+          'kelas_id' => $request->kelas_id,
+          'external_id' => 'off_'.time(),
+          'user_id' => $user->id,
+          'payer_name' => $user->name,
+          'payer_email' => $user->email,
+          'description' => 'Pembayaran untuk #' . $program->programmable->title,
+          'amount' => $request->amount,
+          'invoice_url' => '#',
+          'status' => $request->status,
+          'note' => 'Data di-buat oleh: ' . Auth::user()->name,
+        ]);
+      } else {
+        $create_invoice_request = new CreateInvoiceRequest([
+          'external_id' => 'INV_' . time(),
+          'payer_id' => $user->id,
+          'payer_name' => $user->name,
+          'payer_email' => $user->email,
+          'description' => 'Pembayaran untuk #' . $program->programmable->title,
+          'amount' => $request->amount,
+          'invoice_duration' => 172800,
+          'currency' => 'IDR',
+          'reminder_time' => 1,
+        ]);
+        $result = $this->invoiceApi->createInvoice($create_invoice_request);
+        Payment::create([
+          'program_id' => $request->program_id,
+          'kelas_id' => $request->kelas_id,
+          'external_id' => $create_invoice_request['external_id'],
+          'user_id' => $user->id,
+          'payer_name' => $user->name,
+          'payer_email' => $user->email,
+          'description' => $create_invoice_request['description'],
+          'amount' => $create_invoice_request['amount'],
+          'invoice_url' => $result->getInvoiceUrl(),
+          'status' => 'PENDING',
+          'note' => 'Data di-buat oleh: ' . Auth::user()->name,
+        ]);
+      }
+
+      return redirect()->route('payments.index')->with('success', 'Payment created successfully.');
+    } catch (XenditSdkException $e) {
+      return response()->json([
+        'error' => $e->getMessage(),
+        'full_error' => $e->getFullError(),
+      ], 500);
+    }
+  }
+
+  public function show(Payment $payment)
+  {
+    return view('admin.payments.show', compact('payment'));
+  }
+
+  public function edit(Payment $payment)
+  {
+    $programs = Program::all();
+    $kelas = Kelas::all();
+    $users = User::all();
+    return view('admin.payments.edit', compact('payment', 'programs', 'kelas', 'users'));
+  }
+
+  public function update(Request $request, Payment $payment)
+  {
+    try {
+      if ($request->method == 'Offline') {
+        $payment->update([
+          'method' => $request->method,
+          'external_id' => 'off_' . time(),
+          'status' => $request->status,
+          'invoice_url' => '#',
+          'note' => 'Data di-edit oleh: ' . Auth::user()->name,
+        ]);
+      } else {
+        $payment->update([
+          'method' => $request->method,
+          'status' => $request->status,
+          'note' => 'Data di-edit oleh: ' . Auth::user()->name,
+        ]);
+      }
+      return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
+    } catch (XenditSdkException $e) {
+      return response()->json([
+        'error' => $e->getMessage(),
+        'full_error' => $e->getFullError(),
+      ], 500);
+    }
   }
 
   public function destroy($id)
@@ -40,40 +153,47 @@ class PaymentController extends Controller
 
   public function createInvoice(Request $request)
   {
-    $user = Auth::user();
+    $user = User::where('id', $request->user_id)->first();
+    $program = Program::where('id', $request->program_id)->first();
+
     $create_invoice_request = new CreateInvoiceRequest([
-      'external_id' => 'inv_' . time(),
+      'external_id' => 'INV_' . time(),
       'payer_id' => $user->id,
       'payer_name' => $user->name,
       'payer_email' => $user->email,
-      'description' => 'Pembayaran untuk #' . $request->program_title,
+      'description' => 'Pembayaran untuk #' . $program->programmable->title,
       'amount' => $request->amount,
-      'invoice_duration' => 172800, // 2 hari dalam detik
+      'invoice_duration' => 172800,
       'currency' => 'IDR',
-      'reminder_time' => 1, // Kirim pengingat 1 menit sebelum jatuh tempo
+      'reminder_time' => 1,
     ]);
+
+    // dd($create_invoice_request);
 
     try {
       $result = $this->invoiceApi->createInvoice($create_invoice_request);
 
-      Kelas::create([
-        'user_id' => $user->id,
-        'user_name' => $user->name,
-        'program_batch' => $request->program_batch,
-        'program_title' => $request->program_title,
-        'level' => '',
+      // Create a new instance of Kelas and store the returned instance in a variable
+      $kelas = Kelas::create([
+        'user_id' => $request->user_id,
+        'program_id' => $request->program_id,
+        'program' => $program->programmable->title,
+        'batch' => $program->programmable->batch,
+        'level' => $request->level,
+        'class' => $request->class,
+        'room' => $request->room,
+        'score' => $request->score,
+        'lecturer' => $request->lecturer,
         'session' => json_encode($request->session),
-        'class' => "",
-        'class_type' => $request->class_type,
-        'score' => 0,
-        'lecturer_name' => "",
         'status' => 'Menunggu Update',
       ]);
 
-      // Simpan detail pembayaran ke database
+      // Use the ID of the newly created Kelas instance when creating the Payment
       Payment::create([
+        'program_id' => $request->program_id,
+        'kelas_id' => $kelas->id, // Use the ID from the Kelas instance
         'external_id' => $create_invoice_request['external_id'],
-        'payer_id' => $user->id,
+        'user_id' => $user->id,
         'payer_name' => $user->name,
         'payer_email' => $user->email,
         'description' => $create_invoice_request['description'],
@@ -82,9 +202,14 @@ class PaymentController extends Controller
         'status' => 'PENDING',
       ]);
 
+
       // Redirect ke URL invoice untuk proses pembayaran
       // return redirect()->to($result->getInvoiceUrl());
-      return redirect()->route('payment.status');
+      if (Auth::user()->hasRole('Super Admin')) {
+        return redirect()->route('admin.kelas.index')->with('success', 'Data berhasil ditambah!');
+      } else {
+        return redirect()->route('my.transaction');
+      }
     } catch (XenditSdkException $e) {
       // Menangani eksepsi dan menampilkan pesan kesalahan
       return response()->json([
@@ -127,14 +252,14 @@ class PaymentController extends Controller
         'status' => 'Menunggu Update',
       ]);
 
-    //   Seleksi::create([
-    //     'external_id' => $create_invoice_request['external_id'],
-    //     'user_id' => $user->id,
-    //     'user_name' => $user->name,
-    //     'program_title' => $request->program_title,
-    //     'batch' => $request->batch,
-    //     'status_pembayaran' => 'PENDING',
-    //   ]);
+      //   Seleksi::create([
+      //     'external_id' => $create_invoice_request['external_id'],
+      //     'user_id' => $user->id,
+      //     'user_name' => $user->name,
+      //     'program_title' => $request->program_title,
+      //     'batch' => $request->batch,
+      //     'status_pembayaran' => 'PENDING',
+      //   ]);
 
       // Simpan detail pembayaran ke database
       Payment::create([
@@ -171,7 +296,7 @@ class PaymentController extends Controller
 
     // Regenerate invoice
     $create_invoice_request = new CreateInvoiceRequest([
-      'external_id' => 'inv_regen_' . time(), // Generate external ID baru
+      'external_id' => 'INV_regen_' . time(), // Generate external ID baru
       'payer_id' => $payment->payer_id,
       'payer_name' => $payment->payer_name,
       'payer_email' => $payment->payer_email,
@@ -200,7 +325,6 @@ class PaymentController extends Controller
       ], 500);
     }
   }
-
 
   public function webhook()
   {

@@ -7,84 +7,80 @@
       <div class="card-body row p-0 pb-3">
         <div class="col-12 col-md-8 card-separator">
           <h3>Salam, {{ Auth::user()->name }} 👋🏻</h3>
-          <div class="col-12 col-lg-7">
-            <p>Your progress this week is Awesome. let's keep it up and get a lot of points reward !</p>
+          <div class="col-12">
+            <p>Selamat datang di Ma'had Abu Ubaidah Bin Al Jarrah, <br> <em>Lembaga Pendidikan Bahasa Arab & Studi Islam!</em></p>
           </div>
-          {{-- <div class="d-flex justify-content-between flex-wrap gap-3 me-5">
-          <div class="d-flex align-items-center gap-3 me-4 me-sm-0">
-            <span class="bg-label-primary p-2 rounded">
-              <i class="ti ti-device-laptop ti-xl"></i>
-            </span>
-            <div class="content-right">
-              <p class="mb-0">Hours Spent</p>
-              <h4 class="text-primary mb-0">34h</h4>
+          <div class="d-flex justify-content-between flex-wrap gap-3 me-5 mt-4">
+            <div class="d-flex align-items-center gap-3 me-4 me-sm-0">
+              <span class="bg-label-info p-2 rounded">
+                <i class="ti ti-device-laptop ti-xl"></i>
+              </span>
+              <div class="content-right">
+                <p class="mb-0 text-primary">Kelas Aktif</p>
+                <h4 class="text-warning mb-0">--</h4>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <span class="bg-label-info p-2 rounded">
+                <i class="ti ti-discount-check ti-xl"></i>
+              </span>
+              <div class="content-right">
+                <p class="mb-0 text-primary">Riwayat Kelas</p>
+                <h4 class="text-warning mb-0">--</h4>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <span class="bg-label-info p-2 rounded">
+                <i class="ti ti-bulb ti-xl"></i>
+              </span>
+              <div class="content-right">
+                <p class="mb-0 text-primary">Kelengkapan Profil</p>
+                <h4 class="text-warning mb-0">--%</h4>
+              </div>
             </div>
           </div>
-          <div class="d-flex align-items-center gap-3">
-            <span class="bg-label-info p-2 rounded">
-              <i class="ti ti-bulb ti-xl"></i>
-            </span>
-            <div class="content-right">
-              <p class="mb-0">Test Results</p>
-              <h4 class="text-info mb-0">82%</h4>
-            </div>
-          </div>
-          <div class="d-flex align-items-center gap-3">
-            <span class="bg-label-warning p-2 rounded">
-              <i class="ti ti-discount-check ti-xl"></i>
-            </span>
-            <div class="content-right">
-              <p class="mb-0">Course Completed</p>
-              <h4 class="text-warning mb-0">14</h4>
-            </div>
-          </div>
-        </div> --}}
         </div>
-        {{-- <div class="col-12 col-md-4 ps-md-3 ps-lg-4 pt-3 pt-md-0">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-                <div>
-              <h5 class="mb-2">Time Spendings</h5>
-              <p class="mb-5">Weekly report</p>
-            </div>
-            <div class="time-spending-chart">
-              <h3 class="mb-2">231<span class="text-muted">h</span> 14<span class="text-muted">m</span></h3>
-              <span class="badge bg-label-success">+18.4%</span>
+        @if (!empty($main))
+          <div class="col-12 col-md-4 ps-md-3 ps-lg-4 pt-5 pt-md-0">
+            <div class="card bg-primary text-white mb-3">
+              <div class="card-header">Pengumuman!</div>
+              <div class="card-body">
+                <h4 class="card-title text-white">{{ $main->title }}</h4>
+                <p class="card-text">{{ $main->description }}</p>
+              </div>
             </div>
           </div>
-          <div id="leadsReportChart"></div>
-        </div>
-      </div> --}}
+        @endif
       </div>
     </div>
     <!-- Hour chart End  -->
 
+    <h4 class="py-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Semua Kelas</h4>
+    <hr class="mb-4">
+
     <!-- Topic and Instructors -->
     <div class="row mb-4 g-4">
-      @foreach ($programs as $program)
+      @forelse ($programs as $program)
         <div class="col-12 col-xl-4 col-md-6">
           <div class="card h-100">
             <div class="card-body">
-              <div
-                class=" @if ($program->status) bg-label-primary @else bg-label-warning @endif rounded-3 text-center mb-3 pt-4">
-                <img class="img-fluid" src="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}" alt="Card girl image"
-                  width="140" style="margin-bottom: 25px" />
+              <div class=" @if ($program->status) bg-label-primary @else bg-label-warning @endif rounded-3 text-center mb-3 pt-4">
+                <img class="img-fluid" src="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}" alt="Card girl image" width="140" style="margin-bottom: 25px" />
               </div>
-              <h4 class="mb-2 pb-1">{{ $program->title }}</h4>
+              <h4 class="mb-2 pb-1">{{ $program->programmable->title }}</h4>
               <p class="small" style="height: 64px">
-                {{ $program->description }}
+                {{ $program->programmable->description }}
               </p>
               @if ($program->status)
                 <div class="row mb-3 g-3">
-                  <div class="col-6">
-                    <div class="d-flex">
+                  <div class="col-12">
+                    <div class="d-flex mt-2">
                       <div class="avatar flex-shrink-0 me-2">
-                        <span class="avatar-initial rounded bg-label-primary"><i
-                            class="ti ti-calendar-event ti-md"></i></span>
+                        <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-calendar-event ti-md"></i></span>
                       </div>
                       <div style="margin-top: -4px">
                         <small>Batas Pendaftaran</small>
-                        <h6 class="mb-0 text-nowrap">17 Nov 23</h6>
+                        <h6 class="mb-0 text-nowrap">{{ Carbon\Carbon::parse($program->deadline)->format('j M Y') }}</h6>
                       </div>
                     </div>
                   </div>
@@ -116,11 +112,10 @@
                 @endif
               @else
                 <div class="row mb-3 g-3">
-                  <div class="col-6">
+                  <div class="col-12">
                     <div class="d-flex">
                       <div class="avatar flex-shrink-0 me-2">
-                        <span class="avatar-initial rounded bg-label-light"><i
-                            class="ti ti-calendar-event ti-md"></i></span>
+                        <span class="avatar-initial rounded bg-label-light"><i class="ti ti-calendar-event ti-md"></i></span>
                       </div>
                       <div style="margin-top: -4px">
                         <small>Status Pendaftaran</small>
@@ -134,7 +129,13 @@
             </div>
           </div>
         </div>
-      @endforeach
+      @empty
+        <div class="col-12">
+          <div class="alert alert-light text-center" role="alert">
+            Belum ada program.
+          </div>
+        </div>
+      @endforelse
     </div>
   </div>
 @endsection

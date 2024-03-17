@@ -1,52 +1,153 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('auth.main')
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+@section('content')
+  <div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+      <div class="authentication-inner py-4">
+        <!-- Login -->
+        <div class="card">
+          <div class="card-body">
+            <!-- Logo -->
+            <div class="app-brand justify-content-center mb-4 mt-2">
+              <a href="/" class="app-brand-link gap-2">
+                <img src="{{ asset('assets/img/mahad/abuubaidah.svg') }}" alt="Abu Ubaidah" width="10%">
+                <span class="app-brand-text demo text-body fw-bold ms-1">Ma'had Abu Ubaidah <br>Bin Al Jarrah</span>
+              </a>
+            </div>
+            <!-- /Logo -->
+            <h4 class="mb-1 pt-2">Assalamu'alaykum! 👋</h4>
+            <p class="mb-4">Silakan input email dan password kamu untuk melanjutkan.</p>
+
+            <form action="{{ route('register') }}" method="POST" class="theme-form">
+              @csrf
+              <h4 class="mb-4">Buat Akun</h4>
+              @if ($errors->any())
+                <div class="alert alert-danger">
+                  <ul>
+                    @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                    @endforeach
+                  </ul>
+                </div>
+              @endif
+              <div class="form-group">
+                <label class="col-form-label">Nama Lengkap</label>
+                <input type="text" name="name" value="{{ request()->query('name') ?: old('name') }}" placeholder="Nama Lengkap" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">NIK</label>
+                <input type="number" name="nik" class="form-control" value="{{ old('nik') }}" placeholder="NIK" required>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Email</label>
+                <input type="email" name="email" value="{{ request()->query('email') ?: old('email') }}" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Password</label>
+                <div class="form-input position-relative">
+                  <input class="form-control" type="password" name="password" value="{{ old('password') }}" required="" placeholder="*********">
+                  <div class="show-hide"><span class="show"></span></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Ketik Ulang Password</label>
+                <div class="form-input position-relative">
+                  <input class="form-control" type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" required="" placeholder="*********">
+                  <div class="show-hide"><span class="show"></span></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Jenis Kelamin</label>
+                <select name="gender" class="form-control" required>
+                  <option value="" disabled {{ old('gender') ? '' : 'selected' }}>- Pilih Data -</option>
+                  <option value="Laki-laki" {{ old('gender') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                  <option value="Perempuan" {{ old('gender') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">No. WhatsApp</label>
+                <input type="number" name="phone" value="{{ request()->query('phone') ?: old('phone') }}" placeholder="62XXX" class="form-control" required>
+              </div>
+
+              <input type="hidden" name="religion" value="Islam">
+
+              <div class="row">
+                <div class="form-group col-6">
+                  <label class="col-form-label">Tempat Lahir</label>
+                  <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" placeholder="Sesuai KTP" class="form-control" required>
+                </div>
+
+                <div class="form-group col-6">
+                  <label class="col-form-label">Tanggal Lahir</label>
+                  <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" placeholder="Sesuai KTP" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-6">
+                  <label class="col-form-label" for="status_perkawinan">Status Perkawinan</label>
+                  <select class="form-select" name="status_perkawinan" id="status_perkawinan" required>
+                    <option selected="" disabled="" value="">- Pilih Data -</option>
+                    <option value="Menikah">Menikah</option>
+                    <option value="Belum Menikah">Belum Menikah</option>
+                    <option value="Janda/Duda">Janda/Duda</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-6">
+                  <label class="col-form-label">Suku</label>
+                  <input type="text" name="suku" value="{{ old('suku') }}" placeholder="Suku" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-form-label">Alamat</label>
+                <textarea name="address" rows="2" class="form-control" placeholder="Alamat" required>{{ old('address') }}</textarea>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Provinsi</label>
+                <select class="form-control" name="province" id="provinsi" required>
+                  <option value="">Pilih Provinsi</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Kabupaten</label>
+                <select class="form-control" name="regency" id="kabupaten" required disabled>
+                  <option value="">Pilih Kabupaten</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Kecamatan</label>
+                <select class="form-control" name="district" id="kecamatan" required disabled>
+                  <option value="">Pilih Kecamatan</option>
+                </select>
+              </div>
+              <button class="btn btn-primary btn-block w-100 mt-4" type="submit">Daftar</button>
+              <p class="mt-4 mb-0 text-center">Sudah punya akun?<a class="ms-2" href="{{ route('login') }}">Login</a></p>
+            </form>
+
+            <div class="divider my-4">
+              <div class="divider-text">Atau</div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              {{-- <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
+                                <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
+                            </a>
+
+                            <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
+                                <i class="tf-icons fa-brands fa-google fs-5"></i>
+                            </a> --}}
+
+              <a href="https://abuubaidah.com/" class="small">
+                {{-- <i class="tf-icons fa-brands fa-twitter fs-5"></i> --}}
+                Kembali ke Landing Page
+              </a>
+            </div>
+          </div>
         </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        <!-- /Register -->
+      </div>
+    </div>
+  </div>
+@endsection

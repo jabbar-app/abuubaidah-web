@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
-            $table->string('batch');
-            $table->string('title');
-            $table->string('description');
-            $table->string('option');
-            $table->integer('price_regist')->default(0);
-            $table->integer('price_normal');
-            $table->integer('price_alumni');
-            $table->boolean('status')->default(0);
+            $table->morphs('programmable');
+            $table->decimal('price_pra', 10, 0)->default(0);
+            $table->decimal('price_normal', 10, 0)->default(0);
+            $table->decimal('price_alumni', 10, 0)->default(0);
+            $table->date('deadline')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
+
     }
 
     /**

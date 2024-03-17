@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('batch');
             $table->string('class');
             $table->string('session');
+            $table->string('room')->nullable();
+            $table->string('level')->nullable();
+            $table->string('score')->nullable();
+            $table->string('lecturer')->nullable();
             $table->string('status')->default('Menunggu Update');
             $table->timestamps();
         });

@@ -35,7 +35,7 @@
                 </div>
                 <div class="input-group input-group-merge">
                   <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
-                  <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                  <small class="input-group-text cursor-pointer" style="font-size: 12px;">lihat</small>
                 </div>
               </div>
               <div class="mb-3">

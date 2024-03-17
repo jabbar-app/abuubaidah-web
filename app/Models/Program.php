@@ -11,8 +11,26 @@ class Program extends Model
 
     protected $guarded = ['id'];
 
+    // In Program model
+    public function programmable()
+    {
+        return $this->morphTo();
+    }
+
+
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class);
+        return $this->hasMany(Kelas::class);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

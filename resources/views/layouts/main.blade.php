@@ -30,12 +30,13 @@
   <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
 
   <!-- Vendors CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
+  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/node-waves/node-waves.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/apex-charts/apex-charts.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
@@ -55,19 +56,7 @@
 <body>
   <!-- Layout wrapper -->
   <div class="layout-wrapper layout-content-navbar">
-    <div class="layout-container">
-      @include('student.sidebar')
-
-      <!-- Layout container -->
-      <div class="layout-page">
-        @include('student.navbar')
-
-        <!-- Content wrapper -->
-        @yield('content')
-        <!-- Content wrapper -->
-      </div>
-      <!-- / Layout page -->
-    </div>
+    @yield('contents')
 
     <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
@@ -77,8 +66,31 @@
   </div>
   <!-- / Layout wrapper -->
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
   @yield('js')
   <!-- Core JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Select the toggle text
+      const togglePassword = document.querySelector(".input-group-text");
+
+      // Listen for a click on the text
+      togglePassword.addEventListener("click", function(e) {
+        // Select the password input field
+        const password = document.getElementById("password");
+
+        // Check the type of the password field and toggle accordingly
+        if (password.type === "password") {
+          password.type = "text";
+          togglePassword.textContent = 'sembunyikan'; // Change the text to 'Hide'
+        } else {
+          password.type = "password";
+          togglePassword.textContent = 'lihat'; // Change the text back to 'Show'
+        }
+      });
+    });
+  </script>
   <!-- build:js assets/vendor/js/core.js -->
 
   <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
@@ -94,6 +106,7 @@
   <!-- endbuild -->
 
   <!-- Vendors JS -->
+  <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
   <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
@@ -109,6 +122,7 @@
   <!-- Page JS -->
   <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
   <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+  <script src="{{ asset('assets/js/tables-datatables-basic.js') }}"></script>
 </body>
 
 </html>

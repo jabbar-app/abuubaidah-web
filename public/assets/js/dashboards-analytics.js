@@ -206,10 +206,10 @@
   // --------------------------------------------------------------------
   const supportTrackerEl = document.querySelector('#supportTracker'),
     supportTrackerOptions = {
-      series: [85],
-      labels: ['Completed Task'],
+      series: [100],
+      labels: ['Server Uptime'],
       chart: {
-        height: 360,
+        height: 320,
         type: 'radialBar'
       },
       plotOptions: {
@@ -242,13 +242,13 @@
           }
         }
       },
-      colors: [config.colors.primary],
+      colors: [config.colors.success],
       fill: {
         type: 'gradient',
         gradient: {
           shade: 'dark',
           shadeIntensity: 0.5,
-          gradientToColors: [config.colors.primary],
+          gradientToColors: [config.colors.success],
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 0.6,
@@ -307,11 +307,11 @@
       series: [
         {
           name: 'Earning',
-          data: [15, 10, 20, 8, 12, 18, 12, 5]
+          data: [15, 10, 20, 8, 12, 18]
         },
         {
           name: 'Expense',
-          data: [-7, -10, -7, -12, -6, -9, -5, -8]
+          data: [-7, -10, -7, -12, -6, -9]
         }
       ],
       chart: {
@@ -336,7 +336,7 @@
           endingShape: 'rounded'
         }
       },
-      colors: [config.colors.primary, grayColor],
+      colors: [config.colors.info, grayColor],
       dataLabels: {
         enabled: false
       },
