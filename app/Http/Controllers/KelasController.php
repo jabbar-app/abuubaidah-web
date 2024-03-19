@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelas;
-use App\Models\Program;
 use App\Models\Sesi;
 use App\Models\User;
+use App\Models\Kelas;
+use App\Models\Result;
+use App\Models\Tahsin;
+use App\Models\Program;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class KelasController extends Controller
@@ -35,18 +39,70 @@ class KelasController extends Controller
     }
     public function register($id)
     {
-        $program = Program::where("id", "=", "$id")->first();
-        $level = '-';
-        $alumni = 'Peserta Baru';
-        $price = 0;
-        if ($alumni == 'Alumni') {
-            $price = $program->price_alumni;
-        } else {
-            $price = $program->price_normal;
-        };
+        $program = Program::where("id", $id)->first();
+
+        if (!$program) {
+            return redirect()->back()->with('error', 'Program not found.');
+        }
+
+        if ($program->programmable_type === 'App\Models\Tahsin') {
+            return $this->tahsin($program);
+        } else if ($program->programmable_type === 'App\Models\Kiba') {
+            return $this->kiba($program);
+        } else if ($program->programmable_type === 'App\Models\Bilhaq') {
+            return $this->bilhaq($program);
+        } else if ($program->programmable_type === 'App\Models\Lughoh') {
+            return $this->lughoh($program);
+        }
+        else {
+            return redirect()->back();
+        }
+    }
+
+    public function tahsin(Program $program)
+    {
+        $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
+        $isAlumni = $isAlumniResult !== null;
+        $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
+        $price = $isAlumni ? $program->price_alumni : $program->price_normal;
+        $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
+
+        return view('student.kelas.tahsin', compact('program', 'alumni', 'price', 'level'));
+    }
+
+    public function kiba(Program $program)
+    {
+        $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
+        $isAlumni = $isAlumniResult !== null;
+        $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
+        $price = $isAlumni ? $program->price_alumni : $program->price_normal;
+        $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
 
         return view('kelas.register', compact('program', 'alumni', 'price', 'level'));
     }
+
+    public function bilhaq(Program $program)
+    {
+        $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
+        $isAlumni = $isAlumniResult !== null;
+        $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
+        $price = $isAlumni ? $program->price_alumni : $program->price_normal;
+        $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
+
+        return view('student.kelas.bilhaq', compact('program', 'alumni', 'price', 'level'));
+    }
+
+    public function lughoh(Program $program)
+    {
+        // $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
+        // $isAlumni = $isAlumniResult !== null;
+        // $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
+        // $price = $isAlumni ? $program->price_alumni : $program->price_normal;
+        // $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
+
+        // return view('kelas.register', compact('program', 'alumni', 'price', 'level'));
+    }
+
 
     public function store(Request $request)
     {
@@ -112,5 +168,32 @@ class KelasController extends Controller
         $kelas = Kelas::findOrFail($id);
         $kelas->delete();
         return Redirect::back()->with('success', 'Data kelas telah dihapus.');
+    }
+
+    public function pengumumanIndex()
+    {
+        return view('student.result', [
+            'results' => '',
+            'program' => '',
+        ]);
+    }
+    public function pengumuman($program)
+    {
+        return view('student.result', [
+            'results' => '',
+            'program' => $program,
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $program = strtoupper($request->program);
+        $query = $request->input('phone');
+        $results = Result::where('program', $program)->where('phone', $query)->get();
+
+        return view('student.result', [
+            'results' => $results,
+            'program' => strtolower($program),
+        ]);
     }
 }

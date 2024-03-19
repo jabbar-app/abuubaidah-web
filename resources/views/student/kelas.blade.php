@@ -81,7 +81,15 @@
                 <td>{{ $k->class }}</td>
                 <td>
                   <ul style="margin-left: -16px">
-                    @foreach (json_decode($k->session) as $session)
+                    @php
+                      $sessions = json_decode($k->session, true); // Decode as array
+                      if (!is_array($sessions)) {
+                          // Check if the result is not an array
+                          $sessions = []; // Set to empty array if not
+                      }
+                    @endphp
+
+                    @foreach ($sessions as $session)
                       <li>{{ $session }}</li>
                     @endforeach
                   </ul>

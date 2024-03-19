@@ -44,8 +44,11 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::resource('kelas', KelasController::class)->middleware('auth');
-Route::get('/admin/kelas', [KelasController::class, 'adminIndex'])->name('admin.kelas.index');
-Route::get('/kelas/create/{id}', [KelasController::class, 'register']);
+Route::get('/admin/kelas', [KelasController::class, 'adminIndex'])->name('admin.kelas.index')->middleware('auth');;
+Route::get('/kelas/create/{id}', [KelasController::class, 'register'])->middleware('auth');;
+Route::get('/pengumuman', [KelasController::class, 'pengumumanIndex']);
+Route::get('/pengumuman/{program}', [KelasController::class, 'pengumuman']);
+Route::get('/search', [KelasController::class, 'search'])->name('search.results');
 
 Route::middleware('auth')->group(function () {
     Route::post('/create-invoice', [PaymentController::class,'createInvoice'])->name('create.invoice');

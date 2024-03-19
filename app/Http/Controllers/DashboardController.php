@@ -16,6 +16,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $mahasiswa = User::all()->count() - 9;
         $programs = Program::all()->sortByDesc('status');
 
         if ($programs->isEmpty()) {
@@ -36,6 +37,8 @@ class DashboardController extends Controller
                 'offline' => Payment::where('status', 'PAID')->where('method', 'offline')->sum('amount'),
                 'programs' => $programs,
                 'statusKelas' => $statusKelas,
+                'payments' => Payment::with('program')->orderBy('created_at', 'desc')->get(),
+                'announcements' => Announcement::with('program')->get(),
             ]);
         } else if ($user->hasRole('Accountant')) {
             return view('accountant.dashboard', [
@@ -47,9 +50,64 @@ class DashboardController extends Controller
                 'transaksi_pending' => Payment::whereIn('status', ['PENDING', 'EXPIRED'])->count(),
                 'programs' => $programs,
                 'statusKelas' => $statusKelas,
+                'payments' => Payment::with('program')->orderBy('created_at', 'desc')->get(),
             ]);
-        } else if ($user->hasRole('Admin Program')) {
-            return view('admin-program.dashboard', compact('programs', 'statusKelas'));
+        } else if ($user->hasRole('Admin Tahsin')) {
+            $program_ids = Program::where('programmable_type', '=', 'App\Models\Tahsin')->pluck('id');
+            return view('admin-program.dashboard', [
+                'mahasiswa' => $mahasiswa,
+                'mahasiswa_program' => Kelas::whereIn('program_id', $program_ids)->count(),
+                'program' => 'Tahsin Tilawah Al-Qur\'an',
+                'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
+            ]);
+        } else if ($user->hasRole('Admin Tahfiz')) {
+            $program_ids = Program::where('programmable_type', '=', 'App\Models\Tahfiz')->pluck('id');
+            return view('admin-program.dashboard', [
+                'mahasiswa' => $mahasiswa,
+                'mahasiswa_program' => Kelas::whereIn('program_id', $program_ids)->count(),
+                'program' => 'Beasiswa Tahfiz Al-Qur\'an',
+                'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
+            ]);
+        } else if ($user->hasRole('Admin Bilhaq')) {
+            $program_ids = Program::where('programmable_type', '=', 'App\Models\Bilhaq')->pluck('id');
+            return view('admin-program.dashboard', [
+                'mahasiswa' => $mahasiswa,
+                'mahasiswa_program' => Kelas::whereIn('program_id', $program_ids)->count(),
+                'program' => 'Bimbingan Menghafal Al-Qur\'an',
+                'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
+            ]);
+        } else if ($user->hasRole('Admin KIBA')) {
+            $program_ids = Program::where('programmable_type', '=', 'App\Models\Kiba')->pluck('id');
+            return view('admin-program.dashboard', [
+                'mahasiswa' => $mahasiswa,
+                'mahasiswa_program' => Kelas::whereIn('program_id', $program_ids)->count(),
+                'program' => 'Kursus Intensif Bahasa Arab',
+                'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
+            ]);
+        } else if ($user->hasRole('Admin Lughoh')) {
+            $program_ids = Program::where('programmable_type', '=', 'App\Models\Lughoh')->pluck('id');
+            return view('admin-program.dashboard', [
+                'mahasiswa' => $mahasiswa,
+                'mahasiswa_program' => Kelas::whereIn('program_id', $program_ids)->count(),
+                'program' => 'Program Bahasa Arab & Studi Islam',
+                'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
+            ]);
+        } else if ($user->hasRole('Admin Stebis')) {
+            $program_ids = Program::where('programmable_type', '=', 'App\Models\Stebis')->pluck('id');
+            return view('admin-program.dashboard', [
+                'mahasiswa' => $mahasiswa,
+                'mahasiswa_program' => Kelas::whereIn('program_id', $program_ids)->count(),
+                'program' => 'Integrasi S1 STEBIS AL ULUM Terpadu',
+                'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
+            ]);
+        } else if ($user->hasRole('Admin FAI')) {
+            $program_ids = Program::where('programmable_type', '=', 'App\Models\Fai')->pluck('id');
+            return view('admin-program.dashboard', [
+                'mahasiswa' => $mahasiswa,
+                'mahasiswa_program' => Kelas::whereIn('program_id', $program_ids)->count(),
+                'program' => 'Integrasi S1 Ma\'had - FAI UMSU',
+                'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
+            ]);
         } else {
             return view('student.dashboard', [
                 'main' => Announcement::where('category', 'main')->first(),

@@ -42,15 +42,24 @@
             @foreach ($kelas as $kelas)
               <tr>
                 <td>{{ $kelas->id }}</td>
-                <td>{{ $kelas->user->name }}</td>
-                <td>{{ $kelas->user->nik }}</td>
-                <td>{{ $kelas->user->phone }}</td>
-                <td>{{ $kelas->program.', Angkatan '.$kelas->batch }}</td>
+                <td>{{ $kelas->user->name ?? '' }}</td>
+                <td>{{ $kelas->user->nik ?? '' }}</td>
+                <td>{{ $kelas->user->phone ?? '' }}</td>
+                <td>{{ $kelas->program . ', Angkatan ' . $kelas->batch }}</td>
                 <td>
                   <ul style="margin-left: -16px" class="mt-3">
-                    @foreach (json_decode($kelas->session) as $session)
+                    @php
+                      $sessions = json_decode($kelas->session, true); // Decode as array
+                      if (!is_array($sessions)) {
+                          // Check if the result is not an array
+                          $sessions = []; // Set to empty array if not
+                      }
+                    @endphp
+
+                    @foreach ($sessions as $session)
                       <li>{{ $session }}</li>
                     @endforeach
+
                   </ul>
                 </td>
                 <td>

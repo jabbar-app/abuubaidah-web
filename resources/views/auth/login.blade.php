@@ -18,6 +18,16 @@
             <h4 class="mb-1 pt-2">Assalamu'alaykum! 👋</h4>
             <p class="mb-4">Silakan input email dan password kamu untuk melanjutkan.</p>
 
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                <ul>
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
+
             <form method="POST" action="{{ route('login') }}" id="formAuthentication" class="mb-3">
               @csrf
               <div class="mb-3">

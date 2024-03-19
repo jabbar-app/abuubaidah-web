@@ -53,6 +53,22 @@ class RegisteredUserController extends Controller
             'tanggal_lahir' => 'required|date',
             'status_perkawinan' => 'required|string',
             'suku' => 'required|string',
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'nik.required' => 'NIK wajib diisi.',
+            'nik.unique' => 'NIK sudah terdaftar.',
+            'email.required' => 'Email wajib diisi.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'password.required' => 'Password wajib diisi.',
+            'gender.required' => 'Jenis kelamin wajib dipilih.',
+            'phone.required' => 'No. WhatsApp wajib diisi.',
+            'religion.required' => 'Agama wajib diisi.',
+            'tempat_lahir.required' => 'Tempat lahir wajib diisi.',
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'status_perkawinan.required' => 'Status perkawinan wajib diisi.',
+            'suku.required' => 'Suku wajib diisi.',
+            'validation.min.string'=> 'Password harus minimal 8 karakter.',
+            // Add more custom messages as needed
         ]);
 
         $validatedData['address'] = json_encode([

@@ -28,6 +28,7 @@
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Manajemen Data">Manajemen Data</span>
     </li>
+    @if(Auth::user()->hasRole('Super Admin'))
     <li class="menu-item {{ Request::is('programs*') ? 'active' : '' }}">
       <a href="{{ route('programs.index') }}" class="menu-link">
         <i class="menu-icon tf-icons ti ti-book"></i>
@@ -52,12 +53,15 @@
         <div data-i18n="Data Kelas">Data Kelas</div>
       </a>
     </li>
+    @elseif(Auth::user()->hasRole('Accountant'))
     <li class="menu-item {{ Request::is('payments*') ? 'active' : '' }}">
       <a href="{{ route('payments.index') }}" class="menu-link">
         <i class="menu-icon tf-icons ti ti-file-dollar"></i>
         <div data-i18n="Data Transaksi">Data Transaksi</div>
       </a>
     </li>
+    @endif
+    @if(Auth::user()->hasRole('Super Admin'))
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Manajemen Program</span>
     </li>
@@ -104,6 +108,7 @@
         </li>
       </ul>
     </li>
+    @endif
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Akun">Akun</span>
     </li>

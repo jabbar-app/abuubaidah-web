@@ -30,7 +30,7 @@
             @method('PUT')
             <div class="mb-3">
               <label for="title" class="form-label">Nama Program</label>
-              <input type="text" class="form-control" id="title" name="title" value="Tahsin Tilawah Al-Qur'an">
+              <input type="text" class="form-control" id="title" name="title" value="{{ $kiba->title }}">
             </div>
             <div class="mb-3">
               <label for="batch" class="form-label">Angkatan</label>

@@ -28,7 +28,7 @@
               </span>
               <div class="content-right">
                 <p class="mb-0">Total Transaksi Berhasil</p>
-                <h4 class="text-info mb-0">Rp{{ number_format($transaksi_berhasil, 0, ',', '.') }},-</h4>
+                <h4 class="text-info mb-0">{{ $transaksi_berhasil }}</h4>
               </div>
             </div>
             <div class="d-flex align-items-center gap-3">
@@ -37,7 +37,7 @@
               </span>
               <div class="content-right">
                 <p class="mb-0">Total Transaksi Pending</p>
-                <h4 class="text-warning mb-0">Rp{{ number_format($transaksi_pending, 0, ',', '.') }},-</h4>
+                <h4 class="text-warning mb-0">{{ $transaksi_pending }}</h4>
               </div>
             </div>
           </div>
@@ -203,7 +203,7 @@
     <div class="row mb-5">
       @foreach ($programs as $program)
         <div class="col-xl-3 col-sm-12 mb-4">
-          <div class="card">
+          <div class="card" style="height: 240px;">
             <div class="card-body">
               <div class="badge p-2 bg-label-success mb-2 rounded">
                 <i class="ti ti-notebook ti-md"></i>
@@ -211,9 +211,10 @@
               <h5 class="card-title mb-1 pt-2">{{ $program->programmable->title }}</h5>
               <small class="text-muted">Jumlah User</small>
               <h4 class="mb-2 mt-1">{{ number_format($program->kelas->count()) }}</h4>
-              <div class="pt-1">
+              <hr>
+              {{-- <div class="pt-1">
                 <a href="#" class="btn btn-sm btn-primary">Detail</a>
-              </div>
+              </div> --}}
             </div>
           </div>
         </div>
@@ -227,19 +228,53 @@
             <h5 class="mb-0">Atur Pengumuman</h5> <small class="text-muted float-end">إضافة برنامج</small>
           </div>
           <div class="card-datatable table-responsive pt-0">
-            <table id="datatable" class="table border-top">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th>Name</th>
-                  <th>Leader</th>
-                  <th>Team</th>
-                  <th class="w-px-200">Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-            </table>
+            <table id="announcements" class="table">
+                <thead>
+                  <tr>
+                    <th>Judul</th>
+                    <th>Isi</th>
+                    <th>Program</th>
+                    <th>Kategori</th>
+                    <th>Tindakan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($announcements as $announcement)
+                    <tr>
+                      <td>{{ $announcement->title }}</td>
+                      <td>{{ $announcement->description }}</td>
+                      <td>{{ $announcement->program->programmable->title }}</td>
+                      <td><span class="badge bg-label-info">{{ $announcement->category }}</span></td>
+                      <td>
+                        <div class="d-inline-block"><a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
+                          <ul class="dropdown-menu dropdown-menu-end m-0" style="">
+                            <li><a href="{{ route('announcements.show', $announcement->id) }}" class="dropdown-item">Details</a></li>
+                            {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
+                            <div class="dropdown-divider"></div>
+                            <li>
+                              <form action="{{ route('announcements.destroy', $announcement->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this announcements?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
+                              </form>
+                            </li>
+                          </ul>
+                        </div>
+                        <a href="{{ route('announcements.edit', $announcement->id) }}" class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Judul</th>
+                    <th>Isi</th>
+                    <th>Program</th>
+                    <th>Kategori</th>
+                    <th>Tindakan</th>
+                  </tr>
+                </tfoot>
+              </table>
           </div>
         </div>
       </div>
@@ -270,7 +305,7 @@
 @section('js')
   <script>
     $(document).ready(function() {
-      $('#datatable').DataTable();
+      $('#announcements').DataTable();
     });
   </script>
 @endsection

@@ -24,7 +24,7 @@
           <tbody>
             @foreach ($payments as $payment)
               <tr>
-                <td>{{ $payment->user->name }}</td>
+                <td>{{ $payment->payer_name }}</td>
                 <td>{{ $payment->program->programmable->title }}</td>
                 <td>{{ $payment->description }}</td>
                 <td>Rp{{ number_format($payment->amount, 0, ',', '.') }},-</td>
