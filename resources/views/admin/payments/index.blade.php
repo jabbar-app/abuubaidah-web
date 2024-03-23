@@ -12,6 +12,7 @@
         <table id="payments" class="table">
           <thead>
             <tr>
+              <th>Data Transaksi</th>
               <th>User</th>
               <th>Program</th>
               <th>Deskripsi</th>
@@ -24,12 +25,13 @@
           <tbody>
             @foreach ($payments as $payment)
               <tr>
+                <td>{{ $payment->external_id }}</td>
                 <td>{{ $payment->payer_name }}</td>
                 <td>{{ $payment->program->programmable->title }}</td>
                 <td>{{ $payment->description }}</td>
                 <td>Rp{{ number_format($payment->amount, 0, ',', '.') }},-</td>
-                <td><span class="badge @if($payment->method=='Offline') bg-label-info @else bg-label-primary @endif me-1">{{ $payment->method }}</span></td>
-                <td><span class="badge @if($payment->status=='PAID') bg-label-primary @else bg-label-warning @endif me-1">{{ $payment->status }}</span></td>
+                <td><span class="badge @if ($payment->method == 'Offline') bg-label-info @else bg-label-primary @endif me-1">{{ $payment->method }}</span></td>
+                <td><span class="badge @if ($payment->status == 'PAID') bg-label-primary @else bg-label-warning @endif me-1">{{ $payment->status }}</span></td>
                 <td>
                   <div class="d-inline-block"><a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
@@ -52,6 +54,7 @@
           </tbody>
           <tfoot>
             <tr>
+              <th>Data Transaksi</th>
               <th>User</th>
               <th>Program</th>
               <th>Deskripsi</th>

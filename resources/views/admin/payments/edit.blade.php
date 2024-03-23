@@ -49,7 +49,7 @@
               <div class="row mb-3">
                 <label class="col-sm-3 col-form-label" for="multicol-program">Biaya Program</label>
                 <div class="col-sm-9">
-                  <input type="text" name="amount" class="form-control" value="Rp{{ number_format($payment->amount, 0, ',', '.') }},-" disabled>
+                  <input type="text" name="amount" class="form-control" value="Rp{{ number_format($payment->amount, 0, ',', '.') }},-">
                 </div>
               </div>
 

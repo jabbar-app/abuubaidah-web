@@ -122,6 +122,7 @@ class PaymentController extends Controller
       if ($request->method == 'Offline') {
         $payment->update([
           'method' => $request->method,
+        //   'amount' => $request->amount,
           'external_id' => 'off_' . time(),
           'status' => $request->status,
           'invoice_url' => '#',
@@ -130,6 +131,7 @@ class PaymentController extends Controller
       } else {
         $payment->update([
           'method' => $request->method,
+        //   'amount' => $request->amount,
           'status' => $request->status,
           'note' => 'Data di-edit oleh: ' . Auth::user()->name,
         ]);
@@ -198,6 +200,7 @@ class PaymentController extends Controller
         'payer_email' => $user->email,
         'description' => $create_invoice_request['description'],
         'amount' => $create_invoice_request['amount'],
+        'payment_type' => $request->type,
         'invoice_url' => $result->getInvoiceUrl(),
         'status' => 'PENDING',
       ]);

@@ -68,8 +68,9 @@
             <tr>
               <th>Program</th>
               <th>Angkatan</th>
-              <th>Tipe Kelas</th>
+              <th>Kelas</th>
               <th>Sesi</th>
+              <th>Nilai</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -78,9 +79,15 @@
               <tr>
                 <td>{{ $k->program }}</td>
                 <td>{{ $k->batch }}</td>
-                <td>{{ $k->class }}</td>
                 <td>
-                  <ul style="margin-left: -16px">
+                    {{ $k->class }}
+                    @if(!empty($k->room))
+                    <br>Ruang Kelas: {{ $k->room }}
+                    @endif
+                </td>
+
+                <td>
+                  <ul style="margin-left: -16px; padding-top: 16px;">
                     @php
                       $sessions = json_decode($k->session, true); // Decode as array
                       if (!is_array($sessions)) {
@@ -95,6 +102,7 @@
                   </ul>
                 </td>
 
+                <td><button class="btn btn-sm btn-light">Menunggu</button></td>
                 <td><span class="badge bg-label-primary">{{ $k->status }}</span></td>
               </tr>
             @endforeach
@@ -103,8 +111,9 @@
             <tr>
               <th>Program</th>
               <th>Angkatan</th>
-              <th>Tipe Kelas</th>
+              <th>Kelas</th>
               <th>Sesi</th>
+              <th>Nilai</th>
               <th>Status</th>
             </tr>
           </tfoot>

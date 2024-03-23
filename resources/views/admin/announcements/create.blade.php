@@ -4,7 +4,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
-      <a href="{{ route('announcements.index') }}" class="btn btn-md btn-light">Kembali</a>
+      <a href="#" class="btn btn-md btn-light">Kembali</a>
     </div>
 
     {{-- <hr class="mb-5"> --}}

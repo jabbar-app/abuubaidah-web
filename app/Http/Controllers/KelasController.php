@@ -61,46 +61,40 @@ class KelasController extends Controller
 
     public function tahsin(Program $program)
     {
-        $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
+        $isAlumniResult = Result::where('program', 'TAHSIN')->where('phone', Auth::user()->phone)->first();
         $isAlumni = $isAlumniResult !== null;
         $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
         $price = $isAlumni ? $program->price_alumni : $program->price_normal;
-        $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
+        $level = $isAlumni ? $isAlumniResult->next : 'TAMHIDY';
 
         return view('student.kelas.tahsin', compact('program', 'alumni', 'price', 'level'));
     }
 
     public function kiba(Program $program)
     {
-        $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
+        $isAlumniResult = Result::where('program', 'KIBA')->where('phone', Auth::user()->phone)->first();
         $isAlumni = $isAlumniResult !== null;
         $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
         $price = $isAlumni ? $program->price_alumni : $program->price_normal;
-        $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
+        $level = $isAlumni ? $isAlumniResult->level : '-';
 
-        return view('kelas.register', compact('program', 'alumni', 'price', 'level'));
+        return view('student.kelas.kiba', compact('program', 'alumni', 'price', 'level'));
     }
 
     public function bilhaq(Program $program)
     {
+        return view('student.kelas.bilhaq', ['program' => $program]);
+    }
+
+    public function lughoh(Program $program)
+    {
         $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
         $isAlumni = $isAlumniResult !== null;
         $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
         $price = $isAlumni ? $program->price_alumni : $program->price_normal;
         $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
 
-        return view('student.kelas.bilhaq', compact('program', 'alumni', 'price', 'level'));
-    }
-
-    public function lughoh(Program $program)
-    {
-        // $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
-        // $isAlumni = $isAlumniResult !== null;
-        // $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
-        // $price = $isAlumni ? $program->price_alumni : $program->price_normal;
-        // $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
-
-        // return view('kelas.register', compact('program', 'alumni', 'price', 'level'));
+        return view('student.kelas.lughoh', compact('program', 'alumni', 'price', 'level'));
     }
 
 

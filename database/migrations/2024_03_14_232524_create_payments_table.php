@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('payer_email');
             $table->text('description');
             $table->decimal('amount', 10, 2);
+            $table->string('payment_type')->nullable();
             $table->string('invoice_url')->nullable();
             $table->string('status');
             $table->string('method')->default('Xendit');

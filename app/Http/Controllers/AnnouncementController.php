@@ -11,7 +11,7 @@ class AnnouncementController extends Controller
     // Display a listing of the resource.
     public function index()
     {
-        $announcements = Announcement::with('program')->get(); // Eager load the related program
+        $announcements = Announcement::with('program')->get();
         return view('admin.announcements.index', compact('announcements'));
     }
 

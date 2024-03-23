@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
             'email' => 'required|email|unique:users,email', // Ensures email is unique in the users table
             'password' => 'required|string|min:8',
             'gender' => 'required|in:Laki-laki,Perempuan',
-            'phone' => 'required|numeric',
+            'phone' => 'required|numeric|unique:users,phone',
             'religion' => 'required|string',
             'tempat_lahir' => 'required|string',
             'tanggal_lahir' => 'required|date',
@@ -59,6 +59,7 @@ class RegisteredUserController extends Controller
             'nik.unique' => 'NIK sudah terdaftar.',
             'email.required' => 'Email wajib diisi.',
             'email.unique' => 'Email sudah terdaftar.',
+            'phone.unique' => 'No. WhatsApp sudah terdaftar.',
             'password.required' => 'Password wajib diisi.',
             'gender.required' => 'Jenis kelamin wajib dipilih.',
             'phone.required' => 'No. WhatsApp wajib diisi.',

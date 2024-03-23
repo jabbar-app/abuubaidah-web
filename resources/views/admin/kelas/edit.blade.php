@@ -94,21 +94,21 @@
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-program">Ruang Kelas</label>
               <div class="col-sm-9">
-                <input type="text" name="room" class="form-control" value="{{ $kelas->room }}" required>
+                <input type="text" name="room" class="form-control" value="{{ $kelas->room }}">
               </div>
             </div>
 
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-program">Nilai</label>
               <div class="col-sm-9">
-                <input type="text" name="score" class="form-control" value="{{ $kelas->score }}" required>
+                <input type="text" name="score" class="form-control" value="{{ $kelas->score }}">
               </div>
             </div>
 
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-program">Ustadz(ah)</label>
               <div class="col-sm-9">
-                <input type="text" name="lecturer" class="form-control" value="{{ $kelas->lecturer }}" required>
+                <input type="text" name="lecturer" class="form-control" value="{{ $kelas->lecturer }}">
               </div>
             </div>
 
