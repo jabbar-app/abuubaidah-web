@@ -56,6 +56,10 @@ class KelasController extends Controller
       return $this->bilhaq($program);
     } else if ($program->programmable_type === 'App\Models\Lughoh') {
       return $this->lughoh($program);
+    } else if ($program->programmable_type === 'App\Models\Fai') {
+      return $this->fai($program);
+    } else if ($program->programmable_type === 'App\Models\Stebis') {
+      return $this->stebis($program);
     } else {
       return redirect()->back();
     }
@@ -106,12 +110,7 @@ class KelasController extends Controller
       'program_id' => $request->program_id,
       'program' => $program->programmable->title,
       'batch' => $program->programmable->batch,
-      'level' => '',
-      'class' => '',
-      'room' => '',
-      'score' => '',
-      'lecturer' => '',
-      'session' => '',
+      'bilhaq' => $request->hasBilhaqCert,
       'status' => 'Menunggu Update',
     ]);
 
@@ -143,6 +142,31 @@ class KelasController extends Controller
     $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
 
     return view('student.kelas.lughoh', compact('program', 'alumni', 'price', 'level'));
+  }
+
+  public function fai(Program $program)
+  {
+    return view('student.kelas.fai', [
+      'program' => $program,
+    ]);
+  }
+
+  public function stebis(Program $program)
+  {
+    return view('student.kelas.stebis', [
+      'program' => $program,
+    ]);
+  }
+
+  public function detail($id)
+  {
+    $kelas = Kelas::where('id', $id)->first();
+    $program = Program::where("id", $kelas->program_id)->first();
+
+    return view('student.kelas.detail', [
+      'kelas' => $kelas,
+      'program' => $program,
+    ]);
   }
 
 

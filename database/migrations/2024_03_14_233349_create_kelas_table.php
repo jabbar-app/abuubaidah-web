@@ -17,8 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('program');
             $table->string('batch');
-            $table->string('class');
-            $table->string('session');
+            $table->string('bilhaq')->nullable();
+            $table->string('class')->nullable();
+            $table->string('session')->nullable();
             $table->string('room')->nullable();
             $table->string('level')->nullable();
             $table->string('score')->nullable();

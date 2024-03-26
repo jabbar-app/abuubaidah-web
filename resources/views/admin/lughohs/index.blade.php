@@ -64,6 +64,7 @@
                       <li>
                         <a href="{{ route('lughohs.show', $lughoh->id) }}" class="dropdown-item">Details</a>
                       </li>
+                      <li><a href="{{ route('lughohs.edit', $lughoh->id) }}" class="dropdown-item">Edit Data</a></li>
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>

@@ -61,7 +61,7 @@
                 @endforeach
 
                 @if (!$buttonShown)
-                  <a href="/kelas/create/{{ $program->id }}" class="btn btn-primary w-100">Daftar</a>
+                  <a href="/kelas/daftar/{{ $program->id }}" class="btn btn-primary w-100">Daftar</a>
                 @endif
               @else
                 <div class="row mb-3 g-3">

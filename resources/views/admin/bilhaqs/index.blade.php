@@ -64,6 +64,7 @@
                       <li>
                         <a href="{{ route('bilhaqs.show', $bilhaq->id) }}" class="dropdown-item">Details</a>
                       </li>
+                      <li><a href="{{ route('bilhaqs.edit', $bilhaq->id) }}" class="dropdown-item">Edit Data</a></li>
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>

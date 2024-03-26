@@ -61,9 +61,8 @@
                       <i class="text-primary ti ti-dots-vertical"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
-                      <li>
-                        <a href="{{ route('stebis.show', $stebis->id) }}" class="dropdown-item">Details</a>
-                      </li>
+                      <li><a href="{{ route('stebis.show', $stebis->id) }}" class="dropdown-item">Details</a></li>
+                      <li><a href="{{ route('stebis.edit', $stebis->id) }}" class="dropdown-item">Edit Data</a></li>
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>

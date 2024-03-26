@@ -75,6 +75,13 @@
                     </tr>
                     <tr>
                       <td>
+                        <span class="fw-medium">Biaya Pembangunan S1</span>
+                      </td>
+                      <td>Rp{{ number_format($program->price_s1, 0, ',', '.') }},-</td>
+                      <td class="text-center"><span class="badge bg-label-primary me-1">1 Kali</span></td>
+                    </tr>
+                    <tr>
+                      <td>
                         <span class="fw-medium">Total Biaya</span>
                       </td>
                       @php

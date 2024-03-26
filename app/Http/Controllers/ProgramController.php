@@ -37,36 +37,27 @@ class ProgramController extends Controller
 
   public function store(Request $request)
   {
-    $messages = [
-      'price.required' => 'Wajib diisi',
-    ];
+    // dd($request->all());
 
-    $validatedData = $request->validate([
-      'program_type' => 'required|string',
-      'programmable_id' => 'required|integer',
-      'price_pra' => 'numeric',
-      'price_normal' => 'numeric',
-      'price_alumni' => 'numeric',
-      'price_normal' => 'numeric',
-      'price_mahad' => 'numeric',
-      'price_s1' => 'numeric',
-      'deadline' => 'date',
-      'status' => 'required|boolean',
-    ], $messages);
+    // $messages = [
+    //   'price.required' => 'Wajib diisi',
+    // ];
+
+    // $validatedData = $request->validate([
+    //   'program_type' => 'required|string',
+    //   'programmable_id' => 'required|integer',
+    //   'price_pra' => 'numeric',
+    //   'price_normal' => 'numeric',
+    //   'price_alumni' => 'numeric',
+    //   'price_normal' => 'numeric',
+    //   'price_mahad' => 'numeric',
+    //   'price_s1' => 'numeric',
+    //   'deadline' => 'date',
+    //   'status' => 'required|boolean',
+    // ], $messages);
 
     try {
-      Program::create([
-        'programmable_type' => $request->program_type,
-        'programmable_id' => $request->programmable_id,
-        'price_pra' => $validatedData['price_pra'],
-        'price_normal' => $validatedData['price_normal'],
-        'price_alumni' => $validatedData['price_alumni'],
-        'price_normal' => $validatedData['price_normal'],
-        'price_mahad' => $validatedData['price_mahad'],
-        'price_s1' => $validatedData['price_s1'],
-        'deadline' => $validatedData['deadline'],
-        'status' => $validatedData['status'],
-      ]);
+      Program::create($request->all());
       return redirect()->route('programs.index')->with('success', 'Program created successfully.');
     } catch (Exception $e) {
       // Log the error

@@ -30,8 +30,8 @@
           <form method="POST" action="{{ route('programs.store') }}">
             @csrf
             <div class="mb-3">
-              <label class="form-label" for="program_type">Program</label>
-              <select class="form-select" name="program_type" id="program_type" required>
+              <label class="form-label" for="programmable_type">Program</label>
+              <select class="form-select" name="programmable_type" id="programmable_type" required>
                 <option value="" selected disabled>- Pilih data -</option>
                 <option value="App\Models\Tahsin">{{ $tahsins->first()->title }}</option>
                 <option value="App\Models\Tahfiz">{{ $tahfizs->first()->title }}</option>
@@ -101,7 +101,7 @@
               </div>
             </div>
 
-            <div id="fai" style="display: none;">
+            <div id="stebis" style="display: none;">
               <div class="mb-3">
                 <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
                 <input type="number" name="price_pra" value="0" class="form-control" required>
@@ -120,7 +120,7 @@
               </div>
             </div>
 
-            <div id="stebis" style="display: none;">
+            <div id="fai" style="display: none;">
               <div class="mb-3">
                 <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
                 <input type="number" name="price_pra" value="0" class="form-control" required>
@@ -170,23 +170,21 @@
     var stebis = @json($stebis);
 
     document.addEventListener('DOMContentLoaded', function() {
-      var programTypeSelect = document.getElementById('program_type');
+      var programTypeSelect = document.getElementById('programmable_type');
       var programmableIdSelect = document.getElementById('programmable_id');
 
+      function disableInputs(blockId, disable) {
+        var inputs = document.querySelectorAll('#' + blockId + ' input');
+        inputs.forEach(function(input) {
+          input.disabled = disable;
+        });
+      }
+
       programTypeSelect.addEventListener('change', function() {
-        // Enable the programmable_id select box
         programmableIdSelect.removeAttribute('disabled');
-
-        // Clear previous options
         programmableIdSelect.innerHTML = '';
-
-        // Determine selected program type
         var selectedProgramType = this.value;
-
-        // Variable to hold the new options
         var newOptions = [];
-
-        // Determine the array to use
         switch (selectedProgramType) {
           case 'App\\Models\\Tahsin':
             newOptions = tahsins;
@@ -212,9 +210,12 @@
         }
 
         var programDetailsDivs = document.querySelectorAll(
-          '#tahsin, #tahfiz, #bilhaq, #kiba, #lughoh, #fai, #stebis');
+          '#tahsin, #tahfiz, #bilhaq, #kiba, #lughoh, #fai, #stebis'
+        );
+
         programDetailsDivs.forEach(function(div) {
           div.style.display = 'none';
+          disableInputs(div.id, true); // Disable all inputs in hidden blocks
         });
 
         newOptions.forEach(function(option) {
@@ -222,42 +223,56 @@
           optionElement.value = option.id;
           optionElement.textContent = option.title + ' Angkatan ' + option.batch;
           programmableIdSelect.appendChild(optionElement);
-
-          if (selectedProgramType === 'App\\Models\\Tahsin') {
-            document.getElementById('tahsin').style.display = 'block';
-            document.querySelector('#tahsin input[name="price_normal"]').value = option.price_normal;
-            document.querySelector('#tahsin input[name="price_alumni"]').value = option.price_alumni;
-          } else if (selectedProgramType === 'App\\Models\\Kiba') {
-            document.getElementById('kiba').style.display = 'block';
-            document.querySelector('#kiba input[name="price_normal"]').value = option.price_normal;
-            document.querySelector('#kiba input[name="price_alumni"]').value = option.price_alumni;
-          } else if (selectedProgramType === 'App\\Models\\Tahfiz') {
-            document.getElementById('tahfiz').style.display = 'block';
-            document.querySelector('#tahfiz input[name="price_normal"]').value = option.price_normal;
-          } else if (selectedProgramType === 'App\\Models\\Bilhaq') {
-            document.getElementById('bilhaq').style.display = 'block';
-            document.querySelector('#bilhaq input[name="price_normal"]').value = option.price_normal;
-          } else if (selectedProgramType === 'App\\Models\\Lughoh') {
-            document.getElementById('lughoh').style.display = 'block';
-            document.querySelector('#lughoh input[name="price_pra"]').value = option
-              .price_pra;
-            document.querySelector('#lughoh input[name="price_normal"]').value = option.price_normal;
-            document.querySelector('#lughoh input[name="price_mahad"]').value = option.price_mahad;
-          } else if (selectedProgramType === 'App\\Models\\Fai') {
-            document.getElementById('fai').style.display = 'block';
-            document.querySelector('#fai input[name="price_pra"]').value = option.price_pra;
-            document.querySelector('#fai input[name="price_normal"]').value = option.price_normal;
-            document.querySelector('#fai input[name="price_mahad"]').value = option.price_mahad;
-            document.querySelector('#fai input[name="price_s1"]').value = option.price_s1;
-          } else if (selectedProgramType === 'App\\Models\\Stebis') {
-            document.getElementById('stebis').style.display = 'block';
-            document.querySelector('#stebis input[name="price_pra"]').value = option
-              .price_pra;
-            document.querySelector('#stebis input[name="price_normal"]').value = option.price_normal;
-            document.querySelector('#stebis input[name="price_mahad"]').value = option.price_mahad;
-            document.querySelector('#stebis input[name="price_s1"]').value = option.price_s1;
-          }
         });
+
+        var selectedBlockId = selectedProgramType.split('\\').pop().toLowerCase();
+        var selectedBlock = document.getElementById(selectedBlockId);
+        if (selectedBlock) {
+          selectedBlock.style.display = 'block';
+          disableInputs(selectedBlockId, false);
+          if (selectedProgramType === 'App\\Models\\Tahsin') {
+            document.querySelector('#tahsin input[name="price_normal"]').value = newOptions.length > 0 ?
+              newOptions[0].price_normal : '0';
+            document.querySelector('#tahsin input[name="price_alumni"]').value = newOptions.length > 0 ?
+              newOptions[0].price_alumni : '0';
+          } else if (selectedProgramType === 'App\\Models\\Tahfiz') {
+            document.querySelector('#tahfiz input[name="price_normal"]').value = newOptions.length > 0 ?
+              newOptions[0].price_normal : '0';
+          } else if (selectedProgramType === 'App\\Models\\Kiba') {
+            document.querySelector('#kiba input[name="price_normal"]').value = newOptions.length > 0 ? newOptions[
+              0].price_normal : '0';
+            document.querySelector('#kiba input[name="price_alumni"]').value = newOptions.length > 0 ? newOptions[
+              0].price_alumni : '0';
+          } else if (selectedProgramType === 'App\\Models\\Bilhaq') {
+            document.querySelector('#bilhaq input[name="price_normal"]').value = newOptions.length > 0 ?
+              newOptions[0].price_normal : '0';
+          } else if (selectedProgramType === 'App\\Models\\Lughoh') {
+            document.querySelector('#lughoh input[name="price_pra"]').value = newOptions.length > 0 ? newOptions[
+              0].price_pra : '0';
+            document.querySelector('#lughoh input[name="price_normal"]').value = newOptions.length > 0 ?
+              newOptions[0].price_normal : '0';
+            document.querySelector('#lughoh input[name="price_mahad"]').value = newOptions.length > 0 ?
+              newOptions[0].price_mahad : '0';
+          } else if (selectedProgramType === 'App\\Models\\Fai') {
+            document.querySelector('#fai input[name="price_pra"]').value = newOptions.length > 0 ? newOptions[0]
+              .price_pra : '0';
+            document.querySelector('#fai input[name="price_normal"]').value = newOptions.length > 0 ? newOptions[
+              0].price_normal : '0';
+            document.querySelector('#fai input[name="price_mahad"]').value = newOptions.length > 0 ? newOptions[0]
+              .price_mahad : '0';
+            document.querySelector('#fai input[name="price_s1"]').value = newOptions.length > 0 ? newOptions[0]
+              .price_s1 : '0';
+          } else if (selectedProgramType === 'App\\Models\\Stebis') {
+            document.querySelector('#stebis input[name="price_pra"]').value = newOptions.length > 0 ? newOptions[
+              0].price_pra : '0';
+            document.querySelector('#stebis input[name="price_normal"]').value = newOptions.length > 0 ?
+              newOptions[0].price_normal : '0';
+            document.querySelector('#stebis input[name="price_mahad"]').value = newOptions.length > 0 ?
+              newOptions[0].price_mahad : '0';
+            document.querySelector('#stebis input[name="price_s1"]').value = newOptions.length > 0 ? newOptions[0]
+              .price_s1 : '0';
+          }
+        }
       });
     });
   </script>

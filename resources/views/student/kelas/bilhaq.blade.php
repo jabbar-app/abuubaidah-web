@@ -23,7 +23,8 @@
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-price">Biaya Pendaftaran</label>
               <div class="col-sm-9">
-                <input type="text" id="multicol-price" class="form-control" value="Rp{{ number_format($program->price_normal, 0, ',', '.') }},-" readonly />
+                <input type="text" id="multicol-price" class="form-control"
+                  value="Rp{{ number_format($program->price_normal, 0, ',', '.') }},-" readonly />
                 <input type="hidden" value="{{ $program->price_normal }}" name="amount">
               </div>
             </div>
@@ -33,13 +34,15 @@
               <label class="col-sm-3 col-form-label" for="multicol-program">Program</label>
               <div class="col-sm-9">
                 <input type="hidden" value="{{ $program->id }}" name="program_id">
-                <input type="text" id="multicol-program" class="form-control" value="{{ $program->programmable->title }}" name="program" readonly />
+                <input type="text" id="multicol-program" class="form-control"
+                  value="{{ $program->programmable->title }}" name="program" readonly />
               </div>
             </div>
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-batch">Angkatan</label>
               <div class="col-sm-9">
-                <input type="text" id="multicol-batch" class="form-control" value="{{ $program->programmable->batch }}" name="batch" readonly />
+                <input type="text" id="multicol-batch" class="form-control" value="{{ $program->programmable->batch }}"
+                  name="batch" readonly />
               </div>
             </div>
             <input type="hidden" name="class" value="-">
@@ -47,7 +50,6 @@
               <div class="row justify-content-end">
                 <div class="col-sm-9">
                   <button type="submit" class="btn btn-primary me-sm-2 me-1">Submit</button>
-                  <button type="reset" class="btn btn-label-secondary">Reset</button>
                 </div>
               </div>
             </div>

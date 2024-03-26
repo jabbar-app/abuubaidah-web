@@ -89,8 +89,7 @@
             <div class="pt-4">
               <div class="row justify-content-end">
                 <div class="col-sm-9">
-                  <button type="submit" class="btn btn-primary me-sm-2 me-1">Submit</button>
-                  <button type="reset" class="btn btn-label-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary mb-4 me-sm-2 me-1">Submit</button>
                 </div>
               </div>
             </div>

@@ -23,7 +23,7 @@
               <tr>
                 <td>{{ $p->updated_at->format('d M Y') }}</td>
                 <td>{{ $p->external_id }}</td>
-                <td>{{ $p->program->programmable->title }}</td>
+                <td>{{ $p->description }}</td>
                 <td>Rp{{ number_format($p->amount, 0, ',', '.') }},-</td>
                 <td>
                   <span

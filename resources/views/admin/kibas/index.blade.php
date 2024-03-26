@@ -64,6 +64,7 @@
                       <li>
                         <a href="{{ route('kibas.show', $kiba->id) }}" class="dropdown-item">Details</a>
                       </li>
+                      <li><a href="{{ route('kibas.edit', $kiba->id) }}" class="dropdown-item">Edit Data</a></li>
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>

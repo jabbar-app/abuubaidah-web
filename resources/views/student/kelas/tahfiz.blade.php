@@ -56,12 +56,12 @@
                 <div class="col-sm-9">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="hasBilhaqCert" id="hasBilhaqCertYes"
-                      value="yes">
+                      value="Ada Sertifikat">
                     <label class="form-check-label" for="hasBilhaqCertYes">Ya, sudah.</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="hasBilhaqCert" id="hasBilhaqCertNo"
-                      value="no">
+                      value="Tidak Ada">
                     <label class="form-check-label" for="hasBilhaqCertNo">Belum.</label>
                   </div>
                 </div>
