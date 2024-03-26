@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        Program</h4>
       <a href="{{ route('stebis.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
@@ -36,7 +37,7 @@
               <label for="batch" class="form-label">Angkatan</label>
               <input type="number" class="form-control" id="batch" name="batch" value="{{ $stebis->batch }}">
             </div>
-            <div class="mb-3 select2-primary">
+            {{-- <div class="mb-3 select2-primary">
               <label class="col-sm-3 col-form-label" for="option-select">Tipe Kelas</label>
               <div class="col-12">
                 @php
@@ -48,36 +49,29 @@
                 </select>
                 <div class="form-text">Bisa pilih lebih dari satu, klik lagi untuk memilih opsi lainnya.</div>
               </div>
-            </div>
+            </div> --}}
             <div class="mb-3">
               <label for="description" class="form-label">Description</label>
               <textarea class="form-control" id="description" name="description">{{ $stebis->description }}</textarea>
             </div>
-            <div class="mb-3">
-              <label for="price_normal" class="form-label">Biaya Normal</label>
-              <input type="number" class="form-control" id="price_normal" name="price_normal" value="{{ $stebis->price_normal }}">
-            </div>
-            <div class="mb-3">
-              <label for="price_alumni" class="form-label">Biaya Alumni</label>
-              <input type="number" class="form-control" id="price_alumni" name="price_alumni" value="{{ $stebis->price_alumni }}">
-            </div>
-            <div class="mb-3 select2-primary">
-              <label class="col-sm-3 col-form-label" for="option-select">Sesi Belajar</label>
-              <div class="col-12">
-                <label class="form-label">Sesi</label>
-                @php
-                  $selectedOptions = json_decode($stebis->session, true);
-                  if (!is_array($selectedOptions)) {
-                      $selectedOptions = [$selectedOptions];
-                  }
-                @endphp
 
-                <select id="session-select" class="select2 form-select" multiple name="session[]">
-                  @foreach ($allOptions as $option)
-                    <option value="{{ $option }}" @if (in_array($option, $selectedOptions)) selected @endif>{{ $option }}</option>
-                  @endforeach
-                </select>
-              </div>
+            <div class="mb-3">
+              <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
+              <input type="number" class="form-control" id="price_pra" name="price_pra" value="{{ $stebis->price_pra }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_normal" class="form-label">Biaya SPP</label>
+              <input type="number" class="form-control" id="price_normal" name="price_normal"
+                value="{{ $stebis->price_normal }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_mahad" class="form-label">Biaya Pembangunan Ma'had</label>
+              <input type="number" class="form-control" id="price_mahad" name="price_mahad"
+                value="{{ $stebis->price_mahad }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_s1" class="form-label">Biaya Pembangunan S1</label>
+              <input type="number" class="form-control" id="price_s1" name="price_s1" value="{{ $stebis->price_s1 }}">
             </div>
             <div class="mb-5">
               <label for="status" class="form-label">Status</label>

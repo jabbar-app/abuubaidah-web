@@ -54,14 +54,10 @@
               <textarea class="form-control" id="description" name="description">{{ $bilhaq->description }}</textarea>
             </div>
             <div class="mb-3">
-              <label for="price_normal" class="form-label">Biaya Normal</label>
+              <label for="price_normal" class="form-label">Biaya Pendaftaran</label>
               <input type="number" class="form-control" id="price_normal" name="price_normal" value="{{ $bilhaq->price_normal }}">
             </div>
-            <div class="mb-3">
-              <label for="price_alumni" class="form-label">Biaya Alumni</label>
-              <input type="number" class="form-control" id="price_alumni" name="price_alumni" value="{{ $bilhaq->price_alumni }}">
-            </div>
-            <div class="mb-3 select2-primary">
+            {{-- <div class="mb-3 select2-primary">
               <label class="col-sm-3 col-form-label" for="option-select">Sesi Belajar</label>
               <div class="col-12">
                 <label class="form-label">Sesi</label>
@@ -78,7 +74,7 @@
                   @endforeach
                 </select>
               </div>
-            </div>
+            </div> --}}
             <div class="mb-5">
               <label for="status" class="form-label">Status</label>
               <select name="status" id="status" class="form-select">

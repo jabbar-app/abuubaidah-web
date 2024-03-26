@@ -49,6 +49,7 @@ Route::get('/kelas/create/{id}', [KelasController::class, 'register'])->middlewa
 Route::get('/pengumuman', [KelasController::class, 'pengumumanIndex']);
 Route::get('/pengumuman/{program}', [KelasController::class, 'pengumuman']);
 Route::get('/search', [KelasController::class, 'search'])->name('search.results');
+Route::post('/daftar/tahfiz', [KelasController::class, 'daftarTahfiz'])->name('daftar.tahfiz');
 
 Route::middleware('auth')->group(function () {
     Route::post('/create-invoice', [PaymentController::class,'createInvoice'])->name('create.invoice');
@@ -70,7 +71,15 @@ Route::resource('/bilhaqs', BilhaqController::class)->middleware('auth');
 Route::resource('/kibas', KibaController::class)->middleware('auth');
 Route::resource('/lughohs', LughohController::class)->middleware('auth');
 Route::resource('/fais', FaiController::class)->middleware('auth');
-Route::resource('/stebis', StebisController::class)->middleware('auth');
+
+Route::get('/stebis', [StebisController::class, 'index'])->name('stebis.index');
+Route::post('/stebis', [StebisController::class, 'store'])->name('stebis.store');
+Route::get('/stebis/create', [StebisController::class, 'create'])->name('stebis.create');
+Route::get('/stebis/{stebis}', [StebisController::class, 'show'])->name('stebis.show');
+Route::put('/stebis/{stebis}', [StebisController::class, 'update'])->name('stebis.update');
+Route::delete('/stebis/{stebis}', [StebisController::class, 'destroy'])->name('stebis.destroy');
+Route::get('/stebis/{stebis}/edit', [StebisController::class, 'edit'])->name('stebis.edit');
+
 Route::resource('/programs', ProgramController::class)->middleware('auth');
 Route::resource('/payments', PaymentController::class)->middleware('auth');
 Route::resource('/announcements', AnnouncementController::class)->middleware('auth');

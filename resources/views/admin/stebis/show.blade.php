@@ -34,27 +34,24 @@
             <h5>{{ $stebis->batch }}</h5>
           </div>
           <div class="mb-3">
-            <small>Tipe Kelas</small>
-            @php
-              $selectedOptions = json_decode($stebis->option);
-            @endphp
-            <div class="d-flex mt-1">
-              @foreach ($selectedOptions as $option)
-                <span class="badge bg-label-info me-2">{{ $option }}</span>
-              @endforeach
-            </div>
-          </div>
-          <div class="mb-3">
             <small>Deskripsi</small>
             <p>{{ $stebis->description }}</p>
           </div>
           <div class="mb-3">
-            <small>Biaya Normal</small>
+            <small>Biaya Pendaftaran/Seleksi</small>
+            <h5>Rp{{ number_format($stebis->price_pra, 0, ',', '.') }},-</h5>
+          </div>
+          <div class="mb-3">
+            <small>Biaya SPP</small>
             <h5>Rp{{ number_format($stebis->price_normal, 0, ',', '.') }},-</h5>
           </div>
           <div class="mb-3">
-            <small>Biaya Alumni</small>
-            <h5>Rp{{ number_format($stebis->price_alumni, 0, ',', '.') }},-</h5>
+            <small>Biaya Pembangunan Ma'had</small>
+            <h5>Rp{{ number_format($stebis->price_mahad, 0, ',', '.') }},-</h5>
+          </div>
+          <div class="mb-3">
+            <small>Biaya Pembangunan S1</small>
+            <h5>Rp{{ number_format($stebis->price_s1, 0, ',', '.') }},-</h5>
           </div>
           <div class="my-5">
             <small>Status</small>

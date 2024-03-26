@@ -50,7 +50,7 @@
               </select>
             </div>
 
-            <div id="tahsin" style="display: hidden;">
+            <div id="tahsin" style="display: none;">
               <div class="mb-3">
                 <label for="price_normal" class="form-label">Biaya Normal</label>
                 <input type="number" name="price_normal" value="0" class="form-control" required>
@@ -61,21 +61,81 @@
               </div>
             </div>
 
-            <div id="kiba" style="display: hidden;">
+            <div id="tahfiz" style="display: none;">
               <div class="mb-3">
-                <label for="price_registration" class="form-label">Biaya Pendaftaran/Seleksi</label>
-                <input type="number" name="price_registration" value="0" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="price_spp" class="form-label">Biaya SPP</label>
-                <input type="number" name="price_spp" value="0" class="form-control" required>
+                <label for="price_normal" class="form-label">Biaya Pendaftaran/Seleksi</label>
+                <input type="number" name="price_normal" value="0" class="form-control" required>
               </div>
             </div>
 
-            <div id="bilhaq" style="display: hidden;">
+            <div id="kiba" style="display: none;">
+              <div class="mb-3">
+                <label for="price_normal" class="form-label">Biaya Normal</label>
+                <input type="number" name="price_normal" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_alumni" class="form-label">Biaya Alumni</label>
+                <input type="number" name="price_alumni" value="0" class="form-control" required>
+              </div>
+            </div>
+
+            <div id="bilhaq" style="display: none;">
               <div class="mb-3">
                 <label for="price" class="form-label">Biaya Pendaftaran</label>
-                <input type="number" name="price" value="0" class="form-control" required>
+                <input type="number" name="price_normal" value="0" class="form-control" required>
+              </div>
+            </div>
+
+            <div id="lughoh" style="display: none;">
+              <div class="mb-3">
+                <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
+                <input type="number" name="price_pra" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_normal" class="form-label">Biaya SPP</label>
+                <input type="number" name="price_normal" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_mahad" class="form-label">Biaya Pembangunan Ma'had</label>
+                <input type="number" name="price_mahad" value="0" class="form-control" required>
+              </div>
+            </div>
+
+            <div id="fai" style="display: none;">
+              <div class="mb-3">
+                <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
+                <input type="number" name="price_pra" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_normal" class="form-label">Biaya SPP</label>
+                <input type="number" name="price_normal" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_mahad" class="form-label">Biaya Pembangunan Ma'had</label>
+                <input type="number" name="price_mahad" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_s1" class="form-label">Biaya Pembangunan S1</label>
+                <input type="number" name="price_s1" value="0" class="form-control" required>
+              </div>
+            </div>
+
+            <div id="stebis" style="display: none;">
+              <div class="mb-3">
+                <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
+                <input type="number" name="price_pra" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_normal" class="form-label">Biaya SPP</label>
+                <input type="number" name="price_normal" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_mahad" class="form-label">Biaya Pembangunan Ma'had</label>
+                <input type="number" name="price_mahad" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_s1" class="form-label">Biaya Pembangunan S1</label>
+                <input type="number" name="price_s1" value="0" class="form-control" required>
               </div>
             </div>
 
@@ -151,7 +211,8 @@
             break;
         }
 
-        var programDetailsDivs = document.querySelectorAll('#tahsin, #bilhaq');
+        var programDetailsDivs = document.querySelectorAll(
+          '#tahsin, #tahfiz, #bilhaq, #kiba, #lughoh, #fai, #stebis');
         programDetailsDivs.forEach(function(div) {
           div.style.display = 'none';
         });
@@ -166,13 +227,35 @@
             document.getElementById('tahsin').style.display = 'block';
             document.querySelector('#tahsin input[name="price_normal"]').value = option.price_normal;
             document.querySelector('#tahsin input[name="price_alumni"]').value = option.price_alumni;
-          } else if (selectedProgramType === 'App\\Models\\Bilhaq') {
-            document.getElementById('bilhaq').style.display = 'block';
-            document.querySelector('#tahsin input[name="price"]').value = option.price;
           } else if (selectedProgramType === 'App\\Models\\Kiba') {
             document.getElementById('kiba').style.display = 'block';
-            document.querySelector('#kiba input[name="price_registration"]').value = option.price_registration;
-            document.querySelector('#kiba input[name="price_spp"]').value = option.price_spp;
+            document.querySelector('#kiba input[name="price_normal"]').value = option.price_normal;
+            document.querySelector('#kiba input[name="price_alumni"]').value = option.price_alumni;
+          } else if (selectedProgramType === 'App\\Models\\Tahfiz') {
+            document.getElementById('tahfiz').style.display = 'block';
+            document.querySelector('#tahfiz input[name="price_normal"]').value = option.price_normal;
+          } else if (selectedProgramType === 'App\\Models\\Bilhaq') {
+            document.getElementById('bilhaq').style.display = 'block';
+            document.querySelector('#bilhaq input[name="price_normal"]').value = option.price_normal;
+          } else if (selectedProgramType === 'App\\Models\\Lughoh') {
+            document.getElementById('lughoh').style.display = 'block';
+            document.querySelector('#lughoh input[name="price_pra"]').value = option
+              .price_pra;
+            document.querySelector('#lughoh input[name="price_normal"]').value = option.price_normal;
+            document.querySelector('#lughoh input[name="price_mahad"]').value = option.price_mahad;
+          } else if (selectedProgramType === 'App\\Models\\Fai') {
+            document.getElementById('fai').style.display = 'block';
+            document.querySelector('#fai input[name="price_pra"]').value = option.price_pra;
+            document.querySelector('#fai input[name="price_normal"]').value = option.price_normal;
+            document.querySelector('#fai input[name="price_mahad"]').value = option.price_mahad;
+            document.querySelector('#fai input[name="price_s1"]').value = option.price_s1;
+          } else if (selectedProgramType === 'App\\Models\\Stebis') {
+            document.getElementById('stebis').style.display = 'block';
+            document.querySelector('#stebis input[name="price_pra"]').value = option
+              .price_pra;
+            document.querySelector('#stebis input[name="price_normal"]').value = option.price_normal;
+            document.querySelector('#stebis input[name="price_mahad"]').value = option.price_mahad;
+            document.querySelector('#stebis input[name="price_s1"]').value = option.price_s1;
           }
         });
       });

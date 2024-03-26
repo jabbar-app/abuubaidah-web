@@ -190,7 +190,6 @@ class PaymentController extends Controller
         'status' => 'Menunggu Update',
       ]);
 
-      // Use the ID of the newly created Kelas instance when creating the Payment
       Payment::create([
         'program_id' => $request->program_id,
         'kelas_id' => $kelas->id, // Use the ID from the Kelas instance

@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        Program</h4>
       <a href="{{ route('tahfizs.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
@@ -43,8 +44,10 @@
                   $selectedOptions = json_decode($tahfiz->option);
                 @endphp
                 <select id="option-select" class="select2 form-select" multiple name="option[]">
-                  <option value="Kelas Online (Daring)" @if (in_array('Kelas Online (Daring)', $selectedOptions)) selected @endif>Kelas Online (Daring)</option>
-                  <option value="Kelas Offline (Luring)" @if (in_array('Kelas Offline (Luring)', $selectedOptions)) selected @endif>Kelas Offline (Luring)</option>
+                  <option value="Kelas Online (Daring)" @if (in_array('Kelas Online (Daring)', $selectedOptions)) selected @endif>Kelas Online
+                    (Daring)</option>
+                  <option value="Kelas Offline (Luring)" @if (in_array('Kelas Offline (Luring)', $selectedOptions)) selected @endif>Kelas Offline
+                    (Luring)</option>
                 </select>
                 <div class="form-text">Bisa pilih lebih dari satu, klik lagi untuk memilih opsi lainnya.</div>
               </div>
@@ -54,14 +57,11 @@
               <textarea class="form-control" id="description" name="description">{{ $tahfiz->description }}</textarea>
             </div>
             <div class="mb-3">
-              <label for="price_normal" class="form-label">Biaya Normal</label>
-              <input type="number" class="form-control" id="price_normal" name="price_normal" value="{{ $tahfiz->price_normal }}">
+              <label for="price_normal" class="form-label">Biaya Pendaftaran</label>
+              <input type="number" class="form-control" id="price_normal" name="price_normal"
+                value="{{ $tahfiz->price_normal }}">
             </div>
-            <div class="mb-3">
-              <label for="price_alumni" class="form-label">Biaya Alumni</label>
-              <input type="number" class="form-control" id="price_alumni" name="price_alumni" value="{{ $tahfiz->price_alumni }}">
-            </div>
-            <div class="mb-3 select2-primary">
+            {{-- <div class="mb-3 select2-primary">
               <label class="col-sm-3 col-form-label" for="option-select">Sesi Belajar</label>
               <div class="col-12">
                 <label class="form-label">Sesi</label>
@@ -74,11 +74,12 @@
 
                 <select id="session-select" class="select2 form-select" multiple name="session[]">
                   @foreach ($allOptions as $option)
-                    <option value="{{ $option }}" @if (in_array($option, $selectedOptions)) selected @endif>{{ $option }}</option>
+                    <option value="{{ $option }}" @if (in_array($option, $selectedOptions)) selected @endif>
+                      {{ $option }}</option>
                   @endforeach
                 </select>
               </div>
-            </div>
+            </div> --}}
             <div class="mb-5">
               <label for="status" class="form-label">Status</label>
               <select name="status" id="status" class="form-select">

@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('title');
             $table->string('option');
             $table->text('description');
+            $table->decimal('price_pra', 10, 0)->default(0);
+            $table->decimal('price_normal', 10, 0)->default(0);
+            $table->decimal('price_mahad', 10, 0)->default(0);
+            $table->decimal('price_s1', 10, 0)->default(0);
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

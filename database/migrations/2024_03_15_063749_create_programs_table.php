@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
             $table->morphs('programmable');
-            $table->decimal('price_pra', 10, 0)->default(0);
-            $table->decimal('price_normal', 10, 0)->default(0);
-            $table->decimal('price_alumni', 10, 0)->default(0);
             $table->date('deadline')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();

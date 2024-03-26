@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        Program</h4>
       <a href="{{ route('lughohs.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
@@ -29,7 +30,8 @@
             @csrf
             <div class="mb-3">
               <label for="title" class="form-label">Nama Program</label>
-              <input type="text" class="form-control" id="title" name="title" value="Program Bahasa Arab & Studi Islam">
+              <input type="text" class="form-control" id="title" name="title"
+                value="Program Bahasa Arab & Studi Islam">
             </div>
             <div class="mb-3">
               <label for="batch" class="form-label">Angkatan</label>
@@ -49,14 +51,20 @@
               <label for="description" class="form-label">Description</label>
               <textarea class="form-control" id="description" name="description"></textarea>
             </div>
+
             <div class="mb-3">
-              <label for="price_normal" class="form-label">Biaya Normal</label>
+              <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
+              <input type="number" class="form-control" id="price_pra" name="price_pra" value="0">
+            </div>
+            <div class="mb-3">
+              <label for="price_normal" class="form-label">Biaya SPP</label>
               <input type="number" class="form-control" id="price_normal" name="price_normal" value="0">
             </div>
             <div class="mb-3">
-              <label for="price_alumni" class="form-label">Biaya Alumni</label>
-              <input type="number" class="form-control" id="price_alumni" name="price_alumni" value="0">
+              <label for="price_mahad" class="form-label">Biaya Pembangunan Ma'had</label>
+              <input type="number" class="form-control" id="price_mahad" name="price_mahad" value="0">
             </div>
+
             <div class="mb-5">
               <label for="status" class="form-label">Status</label>
               <select name="status" id="status" class="form-select">

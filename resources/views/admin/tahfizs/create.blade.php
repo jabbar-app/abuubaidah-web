@@ -50,12 +50,8 @@
               <textarea class="form-control" id="description" name="description"></textarea>
             </div>
             <div class="mb-3">
-              <label for="price_normal" class="form-label">Biaya Normal</label>
+              <label for="price_normal" class="form-label">Biaya Pendaftaran</label>
               <input type="number" class="form-control" id="price_normal" name="price_normal" value="0">
-            </div>
-            <div class="mb-3">
-              <label for="price_alumni" class="form-label">Biaya Alumni</label>
-              <input type="number" class="form-control" id="price_alumni" name="price_alumni" value="0">
             </div>
             <div class="mb-5">
               <label for="status" class="form-label">Status</label>

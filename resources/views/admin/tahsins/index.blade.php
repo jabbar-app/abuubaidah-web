@@ -10,7 +10,7 @@
 
     @if (session('success'))
       <div class="col-12">
-        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Success!
+        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Berhasil!
           </strong> {{ session('success') }}
           <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>

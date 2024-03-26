@@ -10,7 +10,7 @@
 
     @if (session('success'))
       <div class="col-12">
-        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Success!
+        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Berhasil!
           </strong> {{ session('success') }}
           <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -46,7 +46,7 @@
                 <td>
                   <div class="d-inline-block"><a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
-                      <li><a href="{{ route('announcements.show', $announcement->id) }}" class="dropdown-item">Details</a></li>
+                      <li><a href="{{ route('announcements.edit', $announcement->id) }}" class="dropdown-item">Edit Pengumuman</a></li>
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>

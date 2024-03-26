@@ -68,9 +68,7 @@
             <tr>
               <th>Program</th>
               <th>Angkatan</th>
-              <th>Kelas</th>
-              <th>Sesi</th>
-              <th>Nilai</th>
+              <th class="text-center">Detail</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -79,9 +77,9 @@
               <tr>
                 <td>{{ $k->program }}</td>
                 <td>{{ $k->batch }}</td>
-                <td>
+                {{-- <td>
                     {{ $k->class }}
-                    @if(!empty($k->room))
+                    @if (!empty($k->room))
                     <br>Ruang Kelas: {{ $k->room }}
                     @endif
                 </td>
@@ -100,9 +98,9 @@
                       <li>{{ $session }}</li>
                     @endforeach
                   </ul>
-                </td>
+                </td> --}}
 
-                <td><button class="btn btn-sm btn-light">Menunggu</button></td>
+                <td class="text-center"><a href="/kelas/detail/{{ $k->id }}" class="btn btn-sm btn-light">Lihat Detail</a></td>
                 <td><span class="badge bg-label-primary">{{ $k->status }}</span></td>
               </tr>
             @endforeach
@@ -111,9 +109,7 @@
             <tr>
               <th>Program</th>
               <th>Angkatan</th>
-              <th>Kelas</th>
-              <th>Sesi</th>
-              <th>Nilai</th>
+              <th class="text-center">Detail</th>
               <th>Status</th>
             </tr>
           </tfoot>

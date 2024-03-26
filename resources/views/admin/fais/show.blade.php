@@ -49,12 +49,20 @@
             <p>{{ $fai->description }}</p>
           </div>
           <div class="mb-3">
-            <small>Biaya Normal</small>
+            <small>Biaya Pendaftaran/Seleksi</small>
+            <h5>Rp{{ number_format($fai->price_pra, 0, ',', '.') }},-</h5>
+          </div>
+          <div class="mb-3">
+            <small>Biaya SPP</small>
             <h5>Rp{{ number_format($fai->price_normal, 0, ',', '.') }},-</h5>
           </div>
           <div class="mb-3">
-            <small>Biaya Alumni</small>
-            <h5>Rp{{ number_format($fai->price_alumni, 0, ',', '.') }},-</h5>
+            <small>Biaya Pembangunan Ma'had</small>
+            <h5>Rp{{ number_format($fai->price_mahad, 0, ',', '.') }},-</h5>
+          </div>
+          <div class="mb-3">
+            <small>Biaya Pembangunan S1</small>
+            <h5>Rp{{ number_format($fai->price_s1, 0, ',', '.') }},-</h5>
           </div>
           <div class="my-5">
             <small>Status</small>

@@ -44,9 +44,12 @@ class ProgramController extends Controller
     $validatedData = $request->validate([
       'program_type' => 'required|string',
       'programmable_id' => 'required|integer',
-      'price_pra' => 'required|numeric',
-      'price_normal' => 'required|numeric',
-      'price_alumni' => 'required|numeric',
+      'price_pra' => 'numeric',
+      'price_normal' => 'numeric',
+      'price_alumni' => 'numeric',
+      'price_normal' => 'numeric',
+      'price_mahad' => 'numeric',
+      'price_s1' => 'numeric',
       'deadline' => 'date',
       'status' => 'required|boolean',
     ], $messages);
@@ -58,6 +61,9 @@ class ProgramController extends Controller
         'price_pra' => $validatedData['price_pra'],
         'price_normal' => $validatedData['price_normal'],
         'price_alumni' => $validatedData['price_alumni'],
+        'price_normal' => $validatedData['price_normal'],
+        'price_mahad' => $validatedData['price_mahad'],
+        'price_s1' => $validatedData['price_s1'],
         'deadline' => $validatedData['deadline'],
         'status' => $validatedData['status'],
       ]);
@@ -93,12 +99,16 @@ class ProgramController extends Controller
 
   public function update(Request $request, Program $program)
   {
+    // dd($request->all());
     $validatedData = $request->validate([
       'program_type' => 'required|string',
       'programmable_id' => 'required|integer',
-      'price_pra' => 'required|numeric',
-      'price_normal' => 'required|numeric',
-      'price_alumni' => 'required|numeric',
+      'price_pra' => 'numeric',
+      'price_normal' => 'numeric',
+      'price_alumni' => 'numeric',
+      'price_normal' => 'numeric',
+      'price_mahad' => 'numeric',
+      'price_s1' => 'numeric',
       'deadline' => 'date',
       'status' => 'required|boolean',
       // Add validation for other fields if necessary

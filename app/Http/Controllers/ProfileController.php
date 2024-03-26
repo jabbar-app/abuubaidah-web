@@ -21,6 +21,8 @@ class ProfileController extends Controller
    */
   public function edit(Request $request): View
   {
+    session(['previous_url' => url()->previous()]);
+
     $user = $request->user();
     $address = json_decode($user->address, true);
     $provinces = Province::all();
@@ -94,107 +96,62 @@ class ProfileController extends Controller
   public function update(Request $request)
   {
     $user = auth()->user();
-    $ktp = '';
-    $kk = '';
-    $ijazah = '';
-    $bilhaq = '';
 
-    if ($request->hasFile('url_pas_foto')) {
-      $request->validate([
-        'url_pas_foto' => 'image|mimes:jpeg,png,jpg|max:2048', // Add validation rules for the profile photo
-      ]);
+    // Handle file uploads
+    $this->handleFileUpload($request, $user, 'url_pas_foto', 'profile-photos');
+    $this->handleFileUpload($request, $user, 'url_ktp', 'upload-image');
+    $this->handleFileUpload($request, $user, 'url_kk', 'upload-image');
+    $this->handleFileUpload($request, $user, 'url_ijazah', 'upload-image');
+    $this->handleFileUpload($request, $user, 'url_bilhaq', 'upload-image');
 
-      // Handle the profile photo upload
-      $profilePhotoPath = $request->file('url_pas_foto')->store('profile-photos', 'public');
+    // Prepare data for update
+    $updateData = $this->prepareUpdateData($request);
 
-      // Delete old profile photo if exists
-      if ($user->url_pas_foto) {
-        Storage::disk('public')->delete($user->url_pas_foto);
-      }
+    // Update user data
+    $user->update($updateData);
 
-      // Update the user's profile photo
-      $user->url_pas_foto = $profilePhotoPath;
-      $user->update(['url_pas_foto' => $user->url_pas_foto]);
-    }
-
-    if ($request->hasFile('url_ktp')) {
-      $ktp = $request->file('url_ktp')->store('upload-image', 'public');
-      if ($user->url_ktp) {
-        Storage::disk('public')->delete($user->url_ktp);
-      }
-
-      $user->update([
-        'url_ktp' => $ktp,
-      ]);
-    } elseif ($request->hasFile('url_kk')) {
-      $kk = $request->file('url_kk')->store('upload-image', 'public');
-      if ($user->url_kk) {
-        Storage::disk('public')->delete($user->url_kk);
-      }
-
-      $user->update([
-        'url_kk' => $kk,
-      ]);
-    } elseif ($request->hasFile('url_ijazah')) {
-      $ijazah = $request->file('url_ijazah')->store('upload-image', 'public');
-      if ($user->url_ijazah) {
-        Storage::disk('public')->delete($user->url_ijazah);
-      }
-
-      $user->update([
-        'url_ijazah' => $ijazah,
-      ]);
-    } elseif ($request->hasFile('url_bilhaq')) {
-      $bilhaq = $request->file('url_bilhaq')->store('upload-image', 'public');
-      if ($user->url_bilhaq) {
-        Storage::disk('public')->delete($user->url_bilhaq);
-      }
-
-      $user->update([
-        'url_bilhaq' => $bilhaq,
-      ]);
-    } else {
-      $user->update([
-        'name' => $request->name,
-        'nik' => $request->nik,
-        'email' => $request->email,
-        'phone' => $request->phone,
-        'tempat_lahir' => $request->tempat_lahir,
-        'tanggal_lahir' => $request->tanggal_lahir,
-        'status_perkawinan' => $request->status_perkawinan,
-        'agama' => $request->agama,
-        'suku' => $request->suku,
-        'address' => $request->address,
-        'province' => $request->province,
-        'regency' => $request->regency,
-        'district' => $request->district,
-        'ukuran_almamater' => $request->ukuran_almamater,
-        'nama_sd' => $request->nama_sd,
-        'lulus_sd' => $request->lulus_sd,
-        'nama_smp' => $request->nama_smp,
-        'lulus_smp' => $request->lulus_smp,
-        'nama_sma' => $request->nama_sma,
-        'lulus_sma' => $request->lulus_sma,
-        'perguruan_tinggi' => $request->perguruan_tinggi,
-        'status_ayah' => $request->status_ayah,
-        'nama_ayah' => $request->nama_ayah,
-        'pekerjaan_ayah' => $request->pekerjaan_ayah,
-        'penghasilan_ayah' => $request->penghasilan_ayah,
-        'telp_ayah' => $request->telp_ayah,
-        'status_ibu' => $request->status_ibu,
-        'nama_ibu' => $request->nama_ibu,
-        'pekerjaan_ibu' => $request->pekerjaan_ibu,
-        'penghasilan_ibu' => $request->penghasilan_ibu,
-        'telp_ibu' => $request->telp_ibu,
-        'url_ktp' => $ktp,
-        'url_kk' => $kk,
-        'url_ijazah' => $ijazah,
-        'url_bilhaq' => $bilhaq,
-      ]);
-    }
-
-    return redirect()->back()->with('success', 'Profile updated successfully!');
+    return redirect(session('previous_url', '/dashboard'))->with('success', 'Profile updated successfully!');
   }
+
+  protected function handleFileUpload($request, $user, $fieldName, $storagePath)
+  {
+    if ($request->hasFile($fieldName)) {
+      $request->validate([$fieldName => 'image|mimes:jpeg,png,jpg|max:2048']);
+
+      $path = $request->file($fieldName)->store($storagePath, 'public');
+
+      // Delete old file if it exists
+      if (!empty($user->$fieldName)) {
+        Storage::disk('public')->delete($user->$fieldName);
+      }
+
+      // Update the user's field with the new file path
+      $user->update([$fieldName => $path]);
+    }
+  }
+
+  protected function prepareUpdateData($request)
+  {
+    $fields = [
+      'nik', 'phone', 'email', 'name', 'tempat_lahir', 'tanggal_lahir',
+      'status_perkawinan', 'agama', 'suku', 'address', 'province', 'regency',
+      'district', 'ukuran_almamater', 'nama_sd', 'lulus_sd', 'nama_smp',
+      'lulus_smp', 'nama_sma', 'lulus_sma', 'perguruan_tinggi', 'status_ayah',
+      'nama_ayah', 'pekerjaan_ayah', 'penghasilan_ayah', 'telp_ayah',
+      'status_ibu', 'nama_ibu', 'pekerjaan_ibu', 'penghasilan_ibu', 'telp_ibu',
+    ];
+
+    $updateData = [];
+
+    foreach ($fields as $field) {
+      if (!empty($request->$field)) {
+        $updateData[$field] = $request->$field;
+      }
+    }
+
+    return $updateData;
+  }
+
 
   /**
    * Delete the user's account.

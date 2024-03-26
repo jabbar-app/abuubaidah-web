@@ -49,12 +49,8 @@
             <p>{{ $bilhaq->description }}</p>
           </div>
           <div class="mb-3">
-            <small>Biaya Normal</small>
+            <small>Biaya Pendaftaran</small>
             <h5>Rp{{ number_format($bilhaq->price_normal, 0, ',', '.') }},-</h5>
-          </div>
-          <div class="mb-3">
-            <small>Biaya Alumni</small>
-            <h5>Rp{{ number_format($bilhaq->price_alumni, 0, ',', '.') }},-</h5>
           </div>
           <div class="my-5">
             <small>Status</small>

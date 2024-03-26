@@ -10,7 +10,7 @@
 
     @if (session('success'))
       <div class="col-12">
-        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Success!
+        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Berhasil!
           </strong> {{ session('success') }}
           <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -42,7 +42,7 @@
             @foreach ($kelas as $kelas)
               <tr>
                 <td>{{ $kelas->id }}</td>
-                <td>{{ $kelas->user->name ?? '' }}</td>
+                <td>{{ $kelas->user->id ?? '' }}</td>
                 <td>{{ $kelas->user->nik ?? '' }}</td>
                 <td>{{ $kelas->user->phone ?? '' }}</td>
                 <td>{{ $kelas->program . ', Angkatan ' . $kelas->batch }}</td>
@@ -69,7 +69,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
                       <li>
-                        <a href="{{ route('kelas.show', $kelas->id) }}" class="dropdown-item">Details</a>
+                        <a href="{{ route('kelas.edit', $kelas->id) }}" class="dropdown-item">Edit Data</a>
                       </li>
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>

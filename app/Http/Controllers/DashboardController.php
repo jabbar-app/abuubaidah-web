@@ -116,12 +116,38 @@ class DashboardController extends Controller
             })
             ->get();
 
+            $fields = [
+                'nik', 'phone', 'email', 'name', 'tempat_lahir', 'tanggal_lahir',
+                'status_perkawinan', 'agama', 'suku', 'address', 'province', 'regency',
+                'district', 'ukuran_almamater', 'nama_sd', 'lulus_sd', 'nama_smp',
+                'lulus_smp', 'nama_sma', 'lulus_sma', 'perguruan_tinggi', 'status_ayah',
+                'nama_ayah', 'pekerjaan_ayah', 'penghasilan_ayah', 'telp_ayah',
+                'status_ibu', 'nama_ibu', 'pekerjaan_ibu', 'penghasilan_ibu', 'telp_ibu',
+            ];
+
+            // Count empty fields
+            $emptyFieldsCount = 0;
+            foreach ($fields as $field) {
+                if (empty($user->$field)) {
+                    $emptyFieldsCount++;
+                }
+            }
+
+            // Calculate profile completeness percentage
+            $totalFields = count($fields);
+            $filledFieldsCount = $totalFields - $emptyFieldsCount;
+            $profileCompletenessPercentage = round(($filledFieldsCount / $totalFields) * 100);
+
+
             return view('student.dashboard', [
+                'user' => $user,
                 'main' => Announcement::where('category', 'main')->first(),
                 'announcements' => Announcement::where('category', 'general')->where('program_id', '0')->get(),
                 'programs' => $programs,
                 'statusKelas' => $statusKelas,
                 'payments' => $payments,
+                'activeKelasCount' => Kelas::where('user_id', $user->id)->count(),
+                'profileCompletenessPercentage' => $profileCompletenessPercentage,
             ]);
         }
     }
@@ -135,7 +161,7 @@ class DashboardController extends Controller
 
     public function myTransaction()
     {
-        $payment = Payment::where('user_id', auth()->user()->id)->get();
+        $payment = Payment::where('user_id', auth()->user()->id)->orderBy('updated_at', 'DESC')->get();
 
         return view('student.payment', compact('payment'));
     }

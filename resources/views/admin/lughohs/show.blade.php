@@ -49,12 +49,16 @@
             <p>{{ $lughoh->description }}</p>
           </div>
           <div class="mb-3">
-            <small>Biaya Normal</small>
+            <small>Biaya Pendaftaran/Seleksi</small>
+            <h5>Rp{{ number_format($lughoh->price_pra, 0, ',', '.') }},-</h5>
+          </div>
+          <div class="mb-3">
+            <small>Biaya SPP</small>
             <h5>Rp{{ number_format($lughoh->price_normal, 0, ',', '.') }},-</h5>
           </div>
           <div class="mb-3">
-            <small>Biaya Alumni</small>
-            <h5>Rp{{ number_format($lughoh->price_alumni, 0, ',', '.') }},-</h5>
+            <small>Biaya Pembangunan Ma'had</small>
+            <h5>Rp{{ number_format($lughoh->price_mahad, 0, ',', '.') }},-</h5>
           </div>
           <div class="my-5">
             <small>Status</small>

@@ -33,8 +33,9 @@
             <div class="mb-3">
               <label for="program_id" class="form-label">Program</label>
               <select name="program_id" id="program_id" class="form-select">
+                <option value="0">Semua Program</option>
                 @foreach ($programs as $program)
-                  <option value="{{ $program->id }}">{{ $program->programmable->title }}</option>
+                  <option value="{{ $program->id }}" {{ $program->id == $announcement->program_id ? 'selected' : '' }}>{{ $program->programmable->title }}</option>
                 @endforeach
               </select>
             </div>

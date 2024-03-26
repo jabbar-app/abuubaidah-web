@@ -54,6 +54,7 @@ return new class extends Migration
             $table->string('url_kk')->nullable();
             $table->string('url_ijazah')->nullable();
             $table->string('url_bilhaq')->nullable();
+            $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

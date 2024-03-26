@@ -4,7 +4,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
-      <a href="{{ route('programs.index') }}" class="btn btn-md btn-light">Kembali</a>
+      <a href="{{ route('admin.kelas.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
     {{-- <hr class="mb-5"> --}}
@@ -60,7 +60,7 @@
                 <select id="multicol-program" name="program_id" class="select2 form-select" data-allow-clear="true" required>
                   <option value="">Pilih</option>
                   @foreach ($programs as $program)
-                    <option value="{{ $program->id }}" {{ $program->id == $kelas->program_id ? 'selected' : '' }}>{{ $program->programmable->title }}</option>
+                    <option value="{{ $program->id }}" {{ $program->id == $kelas->program_id ? 'selected' : '' }}>{{ $program->programmable->title.', Angkatan '.$program->programmable->batch }}</option>
                   @endforeach
                 </select>
               </div>

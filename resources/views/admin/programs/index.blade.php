@@ -10,7 +10,7 @@
 
     @if (session('success'))
       <div class="col-12">
-        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Success!
+        <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Berhasil!
           </strong> {{ session('success') }}
           <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -46,7 +46,7 @@
                   @if ($program->price_pra > 0)
                     <li>
                       <span class="small text-primary">Seleksi: </span>
-                      Rp{{ number_format($program->price_normal, 0, ',', '.') }},-
+                      Rp{{ number_format($program->price_pra, 0, ',', '.') }},-
                     </li>
                   @endif
                   @if ($program->price_normal > 0)
@@ -55,10 +55,28 @@
                       Rp{{ number_format($program->price_normal, 0, ',', '.') }},-
                     </li>
                   @endif
-                  @if ($program->price_normal > 0)
+                  @if ($program->price_alumni > 0)
                     <li>
                       <span class="small text-primary">Alumni: </span>
                       Rp{{ number_format($program->price_alumni, 0, ',', '.') }},-
+                    </li>
+                  @endif
+                  @if ($program->price_normal > 0)
+                    <li>
+                      <span class="small text-primary">Biaya SPP: </span>
+                      Rp{{ number_format($program->price_normal, 0, ',', '.') }},-
+                    </li>
+                  @endif
+                  @if ($program->price_mahad > 0)
+                    <li>
+                      <span class="small text-primary">BP Ma'had: </span>
+                      Rp{{ number_format($program->price_mahad, 0, ',', '.') }},-
+                    </li>
+                  @endif
+                  @if ($program->price_s1 > 0)
+                    <li>
+                      <span class="small text-primary">BP S1: </span>
+                      Rp{{ number_format($program->price_s1, 0, ',', '.') }},-
                     </li>
                   @endif
                 </td>
