@@ -80,11 +80,17 @@
                 <td>{{ $p->description }}</td>
                 <td>Rp{{ number_format($p->amount, 0, ',', '.') }},-</td>
                 <td>
-                  <span class="badge @if ($p->status == 'PAID') bg-label-success @else bg-label-warning @endif">{{ $p->status }}</span>
+                  <span
+                    class="badge @if ($p->status == 'PAID') bg-label-success @else bg-label-warning @endif">{{ $p->status }}</span>
                 </td>
                 <td class="d-flex" style="height: 100%">
                   @if ($p->status == 'PAID')
-                    <a href="{{ $p->invoice_url }}" target="_blank" class="btn btn-sm btn-info me-2">Bayar</a>
+
+                      @if ($p->method == 'Xendit')
+                      <a href="{{ $p->invoice_url }}" target="_blank" class="btn btn-sm btn-info me-2">Lihat</a>
+                      @else
+                        <div class="btn btn-sm btn-info me-2">Pembayaran Offline</div>
+                      @endif
                   @else
                     <a href="{{ $p->invoice_url }}" target="_blank" class="btn btn-sm btn-danger me-2">Bayar</a>
                     <form action="{{ route('invoice.regenerate', ['externalId' => $p->external_id]) }}" method="POST">

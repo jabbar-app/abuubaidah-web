@@ -41,7 +41,7 @@
               <tr>
                 <td>{{ $announcement->title }}</td>
                 <td>{{ $announcement->description }}</td>
-                <td>{{ $announcement->program->programmable->title }}</td>
+                <td>{{ $announcement->program->programmable->title ?? 'Semua Program' }}</td>
                 <td><span class="badge bg-label-info">{{ $announcement->category }}</span></td>
                 <td>
                   <div class="d-inline-block"><a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>

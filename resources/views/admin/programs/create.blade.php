@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        Program</h4>
       <a href="{{ route('programs.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
@@ -49,18 +50,35 @@
               </select>
             </div>
 
-            <div class="mb-3">
-              <label for="price_pra" class="form-label">Biaya Seleksi</label>
-              <input type="number" name="price_pra" value="0" class="form-control" required>
+            <div id="tahsin" style="display: hidden;">
+              <div class="mb-3">
+                <label for="price_normal" class="form-label">Biaya Normal</label>
+                <input type="number" name="price_normal" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_alumni" class="form-label">Biaya Alumni</label>
+                <input type="number" name="price_alumni" value="0" class="form-control" required>
+              </div>
             </div>
-            <div class="mb-3">
-              <label for="price_normal" class="form-label">Biaya Normal</label>
-              <input type="number" name="price_normal" value="0" class="form-control" required>
+
+            <div id="kiba" style="display: hidden;">
+              <div class="mb-3">
+                <label for="price_registration" class="form-label">Biaya Pendaftaran/Seleksi</label>
+                <input type="number" name="price_registration" value="0" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label for="price_spp" class="form-label">Biaya SPP</label>
+                <input type="number" name="price_spp" value="0" class="form-control" required>
+              </div>
             </div>
-            <div class="mb-3">
-              <label for="price_alumni" class="form-label">Biaya Alumni</label>
-              <input type="number" name="price_alumni" value="0" class="form-control" required>
+
+            <div id="bilhaq" style="display: hidden;">
+              <div class="mb-3">
+                <label for="price" class="form-label">Biaya Pendaftaran</label>
+                <input type="number" name="price" value="0" class="form-control" required>
+              </div>
             </div>
+
             <div class="mb-3">
               <label for="deadline" class="form-label">Batas Pendaftaran</label>
               <input type="date" name="deadline" class="form-control" required>
@@ -99,16 +117,16 @@
         // Enable the programmable_id select box
         programmableIdSelect.removeAttribute('disabled');
 
-        // Determine which program type was selected
-        var selectedProgramType = this.value;
-
         // Clear previous options
         programmableIdSelect.innerHTML = '';
+
+        // Determine selected program type
+        var selectedProgramType = this.value;
 
         // Variable to hold the new options
         var newOptions = [];
 
-        // Determine which array to use based on the selected program type
+        // Determine the array to use
         switch (selectedProgramType) {
           case 'App\\Models\\Tahsin':
             newOptions = tahsins;
@@ -133,12 +151,29 @@
             break;
         }
 
-        // Add new options to the programmable_id select box
+        var programDetailsDivs = document.querySelectorAll('#tahsin, #bilhaq');
+        programDetailsDivs.forEach(function(div) {
+          div.style.display = 'none';
+        });
+
         newOptions.forEach(function(option) {
           var optionElement = document.createElement('option');
           optionElement.value = option.id;
           optionElement.textContent = option.title + ' Angkatan ' + option.batch;
           programmableIdSelect.appendChild(optionElement);
+
+          if (selectedProgramType === 'App\\Models\\Tahsin') {
+            document.getElementById('tahsin').style.display = 'block';
+            document.querySelector('#tahsin input[name="price_normal"]').value = option.price_normal;
+            document.querySelector('#tahsin input[name="price_alumni"]').value = option.price_alumni;
+          } else if (selectedProgramType === 'App\\Models\\Bilhaq') {
+            document.getElementById('bilhaq').style.display = 'block';
+            document.querySelector('#tahsin input[name="price"]').value = option.price;
+          } else if (selectedProgramType === 'App\\Models\\Kiba') {
+            document.getElementById('kiba').style.display = 'block';
+            document.querySelector('#kiba input[name="price_registration"]').value = option.price_registration;
+            document.querySelector('#kiba input[name="price_spp"]').value = option.price_spp;
+          }
         });
       });
     });

@@ -18,7 +18,7 @@
                 <i class="ti ti-user ti-xl"></i>
               </span>
               <div class="content-right">
-                <p class="mb-0">Jumlah User</p>
+                <p class="mb-0">Total User</p>
                 <h4 class="text-primary mb-0">{{ $total_user }}</h4>
               </div>
             </div>
@@ -51,6 +51,7 @@
             @csrf
             <select name="program_id" id="program_id" class="form-select mb-1" required>
               <option value="" selected disabled>- Pilih Program -</option>
+              <option value="0">Semua Program</option>
               @foreach ($programs as $program)
                 <option value="{{ $program->id }}">{{ $program->programmable->title }}</option>
               @endforeach
@@ -209,7 +210,7 @@
                 <i class="ti ti-notebook ti-md"></i>
               </div>
               <h5 class="card-title mb-1 pt-2">{{ $program->programmable->title }}</h5>
-              <small class="text-muted">Jumlah User</small>
+              <small class="text-muted">Jumlah Terdaftar</small>
               <h4 class="mb-2 mt-1">{{ number_format($program->kelas->count()) }}</h4>
               <hr>
               {{-- <div class="pt-1">
@@ -243,7 +244,7 @@
                     <tr>
                       <td>{{ $announcement->title }}</td>
                       <td>{{ $announcement->description }}</td>
-                      <td>{{ $announcement->program->programmable->title }}</td>
+                      <td>{{ $announcement->program->programmable->title ?? 'Semua Program' }}</td>
                       <td><span class="badge bg-label-info">{{ $announcement->category }}</span></td>
                       <td>
                         <div class="d-inline-block"><a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>

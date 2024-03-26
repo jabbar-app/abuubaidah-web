@@ -26,7 +26,7 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'program_id' => 'required|exists:programs,id', // Ensure the program exists
+            'program_id' => 'required',
             'title' => 'required|string',
             'description' => 'required|string',
             'category' => 'required|string',

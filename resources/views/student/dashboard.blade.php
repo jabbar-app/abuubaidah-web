@@ -8,7 +8,8 @@
         <div class="col-12 col-md-8 card-separator">
           <h3>Salam, {{ Auth::user()->name }} 👋🏻</h3>
           <div class="col-12">
-            <p>Selamat datang di Ma'had Abu Ubaidah Bin Al Jarrah, <br> <em>Lembaga Pendidikan Bahasa Arab & Studi Islam!</em></p>
+            <p>Selamat datang di Ma'had Abu Ubaidah Bin Al Jarrah, <br> <em>Lembaga Pendidikan Bahasa Arab & Studi
+                Islam!</em></p>
           </div>
           <div class="d-flex justify-content-between flex-wrap gap-3 me-5 mt-4">
             <div class="d-flex align-items-center gap-3 me-4 me-sm-0">
@@ -55,6 +56,30 @@
     </div>
     <!-- Hour chart End  -->
 
+    @if (!empty($payments))
+      <div class="alert alert-danger alert-dismissible" role="alert">
+        <span class="alert-icon text-danger me-2">
+          <i class="ti ti-bell ti-xs"></i>
+        </span>
+        Kamu memiliki tagihan yang belum dibayar! <a href="/my-transaction" class="text-danger" style="font-weight: 600;">Klik disini untuk
+          melihat</a>.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    @endif
+
+    @if (!empty($announcements))
+      @foreach ($announcements as $announce)
+        <div class="alert alert-info alert-dismissible" role="alert">
+          <span class="alert-icon text-info me-2">
+            <i class="ti ti-bell ti-xs"></i>
+          </span>
+          {{ $announce->title.' | '.$announce->description }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      @endforeach
+    @endif
+
+
     <h4 class="py-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Semua Kelas</h4>
     <hr class="mb-4">
 
@@ -64,8 +89,10 @@
         <div class="col-12 col-xl-4 col-md-6">
           <div class="card h-100">
             <div class="card-body">
-              <div class=" @if ($program->status) bg-label-primary @else bg-label-warning @endif rounded-3 text-center mb-3 pt-4">
-                <img class="img-fluid" src="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}" alt="Card girl image" width="140" style="margin-bottom: 25px" />
+              <div
+                class=" @if ($program->status) bg-label-primary @else bg-label-warning @endif rounded-3 text-center mb-3 pt-4">
+                <img class="img-fluid" src="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}" alt="Card girl image"
+                  width="140" style="margin-bottom: 25px" />
               </div>
               <h4 class="mb-2 pb-1">{{ $program->programmable->title }}</h4>
               <p class="small" style="height: 64px">
@@ -76,7 +103,8 @@
                   <div class="col-12">
                     <div class="d-flex mt-2">
                       <div class="avatar flex-shrink-0 me-2">
-                        <span class="avatar-initial rounded bg-label-primary"><i class="ti ti-calendar-event ti-md"></i></span>
+                        <span class="avatar-initial rounded bg-label-primary"><i
+                            class="ti ti-calendar-event ti-md"></i></span>
                       </div>
                       <div style="margin-top: -4px">
                         <small>Batas Pendaftaran</small>
@@ -115,7 +143,8 @@
                   <div class="col-12">
                     <div class="d-flex">
                       <div class="avatar flex-shrink-0 me-2">
-                        <span class="avatar-initial rounded bg-label-light"><i class="ti ti-calendar-event ti-md"></i></span>
+                        <span class="avatar-initial rounded bg-label-light"><i
+                            class="ti ti-calendar-event ti-md"></i></span>
                       </div>
                       <div style="margin-top: -4px">
                         <small>Status Pendaftaran</small>

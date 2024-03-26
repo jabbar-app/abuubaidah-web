@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('batch');
             $table->string('title');
             $table->string('option');
+            $table->decimal('price_registration', 10, 0)->default(0);
+            $table->decimal('price_spp', 10, 0)->default(0);
             $table->text('description');
             $table->boolean('status')->default(true);
             $table->timestamps();

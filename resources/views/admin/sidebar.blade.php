@@ -84,12 +84,12 @@
           </li>
           <li class="menu-item {{ Request::is('tahfizs*') ? 'active' : '' }}">
             <a href="{{ route('tahfizs.index') }}" class="menu-link">
-              <div data-i18n="Tahfizs">Tahfiz</div>
+              <div data-i18n="Tahfiz">Tahfiz</div>
             </a>
           </li>
           <li class="menu-item {{ Request::is('bilhaqs*') ? 'active' : '' }}">
             <a href="{{ route('bilhaqs.index') }}" class="menu-link">
-              <div data-i18n="Bilhaqs">Bilhaq</div>
+              <div data-i18n="Bilhaq">Bilhaq</div>
             </a>
           </li>
           <li class="menu-item {{ Request::is('kibas*') ? 'active' : '' }}">

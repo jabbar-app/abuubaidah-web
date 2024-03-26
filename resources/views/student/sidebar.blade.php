@@ -41,13 +41,11 @@
       </a>
     </li>
 
-
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Akun">Akun</span>
     </li>
     <li class="menu-item {{ Request::routeIs('profile.edit') ? 'active' : '' }}">
-      <a href="#" class="menu-link">
-      {{-- <a href="{{ route('profile.edit') }}" class="menu-link"> --}}
+      <a href="{{ route('profile.edit') }}" class="menu-link">
         <i class="menu-icon tf-icons ti ti-user"></i>
         <div data-i18n="Edit Profil">Edit Profil</div>
       </a>

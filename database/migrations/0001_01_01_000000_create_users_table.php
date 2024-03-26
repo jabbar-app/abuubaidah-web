@@ -28,6 +28,9 @@ return new class extends Migration
             $table->string('agama')->nullable();
             $table->string('suku')->nullable();
             $table->string('address')->nullable();
+            $table->string('province')->nullable();
+            $table->string('regency')->nullable();
+            $table->string('district')->nullable();
             $table->string('ukuran_almamater')->nullable();
             $table->string('nama_sd')->nullable();
             $table->string('lulus_sd')->nullable();

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('batch');
             $table->string('title');
+            $table->decimal('price', 10, 0)->default(0);
             $table->string('option');
             $table->text('description');
             $table->boolean('status')->default(true);

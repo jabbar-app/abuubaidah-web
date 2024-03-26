@@ -109,10 +109,19 @@ class DashboardController extends Controller
                 'kelas' => Kelas::whereIn('program_id', $program_ids)->get(),
             ]);
         } else {
+            $payments = Payment::where('user_id', $user->id)
+            ->where(function($query) {
+                $query->where('status', 'PENDING')
+                      ->orWhere('status', 'EXPIRED');
+            })
+            ->get();
+
             return view('student.dashboard', [
                 'main' => Announcement::where('category', 'main')->first(),
+                'announcements' => Announcement::where('category', 'general')->where('program_id', '0')->get(),
                 'programs' => $programs,
                 'statusKelas' => $statusKelas,
+                'payments' => $payments,
             ]);
         }
     }

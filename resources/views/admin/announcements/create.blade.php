@@ -4,7 +4,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
-      <a href="#" class="btn btn-md btn-light">Kembali</a>
+      <a href="{{ route('announcements.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
     {{-- <hr class="mb-5"> --}}
@@ -30,27 +30,28 @@
             <div class="mb-3">
               <label for="program_id" class="form-label">Program</label>
               <select name="program_id" id="program_id" class="form-select">
+                <option value="0">Semua Program</option>
                 @foreach ($programs as $program)
                   <option value="{{ $program->id }}">{{ $program->programmable->title }}</option>
                 @endforeach
               </select>
             </div>
             <div class="mb-3">
-              <label for="title" class="form-label">Title</label>
+              <label for="title" class="form-label">Judul</label>
               <input type="text" class="form-control" id="title" name="title">
             </div>
             <div class="mb-3">
-              <label for="description" class="form-label">Description</label>
+              <label for="description" class="form-label">Deskripsi</label>
               <textarea class="form-control" id="description" name="description"></textarea>
             </div>
             <div class="mb-3">
-              <label for="category" class="form-label">Category</label>
+              <label for="category" class="form-label">Ketegori</label>
               <select name="category" id="category" class="form-select">
-                <option value="main">Main</option>
-                <option value="general">General</option>
+                <option value="main">Utama</option>
+                <option value="general">Umum</option>
               </select>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn bt-md btn-primary float-end my-4">Buat Pengumuman</button>
           </form>
 
         </div>
