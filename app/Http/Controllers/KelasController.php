@@ -15,11 +15,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Xendit\Invoice\CreateInvoiceRequest;
+use Xendit\Configuration;
+use Xendit\Invoice\InvoiceApi;
 use Xendit\XenditSdkException;
 
 class KelasController extends Controller
 {
     protected $invoiceApi;
+
+    public function __construct()
+    {
+        // Configuration::setXenditKey(config('xendit.secret_key'));
+        Configuration::setXenditKey(config('xendit.test_key'));
+
+        // Instansiasi InvoiceApi
+        $this->invoiceApi = new InvoiceApi();
+    }
 
     public function adminIndex()
     {
