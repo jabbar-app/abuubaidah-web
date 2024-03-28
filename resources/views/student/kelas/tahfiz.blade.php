@@ -10,10 +10,11 @@
       <div class="col-xxl">
         <div class="card mb-4">
           <h5 class="card-header">Form Pendaftaran Program</h5>
-          <form action="{{ route('daftar.tahfiz') }}" method="POST" class="card-body">
+          <form action="{{ route('create.invoice') }}" method="POST" class="card-body">
             @csrf
 
             <input type="hidden" name="program_id" value="{{ $program->id }}">
+            <input type="hidden" value="{{ $program->price_pra }}" name="amount">
 
             <h6>1. Data Peserta</h6>
             <div class="row mb-3">
@@ -35,16 +36,48 @@
                 @endif
               </div>
             </div>
-            @if ($program->programmable->price > 0)
-              <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="multicol-price">Biaya Pendaftaran</label>
-                <div class="col-sm-9">
-                  <input type="text" id="multicol-price" class="form-control"
-                    value="Rp{{ number_format($price, 0, ',', '.') }},-" readonly />
-                  <input type="hidden" value="{{ $price }}" name="amount">
-                </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="multicol-price">Biaya Pendaftaran</label>
+              <div class="col-sm-9 table-responsive text-nowrap">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Deskripsi</th>
+                      <th>Biaya</th>
+                      <th class="text-center">Dibayarkan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span class="fw-medium">Biaya Pendaftaran</span>
+                      </td>
+                      <td>Rp{{ number_format($program->price_pra, 0, ',', '.') }},-</td>
+                      <td class="text-center"><span class="badge bg-label-primary me-1">1 Kali</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="fw-medium">Biaya Asrama</span>
+                      </td>
+                      <td>Rp{{ number_format($program->price_normal, 0, ',', '.') }},-</td>
+                      <td class="text-center"><span class="badge bg-label-primary me-1">1 Kali</span></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <span class="fw-medium">Total Biaya</span>
+                      </td>
+                      @php
+                        $total =
+                            $program->price_pra + $program->price_normal + $program->price_mahad + $program->price_s1;
+                      @endphp
+                      <td colspan="2" class="text-center fw-bold bg-light">
+                        Rp{{ number_format($total, 0, ',', '.') }},-</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-            @endif
+            </div>
 
 
             @if (!empty($status->nama_sma))
