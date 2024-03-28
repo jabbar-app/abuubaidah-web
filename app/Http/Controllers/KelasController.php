@@ -23,13 +23,13 @@ class KelasController extends Controller
 {
     protected $invoiceApi;
 
-    public function __construct()
+    public function __construct(InvoiceApi $invoiceApi)
     {
         // Configuration::setXenditKey(config('xendit.secret_key'));
         Configuration::setXenditKey(config('xendit.test_key'));
 
         // Instansiasi InvoiceApi
-        $this->invoiceApi = new InvoiceApi();
+        $this->invoiceApi = $invoiceApi;
     }
 
     public function adminIndex()
@@ -138,7 +138,7 @@ class KelasController extends Controller
         // dd($create_invoice_request);
 
         try {
-            $result = $this->invoiceApi->daftarTahfiz($create_invoice_request);
+            $result = $this->invoiceApi->createInvoice($create_invoice_request);
 
             // Create a new instance of Kelas and store the returned instance in a variable
             $kelas = Kelas::create([
