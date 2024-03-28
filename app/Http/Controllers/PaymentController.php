@@ -170,12 +170,13 @@ class PaymentController extends Controller
             'reminder_time' => 1,
         ]);
 
-        // dd($create_invoice_request);
+        dd($program);
 
         try {
             $result = $this->invoiceApi->createInvoice($create_invoice_request);
 
             // Create a new instance of Kelas and store the returned instance in a variable
+            if ($program)
             $kelas = Kelas::create([
                 'user_id' => $request->user_id,
                 'program_id' => $request->program_id,
