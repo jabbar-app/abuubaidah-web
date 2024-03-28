@@ -127,7 +127,7 @@ class KelasController extends Controller
         // dd($create_invoice_request);
 
         try {
-            $result = $this->invoiceApi->createInvoice($create_invoice_request);
+            $result = $this->invoiceApi->daftarTahfiz($create_invoice_request);
 
             // Create a new instance of Kelas and store the returned instance in a variable
             $kelas = Kelas::create([
