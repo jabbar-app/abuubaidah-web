@@ -35,7 +35,7 @@
             </div>
             <div class="mb-3">
               <label for="batch" class="form-label">Angkatan</label>
-              <input type="number" class="form-control" id="batch" name="batch" placeholder="0">
+              <input type="text" class="form-control" id="batch" name="batch" placeholder="0">
             </div>
             <div class="mb-3 select2-primary">
               <label class="col-sm-3 col-form-label" for="option-select">Tipe Kelas</label>

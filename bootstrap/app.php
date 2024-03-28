@@ -11,7 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->validateCsrfTokens(except: [
+            'webhook',
+        ]);
+
+        // Register your custom middleware here
+        $middleware->prependToGroup('web', \App\Http\Middleware\MaintenanceModeMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

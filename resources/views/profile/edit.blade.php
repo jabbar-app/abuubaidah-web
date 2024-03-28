@@ -10,7 +10,7 @@
       <div class="card-body">
         <div class="d-flex align-items-start align-items-sm-center gap-4">
           <img
-            src="{{ $user->url_pas_foto ? asset('storage/' . $user->url_pas_foto) : asset('assets/img/mahad/abuubaidah_circle.svg') }}"
+            src="{{ $user->url_pas_foto ? asset($user->url_pas_foto) : asset('assets/img/mahad/abuubaidah_circle.svg') }}"
             alt="user-avatar" class="d-block w-px-150 h-px-150 rounded" id="uploadedAvatar"
             style="border-radius: 250px !important;" />
           <div class="button-wrapper">
@@ -348,7 +348,7 @@
                 <label class="form-label" for="url_ktp">Upload KTP</label>
                 <input class="form-control" type="file" name="url_ktp" id="url_ktp">
                 @if ($user->url_ktp)
-                  Berkas: <a href="{{ asset('storage/' . $user->url_ktp) }}" target="_blank" class="mt-2">Lihat</a>
+                  Berkas: <a href="{{ asset($user->url_ktp) }}" target="_blank" class="mt-2">Lihat</a>
                   <div class="valid-feedback">Terisi!</div>
                 @else
                   <div class="invalid-feedback">Tidak boleh kosong!</div>
@@ -358,7 +358,7 @@
                 <label class="form-label" for="url_kk">Upload KK</label>
                 <input class="form-control" type="file" name="url_kk" id="url_kk">
                 @if ($user->url_kk)
-                  Berkas: <a href="{{ asset('storage/' . $user->url_kk) }}" target="_blank" class="mt-2">Lihat</a>
+                  Berkas: <a href="{{ asset($user->url_kk) }}" target="_blank" class="mt-2">Lihat</a>
                   <div class="valid-feedback">Terisi!</div>
                 @else
                   <div class="invalid-feedback">Tidak boleh kosong!</div>
@@ -368,7 +368,7 @@
                 <label class="form-label" for="url_ijazah">Upload Ijazah</label>
                 <input class="form-control" type="file" name="url_ijazah" id="url_ijazah">
                 @if ($user->url_ijazah)
-                  Berkas: <a href="{{ asset('storage/' . $user->url_ijazah) }}" target="_blank" class="mt-2">Lihat</a>
+                  Berkas: <a href="{{ asset($user->url_ijazah) }}" target="_blank" class="mt-2">Lihat</a>
                   <div class="valid-feedback">Terisi!</div>
                 @else
                   <div class="invalid-feedback">Tidak boleh kosong!</div>
@@ -379,7 +379,7 @@
                 <label class="form-label" for="url_bilhaq">Upload Bilhaq</label>
                 <input class="form-control" type="file" name="url_bilhaq" id="url_bilhaq">
                 @if ($user->url_bilhaq)
-                  Berkas: <a href="{{ asset('storage/' . $user->url_bilhaq) }}" target="_blank" class="mt-2">Lihat</a>
+                  Berkas: <a href="{{ asset($user->url_bilhaq) }}" target="_blank" class="mt-2">Lihat</a>
                 @endif
                 <div class="valid-feedback">Opsional!</div>
               </div>
@@ -391,7 +391,7 @@
       </form>
     </div>
 
-    <div class="card">
+    {{-- <div class="card">
       <h5 class="card-header">Hapus Akun</h5>
       <div class="card-body">
         <div class="mb-3 col-12">
@@ -411,15 +411,16 @@
 
           <button type="submit" class="btn btn-danger">Hapus Akun</button>
         </form>
-        {{-- <form id="formAccountDeactivation" onsubmit="return false">
-          <div class="form-check mb-4">
-            <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" />
-            <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
-          </div>
-          <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
-        </form> --}}
       </div>
-    </div>
+    </div> --}}
+    {{-- <form id="formAccountDeactivation" onsubmit="return false">
+      <div class="form-check mb-4">
+        <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" />
+        <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
+      </div>
+      <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+    </form> --}}
+
   </div>
 @endsection
 

@@ -57,7 +57,7 @@
 </div>
 <!-- Hour chart End  -->
 
-@if (!empty($payments))
+@if (!$payments->isEmpty())
   <div class="alert alert-danger alert-dismissible" role="alert">
     <span class="alert-icon text-danger me-2">
       <i class="ti ti-bell ti-xs"></i>
@@ -68,6 +68,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 @endif
+
 
 @if (!empty($announcements))
   @foreach ($announcements as $announce)

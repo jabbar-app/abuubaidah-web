@@ -71,7 +71,7 @@
                 <div class="col-sm-9">
                   <input type="file" id="url_bilhaq" class="form-control mb-1" name="url_bilhaq">
                   <!-- Link to view the file, will be shown only if url_bilhaq is not empty -->
-                  <a href="{{ asset('storage/' . $user->url_bilhaq) }}" id="viewBilhaqCert" target="_blank"
+                  <a href="{{ asset($user->url_bilhaq) }}" id="viewBilhaqCert" target="_blank"
                     style="display: none;">Lihat Sertifikat</a>
                 </div>
               </div>

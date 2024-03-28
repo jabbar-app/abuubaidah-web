@@ -18,4 +18,5 @@ class Payment extends Model
     public function program() {
         return $this->belongsTo(Program::class);
     }
+
 }

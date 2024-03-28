@@ -8,12 +8,36 @@ use App\Models\District;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function roleManagement($userId)
+    {
+        $user = User::find($userId);
+        $roles = Role::all()->pluck('name');
+
+        return view('admin.users.role-management', compact('user', 'roles'));
+    }
+
+    public function assignRole(Request $request, User $user)
+    {
+        $roleName = $request->role;
+        $role = Role::findByName($roleName); // Ensure role exists
+        $user->assignRole($role);
+        return back()->with('success', 'Role assigned successfully.');
+    }
+
+    public function removeRole(User $user, $roleName)
+    {
+        $user->removeRole($roleName);
+        return back()->with('success', 'Role removed successfully.');
+    }
+
     public function index()
     {
         return view('admin.users.index', [

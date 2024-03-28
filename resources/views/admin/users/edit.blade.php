@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data User</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data User
+      </h4>
       <a href="{{ route('users.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
@@ -12,7 +13,7 @@
     <div class="d-flex justify-content-center">
       <div class="card col-xl-8 col-md-10 col-sm-12">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Tambah User</h5>
+          <h5 class="mb-0">Edit User</h5>
           <small class="text-muted float-end">
             إضافة مستخدم
           </small>
@@ -43,11 +44,13 @@
             @endif
             <div class="form-group">
               <label class="col-form-label">Nama Lengkap</label>
-              <input type="text" name="name" value="{{ $user->name }}" placeholder="Nama Lengkap" class="form-control" required>
+              <input type="text" name="name" value="{{ $user->name }}" placeholder="Nama Lengkap"
+                class="form-control" required>
             </div>
             <div class="form-group">
               <label class="col-form-label">NIK</label>
-              <input type="number" name="nik" class="form-control" value="{{ $user->nik }}" placeholder="NIK" required>
+              <input type="number" name="nik" class="form-control" value="{{ $user->nik }}" placeholder="NIK"
+                required>
             </div>
             <div class="form-group mb-3">
               <label class="col-form-label">Email</label>
@@ -63,7 +66,9 @@
                 @endif
               </div>
               <div class="input-group input-group-merge">
-                <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                <input type="password" id="password" class="form-control" name="password"
+                  placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                  aria-describedby="password" />
                 <small class="input-group-text cursor-pointer" style="font-size: 12px;">lihat</small>
               </div>
             </div>
@@ -76,7 +81,8 @@
             </div>
             <div class="form-group">
               <label class="col-form-label">No. WhatsApp</label>
-              <input type="number" name="phone" value="{{ $user->phone }}" placeholder="62XXX" class="form-control" required>
+              <input type="number" name="phone" value="{{ $user->phone }}" placeholder="62XXX" class="form-control"
+                required>
             </div>
 
             <input type="hidden" name="religion" value="Islam">
@@ -84,12 +90,14 @@
             <div class="row">
               <div class="form-group col-6">
                 <label class="col-form-label">Tempat Lahir</label>
-                <input type="text" name="tempat_lahir" value="{{ $user->tempat_lahir }}" placeholder="Sesuai KTP" class="form-control" required>
+                <input type="text" name="tempat_lahir" value="{{ $user->tempat_lahir }}" placeholder="Sesuai KTP"
+                  class="form-control" required>
               </div>
 
               <div class="form-group col-6">
                 <label class="col-form-label">Tanggal Lahir</label>
-                <input type="date" name="tanggal_lahir" value="{{ $user->tanggal_lahir }}" placeholder="Sesuai KTP" class="form-control" required>
+                <input type="date" name="tanggal_lahir" value="{{ $user->tanggal_lahir }}" placeholder="Sesuai KTP"
+                  class="form-control" required>
               </div>
             </div>
 
@@ -106,7 +114,8 @@
 
               <div class="form-group col-6">
                 <label class="col-form-label">Suku</label>
-                <input type="text" name="suku" value="{{ $user->suku }}" placeholder="Suku" class="form-control" required>
+                <input type="text" name="suku" value="{{ $user->suku }}" placeholder="Suku"
+                  class="form-control" required>
               </div>
             </div>
 
@@ -125,7 +134,8 @@
                 <option value="">Pilih Provinsi</option>
                 <!-- Anda perlu mengisi daftar provinsi di sini -->
                 @foreach ($provinces as $province)
-                  <option value="{{ $province->id }}" {{ $provinceName == $province->name ? 'selected' : '' }}>{{ $province->name }}</option>
+                  <option value="{{ $province->id }}" {{ $provinceName == $province->name ? 'selected' : '' }}>
+                    {{ $province->name }}</option>
                 @endforeach
               </select>
             </div>
@@ -134,9 +144,11 @@
               @if (isset($address['regency']))
                 <input type="hidden" name="regency" value="{{ $regencyId }}">
               @endif
-              <select class="form-control" name="regency" id="kabupaten" {{ isset($address['district']) ? 'disabled' : '' }} required>
+              <select class="form-control" name="regency" id="kabupaten"
+                {{ isset($address['district']) ? 'disabled' : '' }} required>
                 <option value="">Pilih Kabupaten</option>
-                <option value="{{ $regencyId }}" {{ isset($address['regency']) && $address['regency'] != '' ? 'selected' : '' }}>{{ $regencyName }}
+                <option value="{{ $regencyId }}"
+                  {{ isset($address['regency']) && $address['regency'] != '' ? 'selected' : '' }}>{{ $regencyName }}
                 </option>
               </select>
             </div>
@@ -145,10 +157,12 @@
               @if (isset($address['district']))
                 <input type="hidden" name="district" value="{{ $districtId }}">
               @endif
-              <select class="form-control" name="district" id="kecamatan" {{ isset($address['district']) ? 'disabled' : '' }} required>
+              <select class="form-control" name="district" id="kecamatan"
+                {{ isset($address['district']) ? 'disabled' : '' }} required>
                 <option value="">Pilih Kecamatan</option>
                 <!-- Anda perlu mengisi daftar kecamatan di sini -->
-                <option value="{{ $districtId }}" {{ isset($address['district']) ? 'selected' : '' }}>{{ $districtName }}
+                <option value="{{ $districtId }}" {{ isset($address['district']) ? 'selected' : '' }}>
+                  {{ $districtName }}
                 </option>
               </select>
             </div>
@@ -188,7 +202,8 @@
           dataType: 'json',
           success: function(data) {
             $.each(data, function(index, regency) {
-              $('#kabupaten').append('<option value="' + regency.id + '">' + regency.name + '</option>');
+              $('#kabupaten').append('<option value="' + regency.id + '">' + regency.name +
+                '</option>');
             });
           }
         });
@@ -204,7 +219,8 @@
           dataType: 'json',
           success: function(data) {
             $.each(data, function(index, district) {
-              $('#kecamatan').append('<option value="' + district.id + '">' + district.name + '</option>');
+              $('#kecamatan').append('<option value="' + district.id + '">' + district.name +
+                '</option>');
             });
           }
         });

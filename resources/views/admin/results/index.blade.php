@@ -5,7 +5,14 @@
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
         Program</h4>
-      <a href="{{ route('users.create') }}" class="btn btn-md btn-primary">Tambah User</a>
+      <div class="d-flex">
+        <form action="{{ route('import.result') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <input type="file" name="excel_file" required>
+          <button type="submit" class="btn btn-md btn-info">Import</button>
+        </form>
+        <a href="{{ route('results.create') }}" class="btn btn-md btn-primary ms-3">Tambah Data</a>
+      </div>
     </div>
 
 
@@ -27,42 +34,45 @@
 
     <div class="card">
       <div class="card-datatable table-responsive pt-0">
-        <table id="users" class="table">
+        <table id="results" class="table">
           <thead>
             <tr>
-              <th>Nama User</th>
+              <th>Name</th>
               <th>NIK</th>
               <th>Email</th>
-              <th>WhatsApp</th>
+              <th>Gender</th>
+              <th>Phone</th>
+              <th>Program</th>
               <th>Tindakan</th>
             </tr>
           </thead>
           <tbody>
-            @foreach ($users as $user)
+            @foreach ($results as $result)
               <tr>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->nik }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->phone }}</td>
+                <td>{{ $result->name }}</td>
+                <td>{{ $result->nik }}</td>
+                <td>{{ $result->email }}</td>
+                <td>{{ $result->gender }}</td>
+                <td>{{ $result->phone }}</td>
+                <td>{{ $result->program }}</td>
                 <td>
                   <div class="d-inline-block"><a href="javascript:;"
                       class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
                       aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end m-0" style="">
-                      <li><a href="{{ route('users.show', $user->id) }}" class="dropdown-item">Details</a></li>
-                      {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
+                    <ul class="dropdown-menu dropdown-menu-end m-0">
+                      {{-- <li><a href="{{ route('results.show', $result->id) }}" class="dropdown-item">Details</a></li> --}}
+                      <li><a href="{{ route('results.edit', $result->id) }}" class="dropdown-item">Edit Data</a></li>
                       <div class="dropdown-divider"></div>
                       <li>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                          onsubmit="return confirm('Are you sure you want to delete this users?');">
+                        <form action="{{ route('results.destroy', $result->id) }}" method="POST"
+                          onsubmit="return confirm('Are you sure you want to delete this results?');">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="dropdown-item text-danger delete-record">Hapus</button>
+                          <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
                         </form>
                       </li>
                     </ul>
-                  </div>
-                  <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-icon item-edit"><i
+                  </div><a href="{{ route('results.edit', $result->id) }}" class="btn btn-sm btn-icon item-edit"><i
                       class="text-primary ti ti-pencil"></i></a>
                 </td>
               </tr>
@@ -70,10 +80,12 @@
           </tbody>
           <tfoot>
             <tr>
-              <th>Nama User</th>
+              <th>Name</th>
               <th>NIK</th>
               <th>Email</th>
-              <th>WhatsApp</th>
+              <th>Gender</th>
+              <th>Phone</th>
+              <th>Program</th>
               <th>Tindakan</th>
             </tr>
           </tfoot>
@@ -84,9 +96,10 @@
 @endsection
 
 @section('js')
+  <script src="{{ asset('assets/js/tables-datatables-basic.js') }}"></script>
   <script>
     $(document).ready(function() {
-      $('#users').DataTable();
+      $('#results').DataTable();
     });
   </script>
 @endsection

@@ -15,7 +15,7 @@
               <th>Data Transaksi</th>
               <th>User</th>
               <th>Program</th>
-              <th>Deskripsi</th>
+              <th>WhatsApp</th>
               <th>Jumlah</th>
               <th>Metode</th>
               <th>Status</th>
@@ -28,7 +28,7 @@
                 <td>{{ $payment->external_id }}</td>
                 <td>{{ $payment->payer_name }}</td>
                 <td>{{ $payment->program->programmable->title }}</td>
-                <td>{{ $payment->description }}</td>
+                <td>{{ optional($payment->user)->phone }}</td>
                 <td>Rp{{ number_format($payment->amount, 0, ',', '.') }},-</td>
                 <td><span class="badge @if ($payment->method == 'Offline') bg-label-info @else bg-label-primary @endif me-1">{{ $payment->method }}</span></td>
                 <td><span class="badge @if ($payment->status == 'PAID') bg-label-primary @else bg-label-warning @endif me-1">{{ $payment->status }}</span></td>
@@ -57,7 +57,7 @@
               <th>Data Transaksi</th>
               <th>User</th>
               <th>Program</th>
-              <th>Deskripsi</th>
+              <th>WhatsApp</th>
               <th>Jumlah</th>
               <th>Metode</th>
               <th>Status</th>

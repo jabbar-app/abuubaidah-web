@@ -13,20 +13,20 @@ return new class extends Migration
     {
         Schema::create('results', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('nik');
-            $table->string('email');
-            $table->string('password');
-            $table->string('gender');
-            $table->string('phone');
-            $table->string('program');
-            $table->string('batch');
-            $table->string('level');
-            $table->string('session');
-            $table->string('class');
-            $table->string('score');
-            $table->string('next');
-            $table->string('lecturer');
+            $table->string('name')->nullable();
+            $table->string('nik')->nullable();
+            $table->string('email')->nullable();
+            $table->string('password')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('program')->nullable();
+            $table->string('batch')->nullable();
+            $table->string('level')->nullable();
+            $table->string('session')->nullable();
+            $table->string('class')->nullable();
+            $table->string('score')->nullable();
+            $table->string('next')->nullable();
+            $table->string('lecturer')->nullable();
             $table->timestamps();
         });
     }

@@ -47,6 +47,12 @@
           <div data-i18n="Data Pengumuman">Data Pengumuman</div>
         </a>
       </li>
+      <li class="menu-item {{ Request::is('results*') ? 'active' : '' }}">
+        <a href="{{ route('results.index') }}" class="menu-link">
+          <i class="menu-icon tf-icons ti ti-lamp"></i>
+          <div data-i18n="Hasil Ujian">Hasil Ujian</div>
+        </a>
+      </li>
       <li class="menu-item {{ Request::is('kelas*', 'admin/kelas*') ? 'active' : '' }}">
         <a href="{{ route('admin.kelas.index') }}" class="menu-link">
           <i class="menu-icon tf-icons ti ti-book"></i>
