@@ -77,7 +77,8 @@
       <li class="menu-header small text-uppercase">
         <span class="menu-header-text">Manajemen Program</span>
       </li>
-      <li class="menu-item {{ Request::is('tahsins*', 'tahfizs*', 'bilhaqs*', 'kibas*', 'lughohs*', 'fais*', 'stebis*') ? 'open' : '' }}">
+      <li
+        class="menu-item {{ Request::is('tahsins*', 'tahfizs*', 'bilhaqs*', 'kibas*', 'lughohs*', 'fais*', 'stebis*') ? 'open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons ti ti-brand-tabler"></i>
           <div data-i18n="Edit Program">Edit Program</div>
@@ -120,6 +121,12 @@
           </li>
         </ul>
       </li>
+      <li class="menu-item {{ Request::is('helps*') ? 'active' : '' }}">
+        <a href="{{ route('helps.index') }}" class="menu-link">
+          <i class="menu-icon tf-icons ti ti-file-description"></i>
+          <div data-i18n="Laporan Kendala">Laporan Kendala</div>
+        </a>
+      </li>
     @endif
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Akun">Akun</span>
@@ -134,7 +141,8 @@
     <li class="menu-item">
       <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <a href="{{ route('logout') }}" class="menu-link" onclick="event.preventDefault(); this.closest('form').submit();">
+        <a href="{{ route('logout') }}" class="menu-link"
+          onclick="event.preventDefault(); this.closest('form').submit();">
           <i class="menu-icon tf-icons ti ti-power"></i>
           <div data-i18n="Logout">Logout</div>
         </a>

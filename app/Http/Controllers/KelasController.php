@@ -34,10 +34,20 @@ class KelasController extends Controller
 
     public function adminIndex()
     {
-        $kelas = Kelas::all();
-        $programs = Kelas::select('program')->distinct()->pluck('program');
+        return view('admin.kelas.index', [
+            'kelas' => Kelas::all(),
+            'programs' => Program::all(),
+            'program_id' => 0,
+        ]);
+    }
 
-        return view('admin.kelas.index', compact('kelas', 'programs'));
+    public function kelasFilter(Request $request)
+    {
+        return view('admin.kelas.index', [
+            'kelas' => Kelas::where('program_id', $request->program_id)->get(),
+            'programs' => Program::all(),
+            'program_id' => $request->program_id,
+        ]);
     }
 
 
@@ -181,7 +191,7 @@ class KelasController extends Controller
         $isAlumni = $isAlumniResult !== null;
         $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
         $price = $isAlumni ? $program->programmable->price_alumni : $program->programmable->price_normal;
-        $level = $isAlumni ? $isAlumniResult->level : '-';
+        $level = $isAlumni ? $isAlumniResult->next : '-';
 
         return view('student.kelas.kiba', compact('program', 'alumni', 'price', 'level'));
     }

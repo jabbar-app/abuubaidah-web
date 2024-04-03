@@ -3,9 +3,10 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Kelas
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        Laporan Kendala
       </h4>
-      <a href="{{ route('kelas.create') }}" class="btn btn-md btn-primary">Tambah Kelas</a>
+      <a href="{{ route('helps.create') }}" class="btn btn-md btn-primary">Tambah Data</a>
     </div>
 
 
@@ -29,28 +30,7 @@
       <div class="card-body">
 
         <div class="card-title header-elements">
-          <h5 class="m-0 me-2">Data Kelas</h5>
-          {{-- <div class="card-title-elements">
-            <label class="switch switch-primary switch-sm me-0">
-              <input type="checkbox" class="switch-input">
-              <span class="switch-toggle-slider">
-                <span class="switch-on"></span>
-                <span class="switch-off"></span>
-              </span>
-            </label>
-          </div> --}}
-          <div class="card-title-elements ms-auto">
-            <form action="{{ route('kelas.filter') }}" method="POST" class="d-flex">
-              @csrf
-              <select name="program_id" class="form-select form-select-sm w-auto">
-                @foreach ($programs as $program)
-                  <option value="{{ $program->id }}" {{ $program->id == $program_id ? 'selected' : '' }}>{{ $program->programmable->title }}</option>
-                @endforeach
-              </select>
-              <button type="submit" class="btn btn-sm btn-primary waves-effect waves-light ms-2">Filter</button>
-              <a href="{{ route('admin.kelas.index') }}" class="btn btn-sm btn-light ms-2">Reset</a>
-            </form>
-          </div>
+          <h5 class="m-0 me-2">Data Laporan</h5>
         </div>
 
         <div class="card-datatable table-responsive pt-0">
@@ -59,43 +39,18 @@
               <tr>
                 <th>ID</th>
                 <th>Nama</th>
-                <th>NIK</th>
-                <th>WhatsApp</th>
                 <th>Program</th>
-                <th>Sesi</th>
+                <th>Kendala</th>
                 <th>Tindakan</th>
               </tr>
             </thead>
             <tbody>
-              @foreach ($kelas as $kelas)
+              @foreach ($helps as $help)
                 <tr>
-                  <td>{{ $kelas->id }}</td>
-                  <td>{{ $kelas->user->name ?? '' }}</td>
-                  <td>{{ $kelas->user->nik ?? '' }}</td>
-                  <td>{{ $kelas->user->phone ?? '' }}</td>
-                  <td>{{ $kelas->program . ', Angkatan ' . $kelas->batch }}</td>
-                  <td>
-                    <ul style="margin-left: -16px" class="mt-3">
-                      @php
-                        // Attempt to decode the session data
-                        $sessions = json_decode($kelas->session, true);
-
-                        // Check if decoding was successful and we have an array
-                        if (is_array($sessions)) {
-                            // If it's an array, we'll loop through it
-                            foreach ($sessions as $session) {
-                                echo "<li>{$session}</li>";
-                            }
-                        } else {
-                            // If it's not an array, display it directly
-                            // Check if session data is not empty or null
-                            if (!empty($kelas->session)) {
-                                echo "<li>{$kelas->session}</li>";
-                            }
-                        }
-                      @endphp
-                    </ul>
-                  </td>
+                  <td>{{ $help->id }}</td>
+                  <td>{{ $help->user->name }}</td>
+                  <td>{{ $help->program->programmable->title ?? '' }}</td>
+                  <td>{{ $help->title }}</td>
                   <td>
                     <div class="d-inline-block">
                       <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow"
@@ -104,12 +59,12 @@
                       </a>
                       <ul class="dropdown-menu dropdown-menu-end m-0" style="">
                         <li>
-                          <a href="{{ route('kelas.edit', $kelas->id) }}" class="dropdown-item">Edit Data</a>
+                          <a href="{{ route('helps.edit', $help->id) }}" class="dropdown-item">Edit Data</a>
                         </li>
                         {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                         <div class="dropdown-divider"></div>
                         <li>
-                          <form action="{{ route('kelas.destroy', $kelas->id) }}" method="POST"
+                          <form action="{{ route('helps.destroy', $help->id) }}" method="POST"
                             onsubmit="return confirm('Apakah kamu yakin ingin menghapus data ini?');">
                             @csrf
                             @method('DELETE')
@@ -118,8 +73,8 @@
                         </li>
                       </ul>
                     </div>
-                    <a href="{{ route('kelas.edit', $kelas->id) }}" class="btn btn-sm btn-icon item-edit"
-                      style="box-shadow: none;"><i class="text-primary ti ti-pencil"></i></a>
+                    <a href="{{ route('helps.show', $help->id) }}" class="btn btn-sm btn-icon item-edit"
+                      style="box-shadow: none;"><i class="text-primary ti ti-file-description"></i></a>
                   </td>
                 </tr>
               @endforeach
@@ -128,10 +83,8 @@
               <tr>
                 <th>ID</th>
                 <th>Nama</th>
-                <th>NIK</th>
-                <th>WhatsApp</th>
                 <th>Program</th>
-                <th>Sesi</th>
+                <th>Kendala</th>
                 <th>Tindakan</th>
               </tr>
             </tfoot>
@@ -145,7 +98,7 @@
 @section('js')
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      var table = document.getElementById('kelas');
+      var table = document.getElementById('helps');
       var filter = document.getElementById('programFilter');
 
       filter.onchange = function() {
@@ -161,7 +114,7 @@
 
   <script>
     $(document).ready(function() {
-      $('#kelas').DataTable();
+      $('#helps').DataTable();
     });
   </script>
 @endsection

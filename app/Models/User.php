@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Program::class);
     }
+
+    public function help()
+    {
+        return $this->hasMany(Kelas::class);
+    }
 }

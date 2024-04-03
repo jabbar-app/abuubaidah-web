@@ -17,7 +17,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $mahasiswa = User::all()->count() - 9;
-        $programs = Program::all()->sortByDesc('status');
+        $programs = Program::where('status', 1)->get();
 
         if ($programs->isEmpty()) {
             $program = null;

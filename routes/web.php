@@ -5,6 +5,7 @@ use App\Http\Controllers\BilhaqController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FaiController;
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\KibaController;
@@ -55,13 +56,20 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/users', UserController::class);
     Route::resource('results', ResultController::class);
-    Route::resource('/programs', ProgramController::class);
     Route::resource('/tahsins', TahsinController::class);
     Route::resource('/tahfizs', TahfizController::class);
     Route::resource('/bilhaqs', BilhaqController::class);
     Route::resource('/kibas', KibaController::class);
     Route::resource('/lughohs', LughohController::class);
     Route::resource('/fais', FaiController::class);
+    Route::resource('/programs', ProgramController::class);
+    Route::resource('/helps', HelpController::class);
+    Route::get('/laporan', [HelpController::class, 'indexHelp'])->name('student.helps.index');
+    Route::get('/laporan/buat', [HelpController::class, 'createHelp'])->name('student.helps.create');
+    Route::post('/laporan/simpan', [HelpController::class, 'storeHelp'])->name('student.helps.store');
+    Route::get('/laporan/{help}', [HelpController::class, 'showHelp'])->name('student.helps.show');
+    Route::get('/laporan/edit/{help}', [HelpController::class, 'editHelp'])->name('student.helps.edit');
+    Route::post('/laporan/edit/{help}', [HelpController::class, 'updateHelp'])->name('student.helps.update');
 
     Route::get('/stebis', [StebisController::class, 'index'])->name('stebis.index');
     Route::post('/stebis', [StebisController::class, 'store'])->name('stebis.store');
@@ -71,13 +79,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/stebis/{stebis}', [StebisController::class, 'destroy'])->name('stebis.destroy');
     Route::get('/stebis/{stebis}/edit', [StebisController::class, 'edit'])->name('stebis.edit');
 
-    Route::resource('/programs', ProgramController::class);
     Route::resource('/payments', PaymentController::class);
     Route::resource('/announcements', AnnouncementController::class);
     Route::resource('/tahsin', TahsinController::class);
 
     Route::resource('kelas', KelasController::class);
     Route::get('/admin/kelas', [KelasController::class, 'adminIndex'])->name('admin.kelas.index');;
+    Route::post('admin/kelas', [KelasController::class, 'kelasFilter'])->name('kelas.filter');
     Route::get('/kelas/daftar/{id}', [KelasController::class, 'register']);;
 
     Route::post('/daftar/tahfiz', [KelasController::class, 'daftarTahfiz'])->name('daftar.tahfiz');

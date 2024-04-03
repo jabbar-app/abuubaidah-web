@@ -57,6 +57,14 @@
 </div>
 <!-- Hour chart End  -->
 
+<div class="alert alert-info alert-dismissible" role="alert">
+  <span class="alert-icon text-info me-2">
+    <i class="ti ti-bell ti-xs"></i>
+  </span>
+  Apabila kamu memiliki kendala, silakan klik <a href="{{ route('student.helps.create') }}" class="text-primary" style="font-weight: 600;">di sini untuk buat laporan kendala</a>.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
 @if (!$payments->isEmpty())
   <div class="alert alert-danger alert-dismissible" role="alert">
     <span class="alert-icon text-danger me-2">

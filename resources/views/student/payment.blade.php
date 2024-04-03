@@ -21,7 +21,7 @@
           <tbody>
             @foreach ($payment as $p)
               <tr>
-                <td>{{ $p->updated_at->format('d M Y') }}</td>
+                <td>{{ $p->updated_at->format('d M') }}</td>
                 <td>{{ $p->external_id }}</td>
                 <td>{{ $p->description }}</td>
                 <td>Rp{{ number_format($p->amount, 0, ',', '.') }},-</td>
@@ -29,7 +29,29 @@
                   <span
                     class="badge @if ($p->status == 'PAID') bg-label-success @else bg-label-warning @endif">{{ $p->status }}</span>
                 </td>
-                <td class="d-flex" style="height: 100%">
+                <td>
+                  <div class="btn-group dropstart">
+                    <button class="btn btn-sm btn-primary dropdown-toggle waves-effect waves-light" type="button"
+                      data-bs-toggle="dropdown" aria-expanded="false">Pilih</button>
+                    <ul class="dropdown-menu" style="">
+                      <li><a class="dropdown-item" href="{{ $p->invoice_url }}" target="_blank">Lihat</a></li>
+                      <li><a class="dropdown-item" href="javascript:void(0);" onclick="location.reload();">Cek Status</a>
+                      </li>
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+                      <li>
+                        <form action="{{ route('invoice.regenerate', ['externalId' => $p->external_id]) }}"
+                          method="POST">
+                          @csrf
+                          <input type="hidden" name="amount" value="{{ $p->amount }}">
+                          <input type="submit" class="dropdown-item" value="Buat Ulang">
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+                {{-- <td class="d-flex" style="height: 100%">
                   @if ($p->status == 'PAID')
                     @if ($p->method == 'Xendit')
                       <a href="{{ $p->invoice_url }}" target="_blank" class="btn btn-sm btn-info me-2">Lihat</a>
@@ -43,7 +65,7 @@
                       <button type="submit" class="btn btn-sm btn-primary">Buat Ulang</button>
                     </form>
                   @endif
-                </td>
+                </td> --}}
               </tr>
             @endforeach
           </tbody>

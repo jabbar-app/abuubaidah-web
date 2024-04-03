@@ -24,8 +24,8 @@ class PaymentController extends Controller
 
     public function __construct()
     {
-        // Configuration::setXenditKey(config('xendit.secret_key'));
-        Configuration::setXenditKey(config('xendit.test_key'));
+        Configuration::setXenditKey(config('xendit.secret_key'));
+        // Configuration::setXenditKey(config('xendit.test_key'));
 
         // Instansiasi InvoiceApi
         $this->invoiceApi = new InvoiceApi();

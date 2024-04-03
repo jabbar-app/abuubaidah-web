@@ -36,4 +36,9 @@ class Program extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function help()
+    {
+        return $this->hasMany(Help::class);
+    }
 }

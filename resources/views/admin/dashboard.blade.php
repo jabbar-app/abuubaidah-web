@@ -10,7 +10,8 @@
           <h3>{{ Auth::user()->roles->first()->name . ' | ' ?? '' }} {{ Auth::user()->name }}</h3>
 
           <div class="col-12 col-lg-7 mb-5">
-            <p>Selamat datang di Ma'had Abu Ubaidah Bin Al Jarrah, <em>Lembaga Pendidikan Bahasa Arab & Studi Islam!</em></p>
+            <p>Selamat datang di Ma'had Abu Ubaidah Bin Al Jarrah, <em>Lembaga Pendidikan Bahasa Arab & Studi Islam!</em>
+            </p>
           </div>
           <div class="d-flex justify-content-between flex-wrap gap-3 me-5">
             <div class="d-flex align-items-center gap-3 me-4 me-sm-0">
@@ -101,14 +102,17 @@
                   <p class="mb-0">Pending</p>
                   <span class="badge bg-label-warning p-1 rounded"><i class="ti ti-hourglass-empty ti-xs"></i></span>
                 </div>
-                <h5 class="mb-0 pt-1 text-nowrap ms-lg-n3 ms-xl-0">Rp{{ number_format($total_transaksi_pending, 0, ',', '.') }},-</h5>
+                <h5 class="mb-0 pt-1 text-nowrap ms-lg-n3 ms-xl-0">
+                  Rp{{ number_format($total_transaksi_pending, 0, ',', '.') }},-</h5>
                 <small class="text-muted">{{ $transaksi_pending }}</small>
               </div>
             </div>
             <div class="d-flex align-items-center mt-4">
               <div class="progress w-100" style="height: 8px">
-                <div class="progress-bar bg-success" style="width: 50%" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-success" style="width: 50%" role="progressbar" aria-valuenow="50"
+                  aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50"
+                  aria-valuemin="0" aria-valuemax="100"></div>
               </div>
             </div>
             <div class="border rounded p-3 mt-4">
@@ -122,7 +126,8 @@
                   </div>
                   <h4 class="my-2 pt-1">Rp{{ number_format($xendit, 0, ',', '.') }},-</h4>
                   <div class="progress w-75" style="height: 4px">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
+                      aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
                 <div class="col-6">
@@ -134,7 +139,8 @@
                   </div>
                   <h4 class="my-2 pt-1">Rp{{ number_format($offline, 0, ',', '.') }},-</h4>
                   <div class="progress w-75" style="height: 4px">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50"
+                      aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
               </div>
@@ -154,7 +160,8 @@
               <a href="{{ route('programs.index') }}" class="text-muted small">Lihat detail</a>
             </div>
             <div class="dropdown">
-              <button class="btn p-0" type="button" id="supportTrackerMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn p-0" type="button" id="supportTrackerMenu" data-bs-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 <i class="ti ti-dots-vertical ti-sm text-muted"></i>
               </button>
               <div class="dropdown-menu dropdown-menu-end" aria-labelledby="supportTrackerMenu">
@@ -202,17 +209,93 @@
     </div>
 
     <div class="row mb-5">
+      <div class="col-12">
+        <h6 class="text-muted">Basic</h6>
+        <hr>
+        <div class="nav-align-top mb-4">
+          <ul class="nav nav-pills mb-3" role="tablist">
+            <li class="nav-item">
+              <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home" aria-selected="true">
+                Home
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                data-bs-target="#navs-pills-top-profile" aria-controls="navs-pills-top-profile" aria-selected="false">
+                Profile
+              </button>
+            </li>
+            <li class="nav-item">
+              <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                data-bs-target="#navs-pills-top-messages" aria-controls="navs-pills-top-messages"
+                aria-selected="false">
+                Messages
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+              <p>
+                Icing pastry pudding oat cake. Lemon drops cotton candy caramels cake caramels sesame snaps
+                powder. Bear claw candy topping.
+              </p>
+              <p class="mb-0">
+                Tootsie roll fruitcake cookie. Dessert topping pie. Jujubes wafer carrot cake jelly. Bonbon
+                jelly-o jelly-o ice cream jelly beans candy canes cake bonbon. Cookie jelly beans marshmallow
+                jujubes sweet.
+              </p>
+            </div>
+            <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
+              <p>
+                Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
+                cream. Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
+                cheesecake fruitcake.
+              </p>
+              <p class="mb-0">
+                Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
+                cotton candy liquorice caramels.
+              </p>
+            </div>
+            <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
+              <p>
+                Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
+                cupcake gummi bears cake chocolate.
+              </p>
+              <p class="mb-0">
+                Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
+                roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
+                jelly-o tart brownie jelly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-5">
       @foreach ($programs as $program)
         <div class="col-xl-3 col-sm-12 mb-4">
-          <div class="card" style="height: 240px;">
+          <div class="card">
             <div class="card-body">
               <div class="badge p-2 bg-label-success mb-2 rounded">
                 <i class="ti ti-notebook ti-md"></i>
               </div>
-              <h5 class="card-title mb-1 pt-2">{{ $program->programmable->title }}</h5>
-              <small class="text-muted">Jumlah Terdaftar</small>
-              <h4 class="mb-2 mt-1">{{ number_format($program->kelas->count()) }}</h4>
+              <h5 class="card-title mb-1 pt-2" style="height: 60px;">{{ $program->programmable->title }}</h5>
               <hr>
+              <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td style="padding: 0;">Peserta Baru</td>
+                        <td class="float-end text-primary fw-medium">22</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0;">Daftar Ulang</td>
+                        <td class="float-end text-primary fw-medium">332</td>
+                    </tr>
+                </tbody>
+              </table>
+
               {{-- <div class="pt-1">
                 <a href="#" class="btn btn-sm btn-primary">Detail</a>
               </div> --}}
@@ -230,52 +313,57 @@
           </div>
           <div class="card-datatable table-responsive pt-0">
             <table id="announcements" class="table">
-                <thead>
+              <thead>
+                <tr>
+                  <th>Judul</th>
+                  <th>Isi</th>
+                  <th>Program</th>
+                  <th>Kategori</th>
+                  <th>Tindakan</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($announcements as $announcement)
                   <tr>
-                    <th>Judul</th>
-                    <th>Isi</th>
-                    <th>Program</th>
-                    <th>Kategori</th>
-                    <th>Tindakan</th>
+                    <td>{{ $announcement->title }}</td>
+                    <td>{{ $announcement->description }}</td>
+                    <td>{{ $announcement->program->programmable->title ?? 'Semua Program' }}</td>
+                    <td><span class="badge bg-label-info">{{ $announcement->category }}</span></td>
+                    <td>
+                      <div class="d-inline-block"><a href="javascript:;"
+                          class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                          aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end m-0" style="">
+                          <li><a href="{{ route('announcements.show', $announcement->id) }}"
+                              class="dropdown-item">Details</a></li>
+                          {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
+                          <div class="dropdown-divider"></div>
+                          <li>
+                            <form action="{{ route('announcements.destroy', $announcement->id) }}" method="POST"
+                              onsubmit="return confirm('Are you sure you want to delete this announcements?');">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
+                            </form>
+                          </li>
+                        </ul>
+                      </div>
+                      <a href="{{ route('announcements.edit', $announcement->id) }}"
+                        class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  @foreach ($announcements as $announcement)
-                    <tr>
-                      <td>{{ $announcement->title }}</td>
-                      <td>{{ $announcement->description }}</td>
-                      <td>{{ $announcement->program->programmable->title ?? 'Semua Program' }}</td>
-                      <td><span class="badge bg-label-info">{{ $announcement->category }}</span></td>
-                      <td>
-                        <div class="d-inline-block"><a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
-                          <ul class="dropdown-menu dropdown-menu-end m-0" style="">
-                            <li><a href="{{ route('announcements.show', $announcement->id) }}" class="dropdown-item">Details</a></li>
-                            {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
-                            <div class="dropdown-divider"></div>
-                            <li>
-                              <form action="{{ route('announcements.destroy', $announcement->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this announcements?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
-                              </form>
-                            </li>
-                          </ul>
-                        </div>
-                        <a href="{{ route('announcements.edit', $announcement->id) }}" class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>
-                      </td>
-                    </tr>
-                  @endforeach
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th>Judul</th>
-                    <th>Isi</th>
-                    <th>Program</th>
-                    <th>Kategori</th>
-                    <th>Tindakan</th>
-                  </tr>
-                </tfoot>
-              </table>
+                @endforeach
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Judul</th>
+                  <th>Isi</th>
+                  <th>Program</th>
+                  <th>Kategori</th>
+                  <th>Tindakan</th>
+                </tr>
+              </tfoot>
+            </table>
           </div>
         </div>
       </div>

@@ -20,9 +20,13 @@
 
             @if ($errors->any())
               <div class="alert alert-danger">
-                <ul>
+                <ul style="margin-bottom: 0;">
                   @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                    @if ($error == 'auth.failed')
+                      <li>Email atau password anda salah!</li>
+                    @else
+                      <li>{{ $error }}</li>
+                    @endif
                   @endforeach
                 </ul>
               </div>
@@ -32,7 +36,8 @@
               @csrf
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="text" class="form-control" id="email" name="email" placeholder="email@domain.com" autofocus />
+                <input type="text" class="form-control" id="email" name="email" placeholder="email@domain.com"
+                  autofocus />
               </div>
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
@@ -44,7 +49,9 @@
                   @endif
                 </div>
                 <div class="input-group input-group-merge">
-                  <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                  <input type="password" id="password" class="form-control" name="password"
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                    aria-describedby="password" />
                   <small class="input-group-text cursor-pointer" style="font-size: 12px;">lihat</small>
                 </div>
               </div>

@@ -41,6 +41,13 @@
       </a>
     </li>
 
+    <li class="menu-item {{ Request::is('laporan*') ? 'active' : '' }}">
+      <a href="{{ route('student.helps.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons ti ti-file-description"></i>
+        <div data-i18n="Laporan Kendala">Laporan Kendala</div>
+      </a>
+    </li>
+
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Akun">Akun</span>
     </li>
@@ -53,7 +60,8 @@
     <li class="menu-item">
       <form method="POST" action="{{ route('logout') }}">
         @csrf
-        <a href="{{ route('logout') }}" class="menu-link" onclick="event.preventDefault(); this.closest('form').submit();">
+        <a href="{{ route('logout') }}" class="menu-link"
+          onclick="event.preventDefault(); this.closest('form').submit();">
           <i class="menu-icon tf-icons ti ti-power"></i>
           <div data-i18n="Logout">Logout</div>
         </a>

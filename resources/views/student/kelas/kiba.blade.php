@@ -52,7 +52,7 @@
               </div>
             </div>
             <div class="row mb-3">
-              <label class="col-sm-3 col-form-label" for="multicol-level">Level</label>
+              <label class="col-sm-3 col-form-label" for="multicol-level">Rekomendasi Level Selanjutnya</label>
               <div class="col-sm-9">
                 <input type="text" id="multicol-level" class="form-control" value="{{ $level }}" name="level"
                   readonly />
