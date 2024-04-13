@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tahsins', function (Blueprint $table) {
             $table->id();
             $table->string('batch');
+            $table->string('gelombang');
             $table->string('title');
             $table->string('option');
             $table->text('description');

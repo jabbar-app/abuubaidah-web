@@ -71,6 +71,12 @@
     </div>
 
     <div class="row mb-5">
+      <div class="col-12">
+        <div class="card-header">
+          <h4>Ringkasan / Overview</h4>
+          <hr>
+        </div>
+      </div>
       <div class="col-lg-7 col-sm-12 mb-4">
         <div class="card">
           <div class="card-header">
@@ -172,9 +178,9 @@
           </div>
           <div class="card-body">
             <div class="row">
-              <div class="col-12 col-sm-4 col-md-12 col-lg-4">
+              <div class="col-4 position-relative">
                 <div class="mt-lg-4 mt-lg-2 mb-lg-4 mb-2 pt-1">
-                  <h1 class="mb-0">7</h1>
+                  <h1 class="mb-0">{{ $totalPrograms }}</h1>
                   <p class="mb-0">Total Program</p>
                 </div>
                 <ul class="p-0 m-0">
@@ -182,7 +188,7 @@
                     <div class="badge rounded bg-label-primary p-1"><i class="ti ti-ticket ti-sm"></i></div>
                     <div>
                       <h6 class="mb-0 text-nowrap">Aktif</h6>
-                      <small class="text-muted">7</small>
+                      <small class="text-muted">{{ $activePrograms }}</small>
                     </div>
                   </li>
                   <li class="d-flex gap-3 align-items-center mb-lg-3 pb-1">
@@ -191,14 +197,13 @@
                     </div>
                     <div>
                       <h6 class="mb-0 text-nowrap">Non-Aktif</h6>
-                      <small class="text-muted">0</small>
+                      <small class="text-muted">{{ $nonActivePrograms }}</small>
                     </div>
                   </li>
                 </ul>
               </div>
-              <div class="col-12 col-sm-8 col-md-12 col-lg-8">
-                {{-- <div id="supportTracker"></div> --}}
-                <div id="totalEarningChart"></div>
+              <div class="col-8">
+                <div id="projectStatusChart"></div>
               </div>
             </div>
             <hr>
@@ -208,7 +213,7 @@
       <!--/ Support Tracker -->
     </div>
 
-    <div class="row mb-5">
+    {{-- <div class="row mb-5">
       <div class="col-12">
         <h6 class="text-muted">Basic</h6>
         <hr>
@@ -271,9 +276,15 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> --}}
 
     <div class="row mb-5">
+      <div class="col-12">
+        <div class="card-header">
+          <h4>Program Aktif</h4>
+          <hr>
+        </div>
+      </div>
       @foreach ($programs as $program)
         <div class="col-xl-3 col-sm-12 mb-4">
           <div class="card">
@@ -285,14 +296,20 @@
               <hr>
               <table class="table table-borderless">
                 <tbody>
+                  @if ($program->programmable_type == 'App\Models\Tahsin' || $program->programmable_type == 'App\Models\Kiba')
                     <tr>
-                        <td style="padding: 0;">Peserta Baru</td>
-                        <td class="float-end text-primary fw-medium">22</td>
+                      <td style="padding: 0;">Peserta Baru</td>
+                      <td class="float-end text-primary fw-medium">{{ $program->new_participants }}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 0;">Daftar Ulang</td>
-                        <td class="float-end text-primary fw-medium">332</td>
+                      <td style="padding: 0;">Daftar Ulang</td>
+                      <td class="float-end text-primary fw-medium">{{ $program->renewed_participants }}</td>
                     </tr>
+                  @endif
+                  <tr>
+                    <td style="padding: 0;">Total Peserta</td>
+                    <td class="float-end text-primary fw-medium">{{ $program->total_participants }}</td>
+                  </tr>
                 </tbody>
               </table>
 

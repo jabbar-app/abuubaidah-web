@@ -111,7 +111,7 @@
             </div>
 
             <div class="row mb-5">
-              <label class="col-sm-3 col-form-label" for="multicol-program">Status</label>
+              <label class="col-sm-3 col-form-label" for="multicol-program">Status Kelas</label>
               <div class="col-sm-9">
                 <select name="status" id="status" class="form-select" required>
                   <option value="Menunggu Update">Menunggu Update</option>
@@ -120,6 +120,16 @@
                 </select>
               </div>
             </div>
+
+            <div class="row mb-5">
+                <label class="col-sm-3 col-form-label" for="multicol-program">Status Peserta</label>
+                <div class="col-sm-9">
+                  <select name="is_new" id="is_new" class="form-select" required>
+                    <option value="1">Peserta Baru</option>
+                    <option value="0">Daftar Ulang</option>
+                  </select>
+                </div>
+              </div>
 
             <button type="submit" class="btn btn-primary float-end">Tambah Data</button>
           </form>

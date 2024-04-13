@@ -124,6 +124,7 @@
   <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
   <script src="{{ asset('assets/js/tables-datatables-basic.js') }}"></script>
   <script src="{{ asset('assets/js/dropdown-hover.js') }}"></script>
+  <script src="{{ asset('assets/js/cards-analytics.js') }}"></script>
 </body>
 
 </html>

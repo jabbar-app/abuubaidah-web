@@ -97,6 +97,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/export-kelas/lughoh/{id}', [ExportController::class, 'exportLughoh'])->name('kelas.export.lughoh');
     Route::post('/import-kelas/lughoh', [ImportController::class, 'importLughoh'])->name('kelas.import.lughoh');
     Route::post('/import-result', [ImportController::class, 'importResult'])->name('import.result');
+    Route::get('/export-user', [ExportController::class, 'exportUser'])->name('user.export');
+    Route::get('/export-payments', [ExportController::class, 'exportPayment'])->name('payments.export');
+    Route::post('/import-payments', [ImportController::class, 'importPayment'])->name('payments.import');
+    Route::get('/export-kelas-all', [ExportController::class, 'exportKelasAll'])->name('kelas.export.all');
+    Route::get('/export-kelas/{id}/{batch}/{gelombang}', [ExportController::class, 'exportKelas'])->name('kelas.export.filter');
 
     Route::post('/create-invoice', [PaymentController::class, 'createInvoice'])->name('create.invoice');
 });
@@ -104,6 +109,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/provinces', [LocationController::class, 'getProvinces']);
 Route::get('/regencies/{provinceId}', [LocationController::class, 'getRegencies']);
 Route::get('/districts/{regencyId}', [LocationController::class, 'getDistricts']);
+
+Route::get('/get-angkatan/{programId}', [ProgramController::class, 'getAngkatan']);
+Route::get('/get-gelombang/{batchId}', [ProgramController::class, 'getGelombang']);
+
 Route::get('/pengumuman', [KelasController::class, 'pengumumanIndex']);
 Route::get('/pengumuman/{program}', [KelasController::class, 'pengumuman']);
 Route::get('/search', [KelasController::class, 'search'])->name('search.results');

@@ -91,5 +91,7 @@
         </div>
       @endforelse
     </div>
+
+    @include('layouts.whatsapp')
   </div>
 @endsection

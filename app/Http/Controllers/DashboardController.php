@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -17,11 +18,12 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $mahasiswa = User::all()->count() - 9;
-        $programs = Program::where('status', 1)->get();
-
-        if ($programs->isEmpty()) {
-            $program = null;
-        }
+        $programs = Program::where('status', 1)->get()->map(function ($program) {
+            $program->new_participants = DB::table('kelas')->where('program_id', $program->id)->where('is_new', 1)->count();
+            $program->renewed_participants = DB::table('kelas')->where('program_id', $program->id)->where('is_new', 0)->count();
+            $program->total_participants = $program->new_participants + $program->renewed_participants;
+            return $program;
+        });
 
         $statusKelas = Kelas::where('user_id', auth()->user()->id)->get();
 
@@ -36,6 +38,9 @@ class DashboardController extends Controller
                 'xendit' => Payment::where('status', 'PAID')->where('method', 'xendit')->sum('amount'),
                 'offline' => Payment::where('status', 'PAID')->where('method', 'offline')->sum('amount'),
                 'programs' => $programs,
+                'activePrograms' => Program::where('status', 1)->count(),
+                'nonActivePrograms' => Program::where('status', 0)->count(),
+                'totalPrograms' => Program::count(),
                 'statusKelas' => $statusKelas,
                 'payments' => Payment::with('program')->orderBy('created_at', 'desc')->get(),
                 'announcements' => Announcement::with('program')->get(),
@@ -177,7 +182,8 @@ class DashboardController extends Controller
     public function myTransaction()
     {
         $payment = Payment::where('user_id', auth()->user()->id)->orderBy('updated_at', 'DESC')->get();
+        $invoices = Payment::where('user_id', auth()->user()->id)->where('status', 'PENDING')->get();
 
-        return view('student.payment', compact('payment'));
+        return view('student.payment', compact('payment', 'invoices'));
     }
 }

@@ -397,7 +397,8 @@
           <div class="avatar avatar-online">
             <img
               src="{{ Auth::user()->url_pas_foto ? asset(Auth::user()->url_pas_foto) : asset('assets/img/mahad/abuubaidah_circle.svg') }}"
-              alt="user-avatar" class="h-auto rounded-circle" />
+              alt="user-avatar" class="h-auto rounded-circle"
+              onerror="this.onerror=null; this.src='{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}';" />
           </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -408,7 +409,8 @@
                   <div class="avatar avatar-online">
                     <img
                       src="{{ Auth::user()->url_pas_foto ? asset(Auth::user()->url_pas_foto) : asset('assets/img/mahad/abuubaidah_circle.svg') }}"
-                      alt class="h-auto rounded-circle" />
+                      alt="user-avatar" class="h-auto rounded-circle"
+                      onerror="this.onerror=null; this.src='{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}';" />
                   </div>
                 </div>
                 <div class="flex-grow-1">

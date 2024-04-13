@@ -4,7 +4,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
-        Program</h4>
+        User</h4>
       <a href="{{ route('users.create') }}" class="btn btn-md btn-primary">Tambah User</a>
     </div>
 
@@ -26,6 +26,14 @@
     @endif
 
     <div class="card">
+
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Data User</h5>
+        <div class="float-end">
+          <a href="/export-user" class="btn btn-md btn-primary float-end mb-3">Export ke
+            Excel</a>
+        </div>
+      </div>
       <div class="card-datatable table-responsive pt-0">
         <table id="users" class="table">
           <thead>

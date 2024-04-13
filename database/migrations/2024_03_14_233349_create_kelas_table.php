@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('program');
             $table->string('batch');
+            $table->string('gelombang');
             $table->string('bilhaq')->nullable();
             $table->string('class')->nullable();
             $table->string('session')->nullable();
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('score')->nullable();
             $table->string('lecturer')->nullable();
             $table->string('status')->default('Menunggu Update');
+            $table->boolean('is_new')->default(true);
             $table->timestamps();
         });
     }

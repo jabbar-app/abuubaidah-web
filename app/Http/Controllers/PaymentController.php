@@ -64,6 +64,7 @@ class PaymentController extends Controller
                     'amount' => $request->amount,
                     'invoice_url' => '#',
                     'status' => $request->status,
+                    'is_new' => $request->is_new,
                     'note' => 'Data di-buat oleh: ' . Auth::user()->name,
                 ]);
             } else {
@@ -122,18 +123,18 @@ class PaymentController extends Controller
             if ($request->method == 'Offline') {
                 $payment->update([
                     'method' => $request->method,
-                    //   'amount' => $request->amount,
+                    'amount' => $request->amount,
                     'external_id' => 'off_' . time(),
                     'status' => $request->status,
                     'invoice_url' => '#',
-                    'note' => 'Data di-edit oleh: ' . Auth::user()->name,
+                    'note' => $request->note . ' Data di-edit oleh: ' . Auth::user()->name,
                 ]);
             } else {
                 $payment->update([
                     'method' => $request->method,
-                    //   'amount' => $request->amount,
+                    'amount' => $request->amount,
                     'status' => $request->status,
-                    'note' => 'Data di-edit oleh: ' . Auth::user()->name,
+                    'note' => $request->note . ' Data di-edit oleh: ' . Auth::user()->name,
                 ]);
             }
             return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
@@ -187,6 +188,7 @@ class PaymentController extends Controller
                 'lecturer' => $request->lecturer,
                 'session' => json_encode($request->session),
                 'status' => 'Menunggu Update',
+                'is_new' => $request->is_new,
             ]);
 
 
@@ -252,6 +254,7 @@ class PaymentController extends Controller
                 'score' => 0,
                 'lecturer_name' => "",
                 'status' => 'Menunggu Update',
+                'is_new' => $request->is_new,
             ]);
 
             //   Seleksi::create([

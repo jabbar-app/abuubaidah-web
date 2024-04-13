@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Transaksi</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        Transaksi</h4>
       <a href="{{ route('payments.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
@@ -33,32 +34,33 @@
             @csrf
             @method('PUT')
             <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="multicol-program">Nama User</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" value="{{ $payment->payer_name }}" disabled>
-                </div>
+              <label class="col-sm-3 col-form-label" for="multicol-program">Nama User</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" value="{{ $payment->payer_name }}" disabled>
               </div>
+            </div>
 
-              <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="multicol-program">Nama Program</label>
-                <div class="col-sm-9">
-                  <input type="text" class="form-control" value="{{ $payment->program->programmable->title }}" disabled>
-                </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="multicol-program">Nama Program</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" value="{{ $payment->program->programmable->title }}" disabled>
               </div>
+            </div>
 
-              <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="multicol-program">Biaya Program</label>
-                <div class="col-sm-9">
-                  <input type="text" name="amount" class="form-control" value="Rp{{ number_format($payment->amount, 0, ',', '.') }},-">
-                </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="multicol-program">Biaya Program</label>
+              <div class="col-sm-9">
+                <input type="text" name="amount" class="form-control"
+                  value="Rp{{ number_format($payment->amount, 0, ',', '.') }},-">
               </div>
+            </div>
 
-              <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="multicol-program">Status Saat Ini</label>
-                <div class="col-sm-9">
-                  <input type="text" name="amount" class="form-control" value="{{ $payment->status }}" disabled>
-                </div>
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="multicol-program">Status Saat Ini</label>
+              <div class="col-sm-9">
+                <input type="text" name="amount" class="form-control" value="{{ $payment->status }}" disabled>
               </div>
+            </div>
 
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="method">Metode Pembayaran</label>
@@ -79,6 +81,13 @@
                   <option value="PENDING">PENDING</option>
                   <option value="PAID">LUNAS</option>
                 </select>
+              </div>
+            </div>
+
+            <div class="row mb-3" id="note-row">
+              <label class="col-sm-3 col-form-label" for="note">Catatan</label>
+              <div class="col-sm-9">
+                <textarea name="note" id="note" rows="3" class="form-control" placeholder="Tambahkan catatan di sini."></textarea>
               </div>
             </div>
 

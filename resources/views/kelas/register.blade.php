@@ -3,7 +3,7 @@
 
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Program /</span> {{ $program->title }}</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Program /</span> {{ $program->programmable->title }}</h4>
 
     <div class="row">
       <!-- Form Separator -->
@@ -12,6 +12,7 @@
           <h5 class="card-header">Form Pendaftaran Program</h5>
           <form action="{{ route('create.invoice') }}" method="POST" class="card-body">
             @csrf
+            <input type="hidden" name="is_new" value="{{ $alumni == 'Alumni' ? 'false' : 'true' }}">
             <h6>1. Data Peserta</h6>
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-name">Nama Lengkap</label>

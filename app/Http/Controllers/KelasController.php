@@ -12,6 +12,7 @@ use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Xendit\Invoice\CreateInvoiceRequest;
@@ -43,10 +44,24 @@ class KelasController extends Controller
 
     public function kelasFilter(Request $request)
     {
+        $kelas = Kelas::where('program_id', $request->program_id);
+        if (!empty($request->batch)) {
+            $kelas->where('batch', $request->batch);
+        }
+        if (!empty($request->gelombang)) {
+            $kelas->where('gelombang', $request->gelombang);
+        }
+        $kelas = $kelas->get();
+
         return view('admin.kelas.index', [
-            'kelas' => Kelas::where('program_id', $request->program_id)->get(),
+            'kelas' => $kelas,
+            'new' => Kelas::where('program_id', $request->program_id)->where('is_new', 1)->count(),
+            'renewed' => Kelas::where('program_id', $request->program_id)->where('is_new', 0)->count(),
             'programs' => Program::all(),
+            'program' => Program::where('id', $request->program_id)->first(),
             'program_id' => $request->program_id,
+            'batch' => $request->batch,
+            'gelombang' => $request->gelombang,
         ]);
     }
 
@@ -158,6 +173,7 @@ class KelasController extends Controller
                 'batch' => $program->programmable->batch,
                 'bilhaq' => $request->hasBilhaqCert,
                 'status' => 'Menunggu Update',
+                'is_new' => $request->is_new,
             ]);
 
             Payment::create([
@@ -175,7 +191,6 @@ class KelasController extends Controller
             ]);
 
             return redirect()->route('my.program')->with('success', 'Pendaftaran program berhasil!');
-
         } catch (XenditSdkException $e) {
             // Menangani eksepsi dan menampilkan pesan kesalahan
             return response()->json([
@@ -270,6 +285,7 @@ class KelasController extends Controller
             'class' => $request->class,
             'session' => json_encode($request->session),
             'status' => 'Menunggu Update',
+            'is_new' => $request->is_new,
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Program berhasil ditambahkan.');
