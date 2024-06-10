@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data {{ $stebis->first()->title }}</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        {{ $stebis->first()->title }}</h4>
       <a href="{{ route('stebis.create') }}" class="btn btn-md btn-primary">Tambah Data</a>
     </div>
 
@@ -44,10 +45,20 @@
                 <td>{{ $stebis->title }}</td>
                 <td>{{ $stebis->description }}</td>
                 <td>
-                  @foreach (json_decode($stebis->option) as $option)
-                    <li style="display: inline;">{{ $option }}</li>
-                  @endforeach
+                  @php
+                    $options = json_decode($stebis->option);
+                  @endphp
+
+                  @if (is_array($options) || is_object($options))
+                    @foreach ($options as $option)
+                      <li style="display: inline;">{{ $option }}</li>
+                    @endforeach
+                  @else
+                    {{-- Optional: display a default message or nothing --}}
+                    No options available.
+                  @endif
                 </td>
+
                 <td><span class="badge @if ($stebis->status) bg-label-primary @else bg-label-warning @endif">
                     @if ($stebis->status)
                       Aktif
@@ -57,7 +68,8 @@
                   </span></td>
                 <td>
                   <div class="d-inline-block">
-                    <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false" style="box-shadow: none;">
+                    <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow"
+                      data-bs-toggle="dropdown" aria-expanded="false" style="box-shadow: none;">
                       <i class="text-primary ti ti-dots-vertical"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
@@ -66,7 +78,8 @@
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>
-                        <form action="{{ route('stebis.destroy', $stebis->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this stebis?');">
+                        <form action="{{ route('stebis.destroy', $stebis->id) }}" method="POST"
+                          onsubmit="return confirm('Are you sure you want to delete this stebis?');">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
@@ -74,7 +87,8 @@
                       </li>
                     </ul>
                   </div>
-                  <a href="{{ route('stebis.edit', $stebis->id) }}" class="btn btn-sm btn-icon item-edit" style="box-shadow: none;"><i class="text-primary ti ti-pencil"></i></a>
+                  <a href="{{ route('stebis.edit', $stebis->id) }}" class="btn btn-sm btn-icon item-edit"
+                    style="box-shadow: none;"><i class="text-primary ti ti-pencil"></i></a>
                 </td>
               </tr>
             @endforeach

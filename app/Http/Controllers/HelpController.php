@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Help;
 use App\Models\Program;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -98,7 +99,10 @@ class HelpController extends Controller
     public function indexHelp()
     {
         $helps = Help::where('user_id', Auth::user()->id)->get();
-        return view('student.helps.index', compact('helps'));
+        return view('student.helps.index', [
+            'helps' => Help::where('user_id', Auth::user()->id)->get(),
+            'student' => Student::where('user_id', auth()->user()->id)->first(),
+        ]);
     }
 
     public function createHelp()

@@ -8,6 +8,8 @@ use App\Models\District;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Kelas;
+use App\Models\Payment;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -92,7 +94,20 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.users.show', compact('user'));
+        $province = Province::find($user->province);
+        $regency = Regency::find($user->regency);
+        $district = District::find($user->district);
+
+        // dd($province);
+
+        return view('admin.users.show', [
+            'user' => $user,
+            'programs' => Kelas::where('user_id', $user->id)->get(),
+            'payments' => Payment::where('user_id', $user->id)->get(),
+            'provinceName' => $province->name ?? '-',
+            'regencyName' => $regency->name ?? '-',
+            'districtName' => $district->name ?? '-',
+        ]);
     }
 
 
@@ -103,6 +118,8 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $address = json_decode($user->address, true);
+
+        // dd($user->province, $address);
         $provinces = Province::all();
         $regencies = collect(); // Initialize an empty collection
         $districts = collect(); // Initialize an empty collection
@@ -115,30 +132,39 @@ class UserController extends Controller
 
         if (isset($address['province']) && !is_null($address['province'])) {
             $province = Province::find($address['province']);
-            $provinceName = $province ? $province->name : null;
+        } else {
+            $province = Province::find($user->province);
+        }
 
-            // If province is found, load its regencies
-            if ($province) {
-                $regencies = Regency::where('province_id', $province->id)->get();
-            }
+        $provinceName = $province ? $province->name : null;
+        if ($province) {
+            $regencies = Regency::where('province_id', $province->id)->get();
         }
 
         if (isset($address['regency']) && !is_null($address['regency'])) {
-            $regency = Regency::where('id', $address['regency'])->first(); // Assuming $address['regency'] contains the id
-            $regencyId = $regency ? $regency->id : null;
-            $regencyName = $regency ? $regency->name : null;
+            $regency = Regency::where('id', $address['regency'])->first();
+        } else {
+            $regency = Regency::where('id', $user->regency)->first();
+        }
 
-            // If regency is found, load its districts
-            if ($regency) {
-                $districts = District::where('regency_id', $regency->id)->get();
-            }
+        $regencyId = $regency ? $regency->id : null;
+        $regencyName = $regency ? $regency->name : null;
+        if ($regency) {
+            $districts = District::where('regency_id', $regency->id)->get();
         }
 
         if (isset($address['district']) && !is_null($address['district'])) {
-            $district = District::where('id', $address['district'])->first(); // Assuming $address['district'] contains the id
-            $districtId = $district ? $district->id : null;
-            $districtName = $district ? $district->name : null;
+            $district = District::where('id', $address['district'])->first();
+        } else {
+            $district = District::where('id', $user->district)->first();
         }
+
+        $districtId = $district ? $district->id : null;
+        $districtName = $district ? $district->name : null;
+
+        // dd(
+        //     $provinceName
+        // );
 
         return view('admin.users.edit', compact('user', 'provinceName', 'regencyName', 'regencyId', 'districtName', 'districtId', 'provinces', 'regencies', 'districts'));
     }
@@ -151,34 +177,90 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'sometimes|nullable|string|min:8',
-            'gender' => 'required|in:Laki-laki,Perempuan',
-            'phone' => 'required|numeric',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'status_perkawinan' => 'required|string',
-            'suku' => 'required|string|max:255',
+        // Validate unique fields
+        $request->validate([
+            'phone' => 'required|numeric|unique:users,phone,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
         ]);
 
-        if (!empty($validatedData['password'])) {
-            $validatedData['password'] = bcrypt($validatedData['password']);
-        } else {
-            unset($validatedData['password']);
+        // Handle file uploads
+        $this->handleFileUpload($request, $user, 'url_pas_foto', 'profile-photos');
+        $this->handleFileUpload($request, $user, 'url_ktp', 'upload-image');
+        $this->handleFileUpload($request, $user, 'url_kk', 'upload-image');
+        $this->handleFileUpload($request, $user, 'url_ijazah', 'upload-image');
+        $this->handleFileUpload($request, $user, 'url_bilhaq', 'upload-image');
+
+        // Prepare data for update
+        $updateData = $this->prepareUpdateData($request);
+
+        // Update password if provided
+        if (!empty($request->password)) {
+            $updateData['password'] = bcrypt($request->password);
         }
 
-        $validatedData['address'] = json_encode([
-            'address' => $request->address,
-            'province' => $request->province,
-            'regency' => $request->regency,
-            'district' => $request->district
-        ]);
-        $user->update($validatedData);
+        // Update user data
+        $user->update($updateData);
 
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
+
+    protected function handleFileUpload($request, $user, $fieldName, $storagePath)
+    {
+        if ($request->hasFile($fieldName)) {
+            $request->validate([$fieldName => 'image|mimes:jpeg,png,jpg|max:2048']);
+
+            // Get the file from the request
+            $file = $request->file($fieldName);
+
+            // Define the file's destination path
+            $destinationPath = public_path($storagePath);
+
+            // Create the directory if it doesn't exist
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0775, true);
+            }
+
+            // Generate a unique file name
+            $fileName = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+
+            // Move the file to the public directory
+            $file->move($destinationPath, $fileName);
+
+            // Define the file path relative to the public directory
+            $filePath = $storagePath . '/' . $fileName;
+
+            // Delete old file if it exists
+            if (!empty($user->$fieldName) && file_exists(public_path($user->$fieldName))) {
+                unlink(public_path($user->$fieldName));
+            }
+
+            // Update the user's field with the new file path
+            $user->update([$fieldName => $filePath]);
+        }
+    }
+
+    protected function prepareUpdateData($request)
+    {
+        $fields = [
+            'nik', 'phone', 'email', 'name', 'tempat_lahir', 'tanggal_lahir',
+            'status_perkawinan', 'agama', 'suku', 'address', 'province', 'regency',
+            'district', 'ukuran_almamater', 'nama_sd', 'lulus_sd', 'nama_smp',
+            'lulus_smp', 'nama_sma', 'lulus_sma', 'perguruan_tinggi', 'status_ayah',
+            'nama_ayah', 'pekerjaan_ayah', 'penghasilan_ayah', 'telp_ayah',
+            'status_ibu', 'nama_ibu', 'pekerjaan_ibu', 'penghasilan_ibu', 'telp_ibu',
+        ];
+
+        $updateData = [];
+
+        foreach ($fields as $field) {
+            if (!empty($request->$field)) {
+                $updateData[$field] = $request->$field;
+            }
+        }
+
+        return $updateData;
+    }
+
 
 
     public function destroy($id)

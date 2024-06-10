@@ -31,6 +31,7 @@
 
           <form method="POST" action="{{ route('create.invoice') }}">
             @csrf
+            <input type="hidden" name="fromAdmin" value="true">
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-user">Pilih User</label>
               <div class="col-sm-9">
@@ -48,7 +49,7 @@
                 <select id="multicol-program" class="select2 form-select" name="program_id" data-allow-clear="true" required>
                   <option value="">Pilih</option>
                   @foreach ($programs as $program)
-                    <option value="{{ $program->id }}">{{ $program->programmable->title }}</option>
+                    <option value="{{ $program->id }}">{{ $program->programmable->title }}, Angkatan: {{ $program->programmable->batch }}</option>
                   @endforeach
                 </select>
               </div>

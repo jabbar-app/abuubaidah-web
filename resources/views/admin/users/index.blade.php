@@ -58,6 +58,10 @@
                       aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
                       <li><a href="{{ route('users.show', $user->id) }}" class="dropdown-item">Details</a></li>
+                      <li><a href="{{ route('users.edit', $user->id) }}" class="dropdown-item">Edit Data</a></li>
+                      @if (Auth::user()->hasRole('Super Admin'))
+                        <li><a href="/users/{{ $user->id }}/roles" class="dropdown-item">Roles</a></li>
+                      @endif
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>
@@ -70,8 +74,8 @@
                       </li>
                     </ul>
                   </div>
-                  <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-icon item-edit"><i
-                      class="text-primary ti ti-pencil"></i></a>
+                  <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-icon item-edit"><i
+                      class="text-primary ti ti-user"></i></a>
                 </td>
               </tr>
             @endforeach

@@ -34,6 +34,14 @@
         <div data-i18n="Data Kelas">Data Kelas</div>
       </a>
     </li>
+    @if (!empty($student->nim))
+      <li class="menu-item {{ Request::is('kartu-hasil-studi*') ? 'active' : '' }}">
+        <a href="{{ route('khs') }}" class="menu-link">
+          <i class="menu-icon tf-icons ti ti-notebook"></i>
+          <div data-i18n="Kartu Hasil Studi">Kartu Hasil Studi</div>
+        </a>
+      </li>
+    @endif
     <li class="menu-item {{ Request::routeIs('my.transaction') ? 'active' : '' }}">
       <a href="{{ route('my.transaction') }}" class="menu-link">
         <i class="menu-icon tf-icons ti ti-file-dollar"></i>

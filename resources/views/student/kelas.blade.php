@@ -13,13 +13,14 @@
               <th>Program</th>
               <th>Angkatan</th>
               <th class="text-center">Detail</th>
+              <th class="text-center">Group WA</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
             @foreach ($kelas as $k)
               <tr>
-                <td>{{ $k->program }}</td>
+                <td>{{ $k->program->programmable->title }}</td>
                 <td>{{ $k->batch }}</td>
                 {{-- <td>
                     {{ $k->class }}
@@ -44,7 +45,28 @@
                   </ul>
                 </td> --}}
 
-                <td class="text-center"><a href="/kelas/detail/{{ $k->id }}" class="btn btn-sm btn-light">Lihat Detail</a></td>
+                <td class="text-center"><a href="/kelas/detail/{{ $k->id }}" class="btn btn-sm btn-light">Lihat
+                    Detail</a></td>
+                <td class="text-center">
+                  <a href="{{ $k->link_whatsapp ? $k->link_whatsapp : '#' }}" target="_blank" class="fw-medium"
+                    id="wa-link">Join Group WhatsApp</a>
+                </td>
+                <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                    const waLink = document.getElementById('wa-link');
+                    waLink.addEventListener('click', function(event) {
+                      if (waLink.getAttribute('href') === '#') {
+                        event.preventDefault();
+                        Swal.fire({
+                          icon: 'warning',
+                          title: 'Link belum tersedia',
+                          text: 'Silakan cek lagi nanti, ya.',
+                          confirmButtonText: 'OK'
+                        });
+                      }
+                    });
+                  });
+                </script>
                 <td><span class="badge bg-label-primary">{{ $k->status }}</span></td>
               </tr>
             @endforeach

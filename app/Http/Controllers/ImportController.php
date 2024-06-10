@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelas;
+use App\Models\Nim;
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,17 +23,16 @@ class ImportController extends Controller
             // Assuming the first column is ID
             $kelas = Kelas::find($row[0]);
             if ($kelas) {
+                // dd($row[12]);
                 // Update Kelas fields, ignore user-related fields
-                // Example: Update 'class', 'session', 'level', 'room', 'status' of Kelas
-                // Ensure these fields are fillable in your Kelas model
-
                 $kelas->class = $row[4] ?? $kelas->class; // Assuming 'E' column is 'Tipe Kelas'
                 $kelas->session = $row[5] ?? $kelas->session; // Assuming 'F' column is 'Sesi'
                 $kelas->level = $row[6] ?? $kelas->level; // Assuming 'G' column is 'Level'
                 $kelas->room = $row[7] ?? $kelas->room; // Assuming 'H' column is 'Ruang Kelas'
                 $kelas->score = $row[8] ?? $kelas->score;
                 $kelas->lecturer = $row[9] ?? $kelas->lecturer;
-                $kelas->status = $row[10] ?? $kelas->status; // Assuming 'I' column is 'Status'
+                $kelas->status = $row[12] ?? $kelas->status; // Assuming 'I' column is 'Status'
+                $kelas->link_whatsapp = $row[13] ?? $kelas->link_whatsapp; // Assuming 'N' column is 'Link WhatsApp'
 
                 $kelas->save();
             }
@@ -72,5 +72,30 @@ class ImportController extends Controller
         }
 
         return back()->with('success', 'Data telah berhasil diupload.');
+    }
+
+    public function importNims(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $file = $request->file('excel_file');
+        $spreadsheet = IOFactory::load($file->getPathname());
+        $data = $spreadsheet->getActiveSheet()->toArray();
+
+        foreach ($data as $rowIndex => $row) {
+            if ($rowIndex === 0) continue; // Skip header
+
+            Nim::updateOrCreate(
+                ['nim' => $row[0]],
+                [
+                    'name' => $row[1],
+                    'is_registered' => isset($row[2]) ? (bool)$row[2] : false,
+                ]
+            );
+        }
+
+        return back()->with('success', 'NIMs uploaded successfully.');
     }
 }

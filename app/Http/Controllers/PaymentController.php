@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Installment;
 use App\Models\Kelas;
 use App\Models\KelasTerdaftar;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Seleksi;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +37,32 @@ class PaymentController extends Controller
     {
         return view('admin.payments.index', [
             'payments' => Payment::with('program.user')->orderBy('created_at', 'desc')->get(),
+            'programs' => Program::all()->unique('programmable.title'),
+        ]);
+    }
+
+    public function paymentFilter(Request $request)
+    {
+        $payments = Payment::with('program.user')->where('program_id', $request->program_id)->orderBy('created_at', 'desc')->get();
+
+        dd($payments);
+        if (!empty($request->batch)) {
+            $payments->where('batch', $request->batch);
+        }
+        if (!empty($request->gelombang)) {
+            $payments->where('gelombang', $request->gelombang);
+        }
+        $payments = $payments->get();
+
+        return view('admin.payments.index', [
+            'kelas' => $kelas,
+            'new' => Kelas::where('program_id', $request->program_id)->where('is_new', 1)->count(),
+            'renewed' => Kelas::where('program_id', $request->program_id)->where('is_new', 0)->count(),
+            'programs' => Program::all()->unique('programmable.title'),
+            'program' => Program::where('id', $request->program_id)->first(),
+            'program_id' => $request->program_id,
+            'batch' => $request->batch,
+            'gelombang' => $request->gelombang,
         ]);
     }
 
@@ -48,19 +76,35 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
+
         $user = User::where('id', $request->user_id)->first();
         $program = Program::where('id', $request->program_id)->first();
 
         try {
+            // $existingKelas = Kelas::where('user_id', $request->user_id)
+            //     ->where('program_id', $request->program_id)
+            //     ->first();
+
+            // $existingPayment = Payment::where('user_id', $request->user_id)
+            //     ->where('program_id', $request->program_id)
+            //     ->where('kelas_id', $request->kelas_id)
+            //     ->first();
+
+            // if ($existingKelas || $existingPayment) {
+            //     // If found, redirect to the specified route
+            //     return redirect()->back();
+            // }
+            // dd($request->all());
+
             if ($request->method == 'Offline') {
-                Payment::create([
+                $payment = Payment::create([
                     'program_id' => $request->program_id,
                     'kelas_id' => $request->kelas_id,
                     'external_id' => 'off_' . time(),
                     'user_id' => $user->id,
                     'payer_name' => $user->name,
                     'payer_email' => $user->email,
-                    'description' => 'Pembayaran untuk #' . $program->programmable->title,
+                    'description' => 'Pembayaran untuk #' . $program->programmable->title . ', Angkatan #' . $program->programmable->batch,
                     'amount' => $request->amount,
                     'invoice_url' => '#',
                     'status' => $request->status,
@@ -73,7 +117,7 @@ class PaymentController extends Controller
                     'payer_id' => $user->id,
                     'payer_name' => $user->name,
                     'payer_email' => $user->email,
-                    'description' => 'Pembayaran untuk #' . $program->programmable->title,
+                    'description' => 'Pembayaran untuk #' . $program->programmable->title . ', Angkatan #' . $program->programmable->batch,
                     'amount' => $request->amount,
                     'invoice_duration' => 172800,
                     'currency' => 'IDR',
@@ -93,6 +137,27 @@ class PaymentController extends Controller
                     'status' => 'PENDING',
                     'note' => 'Data di-buat oleh: ' . Auth::user()->name,
                 ]);
+            }
+
+            if ($request->has('installments')) {
+                $installments = $request->installments;
+
+                // dd($installments);
+
+                foreach ($installments as $installment) {
+                    // Check for required keys
+                    if (!isset($installment['amount']) || !isset($installment['due_date'])) {
+                        // Log the error or handle it as necessary
+                        continue;  // Skip this iteration if required data is missing
+                    }
+
+                    Installment::create([
+                        'payment_id' => $payment->id,
+                        'amount' => $installment['amount'],
+                        'due_date' => $installment['due_date'],
+                        'status' => 'PENDING',  // assuming you always want to set this by default
+                    ]);
+                }
             }
 
             return redirect()->route('payments.index')->with('success', 'Payment created successfully.');
@@ -119,6 +184,11 @@ class PaymentController extends Controller
 
     public function update(Request $request, Payment $payment)
     {
+        if ($request->note == '') {
+            $note = ' Data di-edit oleh: ' . Auth::user()->name;
+        } else {
+            $note = $request->note;
+        }
         try {
             if ($request->method == 'Offline') {
                 $payment->update([
@@ -127,17 +197,51 @@ class PaymentController extends Controller
                     'external_id' => 'off_' . time(),
                     'status' => $request->status,
                     'invoice_url' => '#',
-                    'note' => $request->note . ' Data di-edit oleh: ' . Auth::user()->name,
+                    'note' => $note,
                 ]);
+
+                if ($request->has('installments')) {
+                    // Delete existing installments
+                    $payment->installments()->delete();
+
+                    // Add new installments
+                    $installments = $request->installments;
+                    foreach ($installments as $installment) {
+                        Installment::create([
+                            'payment_id' => $payment->id,
+                            'amount' => $installment['amount'],
+                            'due_date' => $installment['due_date'],
+                            'status' => 'PENDING',
+                        ]);
+                    }
+                }
             } else {
                 $payment->update([
                     'method' => $request->method,
                     'amount' => $request->amount,
                     'status' => $request->status,
-                    'note' => $request->note . ' Data di-edit oleh: ' . Auth::user()->name,
+                    'note' => $note,
                 ]);
             }
-            return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
+
+            if ($request->has('installments')) {
+                $installments = Installment::where('payment_id', $payment->id)->get();
+                foreach ($installments as $index => $installment) {
+                    // Check if the index exists in the request array to avoid errors
+                    if (isset($request->installments[$index])) {
+                        $installmentData = $request->installments[$index];
+                        // Check if 'status' is set for the current index
+                        if (isset($installmentData['status'])) {
+                            $installment->update([
+                                'status' => $installmentData['status']
+                            ]);
+                        }
+                    }
+                }
+            }
+
+
+            return redirect()->back()->with('success', 'Payment updated successfully.');
         } catch (XenditSdkException $e) {
             return response()->json([
                 'error' => $e->getMessage(),
@@ -156,71 +260,122 @@ class PaymentController extends Controller
 
     public function createInvoice(Request $request)
     {
+        // dd($request->all());
         $user = User::where('id', $request->user_id)->first();
         $program = Program::where('id', $request->program_id)->first();
+        $step = $request->step ?? 'Pendaftaran Baru';
+        $isAdmin = $request->fromAdmin ?? false;
 
-        $create_invoice_request = new CreateInvoiceRequest([
-            'external_id' => 'INV_' . time(),
-            'payer_id' => $user->id,
-            'payer_name' => $user->name,
-            'payer_email' => $user->email,
-            'description' => 'Pembayaran untuk #' . $program->programmable->title,
-            'amount' => $request->amount,
-            'invoice_duration' => 172800,
-            'currency' => 'IDR',
-            'reminder_time' => 1,
-        ]);
+        $existingKelas = Kelas::where('user_id', $request->user_id)
+            ->where('program_id', $request->program_id)
+            ->where('status', 'Menunggu Update')
+            ->first();
+
+        $existingPayment = Payment::where('user_id', $request->user_id)
+            ->where('program_id', $request->program_id)
+            ->where('kelas_id', $request->kelas_id)
+            ->where('amount', $request->amount)
+            ->first();
+
+        if (($existingKelas || $existingPayment) && !$isAdmin) {
+            return redirect()->route('my.program');
+        } else {
+            if ($step == 'Daftar Ulang') {
+                $kelas = Kelas::where('user_id', $request->user_id)->where('program_id', $request->program_id)->where('status', 'Daftar Ulang')->first();
+                $kelas->status = 'Menunggu Update';
+                $kelas->save();
+
+                // dd($kelas->program->programmable_type);
+
+                if ($kelas->program->programmable_type == 'App\Models\Fai' || $kelas->program->programmable_type == 'App\Models\Stebis') {
+                    $isRegisteredLughoh = Kelas::where('user_id', $request->user_id)->whereHas('program', function ($query) {
+                        $query->where('programmable_type', 'App\Models\Lughoh');
+                    })->first();
+                    if (empty($isRegisteredLughoh)) {
+                        $lughoh = Program::where('programmable_type', 'App\Models\Lughoh')->where('status', 1)->first();
+                        Kelas::create([
+                            'user_id' => $request->user_id,
+                            'program_id' => $lughoh->id,
+                            'title' => $lughoh->programmable->title,
+                            'batch' => $lughoh->programmable->batch,
+                            'level' => '',
+                            'class' => '',
+                            'room' => '',
+                            'score' => '',
+                            'lecturer' => '',
+                            'session' => '',
+                            'status' => 'Menunggu Update',
+                            'is_new' => 1,
+                        ]);
+                    }
+                }
+            } else {
+                $kelas = Kelas::create([
+                    'user_id' => $request->user_id,
+                    'program_id' => $request->program_id,
+                    'title' => $program->programmable->title,
+                    'batch' => $program->programmable->batch,
+                    'level' => $request->level,
+                    'class' => $request->class,
+                    'room' => $request->room,
+                    'score' => $request->score,
+                    'lecturer' => $request->lecturer,
+                    'session' => json_encode($request->session),
+                    'status' => $request->status,
+                    'is_new' => $request->is_new,
+                    'nim_temp' => $request->nim,
+                ]);
+            }
+
+            try {
+                $create_invoice_request = new CreateInvoiceRequest([
+                    'external_id' => 'INV_' . time(),
+                    'payer_id' => $user->id,
+                    'payer_name' => $user->name,
+                    'payer_email' => $user->email,
+                    'description' => 'Pembayaran untuk #' . $program->programmable->title . ' Angkatan #' . $program->programmable->batch . ' Jenis Pembayaran #' . $step,
+                    'amount' => $request->amount,
+                    'invoice_duration' => 172800,
+                    'currency' => 'IDR',
+                    'reminder_time' => 1,
+                ]);
+
+                $result = $this->invoiceApi->createInvoice($create_invoice_request);
+
+                $payment = Payment::create([
+                    'program_id' => $request->program_id,
+                    'kelas_id' => $kelas->id,
+                    'external_id' => $create_invoice_request['external_id'],
+                    'user_id' => $user->id,
+                    'payer_name' => $user->name,
+                    'payer_email' => $user->email,
+                    'description' => $create_invoice_request['description'],
+                    'amount' => $create_invoice_request['amount'],
+                    'payment_type' => $request->type,
+                    'invoice_url' => $result->getInvoiceUrl(),
+                    'status' => 'PENDING',
+                ]);
+
+
+                // Redirect ke URL invoice untuk proses pembayaran
+                // return redirect()->to($result->getInvoiceUrl());
+                if (Auth::user()->hasRole('Super Admin')) {
+                    return redirect()->route('admin.kelas.index')->with('success', 'Data berhasil ditambah!');
+                } else {
+                    return redirect()->route('wa.payment', $payment);
+                }
+            } catch (XenditSdkException $e) {
+                // Menangani eksepsi dan menampilkan pesan kesalahan
+                return response()->json([
+                    'error' => $e->getMessage(),
+                    'full_error' => $e->getFullError(),
+                ], 500);
+            }
+        }
 
         // dd($program);
 
-        try {
-            $result = $this->invoiceApi->createInvoice($create_invoice_request);
 
-            $kelas = Kelas::create([
-                'user_id' => $request->user_id,
-                'program_id' => $request->program_id,
-                'program' => $program->programmable->title,
-                'batch' => $program->programmable->batch,
-                'level' => $request->level,
-                'class' => $request->class,
-                'room' => $request->room,
-                'score' => $request->score,
-                'lecturer' => $request->lecturer,
-                'session' => json_encode($request->session),
-                'status' => 'Menunggu Update',
-                'is_new' => $request->is_new,
-            ]);
-
-
-            Payment::create([
-                'program_id' => $request->program_id,
-                'kelas_id' => $kelas->id, // Use the ID from the Kelas instance
-                'external_id' => $create_invoice_request['external_id'],
-                'user_id' => $user->id,
-                'payer_name' => $user->name,
-                'payer_email' => $user->email,
-                'description' => $create_invoice_request['description'],
-                'amount' => $create_invoice_request['amount'],
-                'payment_type' => $request->type,
-                'invoice_url' => $result->getInvoiceUrl(),
-                'status' => 'PENDING',
-            ]);
-
-
-            // Redirect ke URL invoice untuk proses pembayaran
-            // return redirect()->to($result->getInvoiceUrl());
-            if (Auth::user()->hasRole('Super Admin')) {
-                return redirect()->route('admin.kelas.index')->with('success', 'Data berhasil ditambah!');
-            } else {
-                return redirect()->route('my.transaction');
-            }
-        } catch (XenditSdkException $e) {
-            // Menangani eksepsi dan menampilkan pesan kesalahan
-            return response()->json([
-                'error' => $e->getMessage(),
-                'full_error' => $e->getFullError(),
-            ], 500);
-        }
     }
 
     public function createInvoiceSelection(Request $request)
@@ -356,7 +511,7 @@ class PaymentController extends Controller
             return response()->json(['message' => 'Payment record not found.'], 404);
         }
 
-        if ($_status === 'EXPIRED') {
+        if ($_status === 'EXPIRED' && $payment->status != 'PAID') {
             $payment->status = $_status;
             $payment->save();
             Log::info("Invoice expired for external ID: {$_externalId}");

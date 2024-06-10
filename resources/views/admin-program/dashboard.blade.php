@@ -74,7 +74,7 @@
       <div class="col-12 col-sm-12 order-1 order-lg-2 mb-4 mb-lg-0">
         <div class="card">
           <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Data Transaksi</h5>
+            <h5 class="mb-0">Semua Data</h5>
             <div class="float-end">
               @if (Auth::user()->hasRole('Admin Tahsin') || Auth::user()->hasRole('Admin Kiba'))
                 <a href="/export-kelas/{{ $program_id }}" class="btn btn-md btn-primary float-end mb-3">Export ke
@@ -120,7 +120,7 @@
                     <td>{{ $kelas->user->name ?? '' }}</td>
                     <td>{{ $kelas->user->nik ?? '' }}</td>
                     <td>{{ $kelas->user->phone ?? '' }}</td>
-                    <td>{{ $kelas->program . ', Angkatan ' . $kelas->batch }}</td>
+                    <td>{{ $kelas->program->programmable->title. ', Angkatan ' . $kelas->batch }}</td>
                     @if (Auth::user()->hasRole('Admin Tahsin') || Auth::user()->hasRole('Admin Kiba'))
                       <td>
                         <ul style="margin-left: -16px" class="mt-3">

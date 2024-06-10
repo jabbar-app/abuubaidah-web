@@ -1,23 +1,28 @@
 <!doctype html>
 
-<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default" data-assets-path="../../assets/" data-template="vertical-menu-template">
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr"
+  data-theme="theme-default" data-assets-path="../../assets/" data-template="vertical-menu-template">
 
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
   <title>{{ isset($title) ? $title . ' | ' : '' }}Ma'had Abu Ubaidah Bin Al Jarrah</title>
 
 
   <meta name="description" content="Lembaga Pendidikan Bahasa Arab & Studi Islam" />
 
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
+    rel="stylesheet" />
 
   <!-- Icons -->
   <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/fontawesome.css') }}" />
@@ -31,8 +36,10 @@
 
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
-  <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
+  <link rel="stylesheet"
+    href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
+  <link rel="stylesheet"
+    href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/node-waves/node-waves.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
@@ -41,6 +48,8 @@
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
   <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <!-- Page CSS -->
   @yield('css')
 
@@ -51,6 +60,14 @@
   <script src="{{ asset('assets/vendor/js/template-customizer.js') }}"></script>
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
   <script src="{{ asset('assets/js/config.js') }}"></script>
+
+  <style>
+    .one-line {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
 </head>
 
 <body>
@@ -70,6 +87,64 @@
 
   @yield('js')
   <!-- Core JS -->
+
+  <script>
+    document.getElementById('program_id').addEventListener('change', function() {
+      var programId = this.value;
+      if (!programId) {
+        document.getElementById('batch').style.display = 'none';
+        document.getElementById('gelombang').style.display = 'none';
+        return;
+      }
+
+      fetch('/get-angkatan/' + programId) // Adjust the endpoint as needed
+        .then(response => response.json())
+        .then(data => {
+          let batchSelect = document.getElementById('batch');
+          batchSelect.innerHTML = '<option value="">Select Angkatan</option>';
+          data.forEach(function(batch) {
+            batchSelect.innerHTML += `<option value="${batch.batchName}">${batch.batchName}</option>`;
+          });
+          batchSelect.style.display = 'block';
+        });
+
+      document.getElementById('batch').addEventListener('change', function() {
+        var batchId = this.value;
+        if (!batchId) {
+          document.getElementById('gelombang').style.display = 'none';
+          return;
+        }
+
+        fetch('/get-gelombang/' + batchId) // Adjust the endpoint as needed
+          .then(response => response.json())
+          .then(data => {
+            let gelombangSelect = document.getElementById('gelombang');
+            gelombangSelect.innerHTML = '<option value="">Select Gelombang</option>';
+            data.forEach(function(gelombang) {
+              gelombangSelect.innerHTML +=
+                `<option value="${gelombang.gelombang}">${gelombang.gelombang}</option>`;
+            });
+            gelombangSelect.style.display = 'block';
+          });
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var table = document.getElementById('kelas');
+      var filter = document.getElementById('programFilter');
+
+      filter.onchange = function() {
+        var filterValue = this.value.toLowerCase();
+        Array.from(table.getElementsByTagName('tr')).forEach(function(row) {
+          // Assumes program is in the 5th column (adjust index as needed)
+          var cell = row.cells[4] ? row.cells[4].textContent.toLowerCase() : '';
+          row.style.display = cell.includes(filterValue) || !filterValue ? '' : 'none';
+        });
+      };
+    });
+  </script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       // Select the toggle text

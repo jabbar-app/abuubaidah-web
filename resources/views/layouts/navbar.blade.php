@@ -140,7 +140,7 @@
                                 <span class="dropdown-shortcuts-icon rounded-circle mb-2">
                                     <i class="ti ti-settings fs-4"></i>
                                 </span>
-                                <a href="pages-account-settings-account.html" class="stretched-link">Setting</a>
+                                <a href="{{ route('profile.edit') }}" class="stretched-link">Setting</a>
                                 <small class="text-muted mb-0">Account Settings</small>
                             </div>
                         </div>
@@ -400,7 +400,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="pages-account-settings-account.html">
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online">
@@ -424,7 +424,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="pages-account-settings-account.html">
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}">
                             <i class="ti ti-settings me-2 ti-sm"></i>
                             <span class="align-middle">Settings</span>
                         </a>

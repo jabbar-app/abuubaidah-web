@@ -2,7 +2,11 @@
 
 @section('contents')
   <div class="layout-container">
-    @include('student.sidebar')
+    @if (Auth::user()->roles->count() > 0)
+      @include('admin.sidebar')
+    @else
+      @include('student.sidebar')
+    @endif
 
     <!-- Layout container -->
     <div class="layout-page">

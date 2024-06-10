@@ -85,9 +85,22 @@
                   @endif
                 </td>
                 <td>
-                  @foreach (json_decode($program->programmable->option) as $option)
-                    <li>{{ $option }}</li>
-                  @endforeach
+                  @if ($program->programmable->option)
+                    @php
+                      $options = json_decode($program->programmable->option);
+                    @endphp
+
+                    @if ($options)
+                      @foreach ($options as $option)
+                        <li>{{ $option }}</li>
+                      @endforeach
+                    @else
+                      <li>No options available</li>
+                    @endif
+                  @else
+                    <li>No options available</li>
+                  @endif
+
                 </td>
                 <td><span class="badge @if ($program->status) bg-label-primary @else bg-label-warning @endif">
                     @if ($program->status)

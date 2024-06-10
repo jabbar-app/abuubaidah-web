@@ -41,4 +41,14 @@ class Program extends Model
     {
         return $this->hasMany(Help::class);
     }
+
+    public function student()
+    {
+        return $this->hasMany(Student::class);
+    }
+
+    public function course()
+    {
+        return $this->hasMany(Course::class);
+    }
 }

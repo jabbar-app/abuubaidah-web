@@ -298,17 +298,64 @@
                 <tbody>
                   @if ($program->programmable_type == 'App\Models\Tahsin' || $program->programmable_type == 'App\Models\Kiba')
                     <tr>
-                      <td style="padding: 0;">Peserta Baru</td>
-                      <td class="float-end text-primary fw-medium">{{ $program->new_participants }}</td>
+                      <td style="padding: 0;">
+                        Peserta Baru
+                        <br>
+                        <span class="form-label text-danger">Paid:</span>
+                        <br>
+                        <span class="form-label text-danger">Pending:</span>
+                        <br>
+                        <span class="form-label text-danger">Expired:</span>
+                      </td>
+                      <td class="text-primary fw-medium" style="text-align: right;">
+                        {{ $program->new_total }}
+                        <br>
+                        <span class="form-label text-danger">{{ $program->new_paid }}</span>
+                        <br>
+                        <span class="form-label text-danger">{{ $program->new_pending }}</span>
+                        <br>
+                        <span class="form-label text-danger">{{ $program->new_expired }}</span>
+                      </td>
                     </tr>
                     <tr>
-                      <td style="padding: 0;">Daftar Ulang</td>
-                      <td class="float-end text-primary fw-medium">{{ $program->renewed_participants }}</td>
+                      <td style="padding: 0;">
+                        Daftar Ulang
+                        <br>
+                        <span class="form-label text-danger">Paid:</span>
+                        <br>
+                        <span class="form-label text-danger">Pending:</span>
+                        <br>
+                        <span class="form-label text-danger">Expired:</span>
+                      </td>
+                      <td class="text-primary fw-medium" style="text-align: right;">
+                        {{ $program->renew_total }}
+                        <br>
+                        <span class="form-label text-danger">{{ $program->renew_paid }}</span>
+                        <br>
+                        <span class="form-label text-danger">{{ $program->renew_pending }}</span>
+                        <br>
+                        <span class="form-label text-danger">{{ $program->renew_expired }}</span>
+                      </td>
                     </tr>
                   @endif
                   <tr>
-                    <td style="padding: 0;">Total Peserta</td>
-                    <td class="float-end text-primary fw-medium">{{ $program->total_participants }}</td>
+                    <td style="padding: 0;">Total Peserta
+                      <br>
+                      <span class="form-label text-danger">Paid:</span>
+                      <br>
+                      <span class="form-label text-danger">Pending:</span>
+                      <br>
+                      <span class="form-label text-danger">Expired:</span>
+                    </td>
+                    <td class="text-primary fw-medium" style="text-align: right;">
+                      {{ $program->total }}
+                      <br>
+                      <span class="form-label text-danger">{{ $program->total_paid }}</span>
+                      <br>
+                      <span class="form-label text-danger">{{ $program->total_pending }}</span>
+                      <br>
+                      <span class="form-label text-danger">{{ $program->total_expired }}</span>
+                    </td>
                   </tr>
                 </tbody>
               </table>

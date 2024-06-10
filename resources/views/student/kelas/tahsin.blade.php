@@ -12,6 +12,7 @@
           <h5 class="card-header">Form Pendaftaran Program</h5>
           <form action="{{ route('create.invoice') }}" method="POST" class="card-body">
             @csrf
+            <input type="hidden" name="status" value="Menunggu Update">
             <input type="hidden" name="is_new" value="{{ $alumni == 'Alumni' ? '0' : '1' }}">
             <h6>1. Data Peserta</h6>
             <div class="row mb-3">

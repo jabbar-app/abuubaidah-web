@@ -12,9 +12,10 @@
           <h5 class="card-header">Form Pendaftaran Program</h5>
           <form action="{{ route('create.invoice') }}" method="POST" class="card-body">
             @csrf
-
+            <input type="hidden" name="status" value="Menunggu Update">
             <input type="hidden" name="program_id" value="{{ $program->id }}">
             <input type="hidden" value="{{ $program->price_pra }}" name="amount">
+            <input type="hidden" name="is_new" value="1">
 
             <h6>1. Data Peserta</h6>
             <div class="row mb-3">
@@ -57,10 +58,10 @@
                     </tr>
                     <tr>
                       <td>
-                        <span class="fw-medium">Biaya Asrama</span>
+                        <span class="fw-medium">Biaya Rihlah & Almamaater</span>
                       </td>
                       <td>Rp{{ number_format($program->price_normal, 0, ',', '.') }},-</td>
-                      <td class="text-center"><span class="badge bg-label-primary me-1">1 Kali</span></td>
+                      <td class="text-center"><span class="badge bg-label-primary me-1">1 Kali (jika dinyatakan lulus)</span></td>
                     </tr>
 
                     <tr>

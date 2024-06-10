@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\BilhaqController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FaiController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\HelpController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\KibaController;
+use App\Http\Controllers\LecturerController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LughohController;
 use App\Http\Controllers\PaymentController;
@@ -16,10 +18,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\StebisController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TahfizController;
 use App\Http\Controllers\TahsinController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PdfController;
+use App\Http\Controllers\TranscriptController;
+use App\Http\Controllers\WhatsappController;
 
 Route::get('/welcome', function () {
     return view('welcome');
@@ -51,6 +57,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/create-invoice-selection', 'createInvoiceSelection')->name('program.selection');
         Route::post('/invoice/regenerate/{externalId}', 'regenerateInvoice')->name('invoice.regenerate');
         Route::delete('/invoice/delete/{id}', 'destroy')->name('invoice.destroy');
+        Route::post('admin/payment', 'paymentFilter')->name('payment.filter');
     });
     Route::resource('payments', PaymentController::class);
 
@@ -99,12 +106,37 @@ Route::middleware('auth')->group(function () {
     Route::post('/import-result', [ImportController::class, 'importResult'])->name('import.result');
     Route::get('/export-user', [ExportController::class, 'exportUser'])->name('user.export');
     Route::get('/export-payments', [ExportController::class, 'exportPayment'])->name('payments.export');
+    Route::get('/export-payments/{id}/{batch}/{gelombang}', [ExportController::class, 'exportPaymentData'])->name('payment.export.filter');
+    Route::get('/export-payments/{id}/{batch}', [ExportController::class, 'exportPaymentData'])->name('payment.export.filter');
     Route::post('/import-payments', [ImportController::class, 'importPayment'])->name('payments.import');
     Route::get('/export-kelas-all', [ExportController::class, 'exportKelasAll'])->name('kelas.export.all');
     Route::get('/export-kelas/{id}/{batch}/{gelombang}', [ExportController::class, 'exportKelas'])->name('kelas.export.filter');
+    Route::get('/export-kelas/{id}/{batch}', [ExportController::class, 'exportKelas'])->name('kelas.export.filter');
 
     Route::post('/create-invoice', [PaymentController::class, 'createInvoice'])->name('create.invoice');
+
+    Route::post('/generate-nim', [StudentController::class, 'generateNIM'])->name('generate-nim');
+    Route::get('/kartu-hasil-studi', [StudentController::class, 'khs'])->name('khs');
+    Route::get('/generate-pdf', [PdfController::class, 'generatePdf'])->name('generate-pdf');
+    Route::resource('courses', CourseController::class);
+    Route::resource('students', StudentController::class);
+
+    Route::resource('transcripts', TranscriptController::class);
+    Route::get('/transcripts/add', [TranscriptController::class, 'transcriptAdd'])->name('transcripts.add');
+    Route::get('students/{id}/assign', [StudentController::class, 'assignCoursesForm'])->name('students.assignCoursesForm');
+    Route::post('students/{id}/assign', [StudentController::class, 'assignCourses'])->name('students.assignCourses');
+    Route::get('students/{id}/grades', [TranscriptController::class, 'showGradesForm'])->name('transcripts.showGradesForm');
+    Route::post('students/{id}/grades', [TranscriptController::class, 'storeGrades'])->name('transcripts.storeGrades');
+
+
+    Route::resource('lecturers', LecturerController::class);
 });
+
+Route::post('/check-nim', [KelasController::class, 'checkNim']);
+
+Route::get('/send-whatsapp', [WhatsappController::class, 'index'])->name('whatsapp');
+Route::post('/send-whatsapp', [WhatsappController::class, 'sendWhatsapp'])->name('whatsapp.send');
+Route::get('/send-whatsapp/{payment}', [WhatsappController::class, 'waPayment'])->name('wa.payment');
 
 Route::get('/provinces', [LocationController::class, 'getProvinces']);
 Route::get('/regencies/{provinceId}', [LocationController::class, 'getRegencies']);
@@ -117,3 +149,9 @@ Route::get('/pengumuman', [KelasController::class, 'pengumumanIndex']);
 Route::get('/pengumuman/{program}', [KelasController::class, 'pengumuman']);
 Route::get('/search', [KelasController::class, 'search'])->name('search.results');
 Route::post('/webhook', [PaymentController::class, 'webhook']);
+
+Route::get('upload-nim', function () {
+    return view('admin.upload');
+})->name('upload.form');
+
+Route::post('upload-nims', [ImportController::class, 'importNims'])->name('upload.nims');

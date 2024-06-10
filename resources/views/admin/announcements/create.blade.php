@@ -3,7 +3,7 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Program</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Pengumuman</h4>
       <a href="{{ route('announcements.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
 
@@ -12,7 +12,7 @@
     <div class="d-flex justify-content-center">
       <div class="card col-xl-8 col-md-10 col-sm-12">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Tambah Program</h5> <small class="text-muted float-end">إضافة برنامج</small>
+          <h5 class="mb-0">Tambah Pengumuman</h5> <small class="text-muted float-end">إضافة برنامج</small>
         </div>
         <div class="card-body">
           @if ($errors->any())

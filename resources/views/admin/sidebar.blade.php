@@ -28,17 +28,31 @@
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Manajemen Data">Manajemen Data</span>
     </li>
+    @if (!Auth::user()->hasRole('Accountant'))
+      <li class="menu-item {{ Request::is('users*') ? 'active' : '' }}">
+        <a href="{{ route('users.index') }}" class="menu-link">
+          <i class="menu-icon tf-icons ti ti-user"></i>
+          <div data-i18n="Data User">Data User</div>
+        </a>
+      </li>
+    @endif
+    <li class="menu-item {{ Request::is('payments*') ? 'active' : '' }}">
+      <a href="{{ route('payments.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons ti ti-file-dollar"></i>
+        <div data-i18n="Data Transaksi">Data Transaksi</div>
+      </a>
+    </li>
+    <li class="menu-item {{ Request::is('kelas*', 'admin/kelas*') ? 'active' : '' }}">
+      <a href="{{ route('admin.kelas.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons ti ti-book"></i>
+        <div data-i18n="Data Kelas">Data Kelas</div>
+      </a>
+    </li>
     @if (Auth::user()->hasRole('Super Admin'))
       <li class="menu-item {{ Request::is('programs*') ? 'active' : '' }}">
         <a href="{{ route('programs.index') }}" class="menu-link">
           <i class="menu-icon tf-icons ti ti-book"></i>
           <div data-i18n="Data Program">Data Program</div>
-        </a>
-      </li>
-      <li class="menu-item {{ Request::is('users*') ? 'active' : '' }}">
-        <a href="{{ route('users.index') }}" class="menu-link">
-          <i class="menu-icon tf-icons ti ti-user"></i>
-          <div data-i18n="Data User">Data User</div>
         </a>
       </li>
       <li class="menu-item {{ Request::is('announcements*') ? 'active' : '' }}">
@@ -53,29 +67,34 @@
           <div data-i18n="Hasil Ujian">Hasil Ujian</div>
         </a>
       </li>
-      <li class="menu-item {{ Request::is('kelas*', 'admin/kelas*') ? 'active' : '' }}">
-        <a href="{{ route('admin.kelas.index') }}" class="menu-link">
-          <i class="menu-icon tf-icons ti ti-book"></i>
-          <div data-i18n="Data Kelas">Data Kelas</div>
-        </a>
-      </li>
-    @elseif(Auth::user()->hasRole('Accountant'))
-      <li class="menu-item {{ Request::is('payments*') ? 'active' : '' }}">
-        <a href="{{ route('payments.index') }}" class="menu-link">
-          <i class="menu-icon tf-icons ti ti-file-dollar"></i>
-          <div data-i18n="Data Transaksi">Data Transaksi</div>
-        </a>
-      </li>
     @endif
     @if (Auth::user()->hasRole('Super Admin'))
-      <li class="menu-item {{ Request::is('payments*') ? 'active' : '' }}">
-        <a href="{{ route('payments.index') }}" class="menu-link">
-          <i class="menu-icon tf-icons ti ti-file-dollar"></i>
-          <div data-i18n="Data Transaksi">Data Transaksi</div>
-        </a>
-      </li>
       <li class="menu-header small text-uppercase">
         <span class="menu-header-text">Manajemen Program</span>
+      </li>
+
+      <li class="menu-item {{ Request::is('courses*', 'transcripts*', 'lecturers*', 'students*') ? 'open' : '' }}">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons ti ti-notebook"></i>
+          <div data-i18n="Data Studi">Data Studi</div>
+        </a>
+        <ul class="menu-sub">
+          <li class="menu-item {{ Request::is('lecturers*') ? 'active' : '' }}">
+            <a href="{{ route('lecturers.index') }}" class="menu-link">
+              <div data-i18n="Pengajar">Pengajar</div>
+            </a>
+          </li>
+          <li class="menu-item {{ Request::is('transcripts*', 'students*') ? 'active' : '' }}">
+            <a href="{{ route('transcripts.index') }}" class="menu-link">
+              <div data-i18n="Kartu Hasil Studi">Kartu Hasil Studi</div>
+            </a>
+          </li>
+          <li class="menu-item {{ Request::is('courses*') ? 'active' : '' }}">
+            <a href="{{ route('courses.index') }}" class="menu-link">
+              <div data-i18n="Mata Kuliah">Mata Kuliah</div>
+            </a>
+          </li>
+        </ul>
       </li>
       <li
         class="menu-item {{ Request::is('tahsins*', 'tahfizs*', 'bilhaqs*', 'kibas*', 'lughohs*', 'fais*', 'stebis*') ? 'open' : '' }}">
@@ -132,7 +151,7 @@
       <span class="menu-header-text" data-i18n="Akun">Akun</span>
     </li>
     <li class="menu-item {{ Request::routeIs('profile.edit') ? 'active' : '' }}">
-      <a href="#" class="menu-link">
+      <a href="/profile" class="menu-link">
         {{-- <a href="{{ route('profile.edit') }}" class="menu-link"> --}}
         <i class="menu-icon tf-icons ti ti-user"></i>
         <div data-i18n="Edit Profil">Edit Profil</div>

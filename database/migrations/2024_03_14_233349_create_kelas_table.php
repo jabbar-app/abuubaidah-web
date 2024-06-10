@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('lecturer')->nullable();
             $table->string('status')->default('Menunggu Update');
             $table->boolean('is_new')->default(true);
+            $table->string('nim_temp')->nullable();
+            $table->boolean('nim_valid')->default(false);
             $table->timestamps();
         });
     }

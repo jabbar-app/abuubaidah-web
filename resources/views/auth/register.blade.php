@@ -32,27 +32,32 @@
               @endif
               <div class="form-group">
                 <label class="col-form-label">Nama Lengkap</label>
-                <input type="text" name="name" value="{{ request()->query('name') ?: old('name') }}" placeholder="Nama Lengkap" class="form-control" required>
+                <input type="text" name="name" value="{{ request()->query('name') ?: old('name') }}"
+                  placeholder="Nama Lengkap" class="form-control" required>
               </div>
               <div class="form-group">
                 <label class="col-form-label">NIK</label>
-                <input type="number" name="nik" class="form-control" value="{{ old('nik') }}" placeholder="NIK" required>
+                <input type="number" name="nik" class="form-control" value="{{ old('nik') }}" placeholder="NIK"
+                  required>
               </div>
               <div class="form-group">
                 <label class="col-form-label">Email</label>
-                <input type="email" name="email" value="{{ request()->query('email') ?: old('email') }}" class="form-control" required>
+                <input type="email" name="email" value="{{ request()->query('email') ?: old('email') }}"
+                  class="form-control" required>
               </div>
               <div class="form-group">
                 <label class="col-form-label">Password</label>
                 <div class="form-input position-relative">
-                  <input class="form-control" type="password" name="password" value="{{ old('password') }}" required="" placeholder="*********">
+                  <input class="form-control" type="password" name="password" value="{{ old('password') }}" required=""
+                    placeholder="*********">
                   <div class="show-hide"><span class="show"></span></div>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-form-label">Ketik Ulang Password</label>
                 <div class="form-input position-relative">
-                  <input class="form-control" type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" required="" placeholder="*********">
+                  <input class="form-control" type="password" name="password_confirmation"
+                    value="{{ old('password_confirmation') }}" required="" placeholder="*********">
                   <div class="show-hide"><span class="show"></span></div>
                 </div>
               </div>
@@ -66,20 +71,44 @@
               </div>
               <div class="form-group">
                 <label class="col-form-label">No. WhatsApp</label>
-                <input type="number" name="phone" value="{{ request()->query('phone') ?: old('phone') }}" placeholder="62XXX" class="form-control" required>
+                <input type="tel" name="phone" value="{{ request()->query('phone') ?: old('phone') }}"
+                  placeholder="62XXX" pattern="^62[1-9][0-9]*$" oninput="validatePhoneNumber(this)" class="form-control"
+                  required>
+                <small class="text-muted">Awalan input yang diperbolehkan adalah 62.</small>
               </div>
+
+              <script>
+                function validatePhoneNumber(input) {
+                  // Remove all non-digit characters
+                  let sanitizedInput = input.value.replace(/\D/g, '');
+
+                  // Check if the first two digits are "62"
+                  if (!sanitizedInput.startsWith('62')) {
+                    sanitizedInput = '62';
+                  }
+
+                  // Remove leading zeroes after "62"
+                  sanitizedInput = sanitizedInput.replace(/^62[0]*/, '62');
+
+                  // Update the input value with the sanitized version
+                  input.value = sanitizedInput;
+                }
+              </script>
+
 
               <input type="hidden" name="religion" value="Islam">
 
               <div class="row">
                 <div class="form-group col-6">
                   <label class="col-form-label">Tempat Lahir</label>
-                  <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" placeholder="Sesuai KTP" class="form-control" required>
+                  <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" placeholder="Sesuai KTP"
+                    class="form-control" required>
                 </div>
 
                 <div class="form-group col-6">
                   <label class="col-form-label">Tanggal Lahir</label>
-                  <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" placeholder="Sesuai KTP" class="form-control" required>
+                  <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" placeholder="Sesuai KTP"
+                    class="form-control" required>
                 </div>
               </div>
 
@@ -96,7 +125,8 @@
 
                 <div class="form-group col-6">
                   <label class="col-form-label">Suku</label>
-                  <input type="text" name="suku" value="{{ old('suku') }}" placeholder="Suku" class="form-control" required>
+                  <input type="text" name="suku" value="{{ old('suku') }}" placeholder="Suku"
+                    class="form-control" required>
                 </div>
               </div>
 
@@ -123,7 +153,8 @@
                 </select>
               </div>
               <button class="btn btn-primary btn-block w-100 mt-4" type="submit">Daftar</button>
-              <p class="mt-4 mb-0 text-center">Sudah punya akun?<a class="ms-2" href="{{ route('login') }}">Login</a></p>
+              <p class="mt-4 mb-0 text-center">Sudah punya akun?<a class="ms-2"
+                  href="{{ route('login') }}">Login</a></p>
             </form>
 
             <div class="divider my-4">

@@ -11,6 +11,11 @@ class Lughoh extends Model
 
     protected $guarded = ['id'];
 
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
     // In Tahsin, Bilhaq, and Tahfiz models
     public function program()
     {

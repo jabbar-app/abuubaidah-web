@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Sesi;
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\Nim;
 use App\Models\Payment;
 use App\Models\Result;
 use App\Models\Tahsin;
 use App\Models\Program;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -35,12 +37,16 @@ class KelasController extends Controller
 
     public function adminIndex()
     {
+        $programs = Program::all()->unique('programmable.title');
+
         return view('admin.kelas.index', [
-            'kelas' => Kelas::all(),
-            'programs' => Program::all(),
+            'kelas' => Kelas::with('payments')->get(),
+            'programs' => $programs,
             'program_id' => 0,
         ]);
     }
+
+
 
     public function kelasFilter(Request $request)
     {
@@ -218,19 +224,21 @@ class KelasController extends Controller
 
     public function lughoh(Program $program)
     {
-        $isAlumniResult = Result::where('phone', Auth::user()->phone)->first();
-        $isAlumni = $isAlumniResult !== null;
-        $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
-        $price = $isAlumni ? $program->price_alumni : $program->price_normal;
-        $level = $isAlumni ? $isAlumniResult->level : 'TAMHIDY';
-
-        return view('student.kelas.lughoh', compact('program', 'alumni', 'price', 'level'));
+        return view('student.kelas.lughoh', [
+            'program' => $program,
+            'step' => Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first(),
+            'status' => User::where('id', auth()->user()->id)->first(),
+            'student' => Student::where('user_id', auth()->user()->id)->first(),
+        ]);
     }
 
     public function fai(Program $program)
     {
         return view('student.kelas.fai', [
             'program' => $program,
+            'step' => Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first(),
+            'status' => User::where('id', auth()->user()->id)->first(),
+            'student' => Student::where('user_id', auth()->user()->id)->first(),
         ]);
     }
 
@@ -238,6 +246,9 @@ class KelasController extends Controller
     {
         return view('student.kelas.stebis', [
             'program' => $program,
+            'step' => Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first() ?? '',
+            'status' => User::where('id', auth()->user()->id)->first(),
+            'student' => Student::where('user_id', auth()->user()->id)->first(),
         ]);
     }
 
@@ -349,12 +360,35 @@ class KelasController extends Controller
     public function search(Request $request)
     {
         $program = strtoupper($request->program);
-        $query = $request->input('phone');
-        $results = Result::where('program', $program)->where('phone', $query)->get();
+        if (empty($request->phone)) {
+            $results = Result::where('program', $program)->where('nim', $request->input('nim'))->get();
+        } else {
+            return 'hai';
+            $results = Result::where('program', $program)->where('phone', $request->input('phone'))->get();
+        }
+
+        // dd($results);
+
 
         return view('student.result', [
             'results' => $results,
             'program' => strtolower($program),
         ]);
+    }
+
+    public function checkNim(Request $request)
+    {
+        $nim = $request->input('nim');
+        $nimRecord = Nim::where('nim', $nim)->first();
+
+        if ($nimRecord) {
+            return response()->json([
+                'status' => 'valid',
+                'name' => $nimRecord->name,
+                'is_registered' => $nimRecord->is_registered
+            ]);
+        } else {
+            return response()->json(['status' => 'invalid']);
+        }
     }
 }

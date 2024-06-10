@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('lughohs', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
             $table->string('batch');
             $table->string('title');
             $table->string('option');
@@ -20,6 +21,8 @@ return new class extends Migration
             $table->decimal('price_pra', 10, 0)->default(0);
             $table->decimal('price_normal', 10, 0)->default(0);
             $table->decimal('price_mahad', 10, 0)->default(0);
+            $table->smallInteger('enrollment_year');
+            $table->boolean('enrollment_semester');
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

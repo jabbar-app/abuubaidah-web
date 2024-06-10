@@ -3,6 +3,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
+    z-index: 99;
   }
 
   .fab {
@@ -56,13 +57,10 @@
   </div>
   <!-- Menu items -->
   <ul id="fab-menu" class="fab-menu hidden">
-    <li onclick="openWhatsApp('#')">Admin Tahsin</li>
-    <li onclick="openWhatsApp('#')">Admin Bahasa Arab</li>
-    <li onclick="openWhatsApp('#')">Admin Lughoh</li>
-    <li onclick="openWhatsApp('#')">Admin Bilhaq</li>
-    <li onclick="openWhatsApp('#')">Admin Tahfiz</li>
-    <li onclick="openWhatsApp('#')">Admin S1 FAI</li>
-    <li onclick="openWhatsApp('#')">Admin S1 STEBIS</li>
+    <li onclick="openWhatsApp('6285373947242')">Admin Tahsin, KIBA, Bilhaq (Akhi Fauzi)</li>
+    <li onclick="openWhatsApp('6285156051147')">Admin Tahsin, Beasiswa Tahfiz (Ukhti Siti)</li>
+    <li onclick="openWhatsApp('6289673934506')">Admin Lughoh, S1 FAI, S1 STEBIS (Akhi Mahendra)</li>
+    <li onclick="openWhatsApp('6281376092551')">Admin Lughoh, S1 FAI, S1 STEBIS (Ukhti Rika)</li>
     <!-- Add more numbers as needed -->
   </ul>
 </div>

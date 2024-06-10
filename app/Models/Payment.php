@@ -11,12 +11,23 @@ class Payment extends Model
 
     protected $guarded = ['id'];
 
-    public function user() {
+    public function installments()
+    {
+        return $this->hasMany(Installment::class);
+    }
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function program() {
+    public function program()
+    {
         return $this->belongsTo(Program::class);
     }
 
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class); // Ensure 'kelas_id' is the foreign key in 'payments' table
+    }
 }

@@ -27,7 +27,7 @@
 
           <div class="mb-3">
             <small>Nama Program</small>
-            <h5>{{ $kelas->program }}</h5>
+            <h5>{{ $kelas->program->programmable->title }}</h5>
           </div>
           <div class="mb-4">
             <small>Tanggal Diupdate</small>
@@ -85,28 +85,92 @@
               </tbody>
             </table>
           @elseif ($program->programmable_type == 'App\Models\Bilhaq')
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th class="bg-light">Data</th>
-                  <th class="bg-light">Keterangan</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Nama Peserta</td>
-                  <td>
-                    <span class="fw-medium">{{ Auth::user()->name }}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Status</td>
-                  <td>
-                    <span class="fw-medium">{{ $kelas->status }}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive text-nowrap">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th class="bg-light">Data</th>
+                    <th class="bg-light">Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Nama Peserta</td>
+                    <td>
+                      <span class="fw-medium">{{ Auth::user()->name }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Program</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->program->programmable->title }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Angkatan</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->batch }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tipe Kelas</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->class }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Lokasi</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->room ?? 'Belum ada lokasi.' }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nilai</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->score ?? 'Belum ada nilai.' }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Predikat</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->lecturer ?? 'Belum ada predikat.' }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->status }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Group WA</td>
+                    <td>
+                      <a href="{{ $kelas->link_whatsapp ? $kelas->link_whatsapp : '#' }}" target="_blank"
+                        class="fw-medium" id="wa-link">Join Group WhatsApp</a>
+                    </td>
+                  </tr>
+
+                  <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                      const waLink = document.getElementById('wa-link');
+                      waLink.addEventListener('click', function(event) {
+                        if (!waLink.href || waLink.href.endsWith('#')) {
+                          event.preventDefault();
+                          Swal.fire({
+                            icon: 'warning',
+                            title: 'Link belum tersedia',
+                            text: 'Silakan cek lagi nanti, ya.',
+                            confirmButtonText: 'OK'
+                          });
+                        }
+                      });
+                    });
+                  </script>
+
+
+                </tbody>
+              </table>
+            </div>
           @else
             <div class="table-responsive text-nowrap">
               <table class="table table-bordered">
@@ -126,7 +190,7 @@
                   <tr>
                     <td>Program</td>
                     <td>
-                      <span class="fw-medium">{{ $kelas->program }}</span>
+                      <span class="fw-medium">{{ $kelas->program->programmable->title }}</span>
                     </td>
                   </tr>
                   <tr>
@@ -186,6 +250,32 @@
                       <span class="fw-medium">{{ $kelas->status }}</span>
                     </td>
                   </tr>
+                  <tr>
+                    <td>Group WA</td>
+                    <td>
+                      <a href="{{ $kelas->link_whatsapp ? $kelas->link_whatsapp : '#' }}" target="_blank"
+                        class="fw-medium" id="wa-link">Join Group WhatsApp</a>
+                    </td>
+                  </tr>
+
+                  <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                      const waLink = document.getElementById('wa-link');
+                      waLink.addEventListener('click', function(event) {
+                        if (!waLink.href || waLink.href.endsWith('#')) {
+                          event.preventDefault();
+                          Swal.fire({
+                            icon: 'warning',
+                            title: 'Link belum tersedia',
+                            text: 'Silakan cek lagi nanti, ya.',
+                            confirmButtonText: 'OK'
+                          });
+                        }
+                      });
+                    });
+                  </script>
+
+
                 </tbody>
               </table>
             </div>

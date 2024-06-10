@@ -28,12 +28,20 @@ class ExportController extends Controller
         $sheet->setCellValue('H1', 'Ruang Kelas');
         $sheet->setCellValue('I1', 'Nilai');
         $sheet->setCellValue('J1', 'Ustadz/ah');
-        $sheet->setCellValue('K1', 'Status');
+        $sheet->setCellValue('K1', 'Status Peserta');
+        $sheet->setCellValue('L1', 'Status Pembayaran');
+        $sheet->setCellValue('M1', 'Status Kelas');
+        $sheet->setCellValue('N1', 'Link WhatsApp');
         // Add more headers as needed
 
         $kelasData = Kelas::where('program_id', $id)->get();
         $row = 2; // Start from the second row
         foreach ($kelasData as $kelas) {
+            foreach ($kelas->payments as $payment) {
+                $statusPayment = $payment->status;
+            }
+            $statusPeserta = $kelas->is_new ? 'Peserta Baru' : 'Daftar Ulang';
+
             $sheet->setCellValue('A' . $row, $kelas->id);
             $sheet->setCellValue('B' . $row, $kelas->user->name ?? '');
             $sheet->setCellValue('C' . $row, $kelas->user->phone ?? '');
@@ -44,20 +52,24 @@ class ExportController extends Controller
             $sheet->setCellValue('H' . $row, $kelas->room ?? '');
             $sheet->setCellValue('I' . $row, $kelas->score ?? '');
             $sheet->setCellValue('J' . $row, $kelas->lecturer ?? '');
-            $sheet->setCellValue('K' . $row, $kelas->status ?? '');
+            $sheet->setCellValue('K' . $row, $statusPeserta);
+            $sheet->setCellValue('L' . $row, $statusPayment);
+            $sheet->setCellValue('M' . $row, $kelas->status ?? '');
+            $sheet->setCellValue('N' . $row, $kelas->link_whatsapp ?? '');
             // Fill in more data as needed
             $row++;
         }
 
         // Write file to a temporary file
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'kelas_data.xlsx';
+        $fileName = 'Data Kelas - Mahad Abu Ubaidah.xlsx';
         $temp_file = tempnam(sys_get_temp_dir(), $fileName);
         $writer->save($temp_file);
 
         // Return download response
         return response()->download($temp_file, $fileName, ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'])->deleteFileAfterSend(true);
     }
+
 
     public function exportLughoh($id): BinaryFileResponse
     {
@@ -68,16 +80,29 @@ class ExportController extends Controller
         $sheet->setCellValue('B1', 'Nama');
         $sheet->setCellValue('C1', 'WhatsApp');
         $sheet->setCellValue('D1', 'Gender');
-        $sheet->setCellValue('E1', 'Status');
+        $sheet->setCellValue('E1', 'Status Peserta');
+        $sheet->setCellValue('F1', 'Status Pembayaran');
+        $sheet->setCellValue('G1', 'Status Kelas');
 
         $kelasData = Kelas::where('program_id', $id)->get();
         $row = 2;
+        $statusPeserta = '';
         foreach ($kelasData as $kelas) {
+            foreach ($kelas->payments as $payment) {
+                $statusPayment = $payment->status;
+            }
+            if ($kelas->is_new) {
+                $statusPeserta = 'Peserta Baru';
+            } else {
+                $statusPeserta = 'Daftar Ulang';
+            }
             $sheet->setCellValue('A' . $row, $kelas->id);
             $sheet->setCellValue('B' . $row, $kelas->user->name ?? '');
             $sheet->setCellValue('C' . $row, $kelas->user->phone ?? '');
             $sheet->setCellValue('D' . $row, $kelas->user->gender ?? '');
-            $sheet->setCellValue('E' . $row, $kelas->status ?? '');
+            $sheet->setCellValue('E' . $row, $statusPeserta);
+            $sheet->setCellValue('F' . $row, $statusPayment);
+            $sheet->setCellValue('G' . $row, $kelas->status ?? '');
             $row++;
         }
 
@@ -99,7 +124,7 @@ class ExportController extends Controller
         $headers = [
             'A' => 'NIK', 'B' => 'Nama', 'C' => 'Email', 'D' => 'WhatsApp',
             'E' => 'Program', 'F' => 'Angkatan', 'G' => 'Gelombang',
-            'H' => 'Tipe Kelas', 'I' => 'Status',
+            'H' => 'Tipe Kelas', 'I' => 'Status Peserta', 'J' => 'Status Pembayaran', 'K' => 'Status Kelas',
         ];
 
         // Set the headers in the first row of the sheet
@@ -112,6 +137,14 @@ class ExportController extends Controller
 
         $row = 2;
         foreach ($kelasData as $kelas) {
+            foreach ($kelas->payments as $payment) {
+                $statusPayment = $payment->status;
+            }
+            if ($kelas->is_new) {
+                $statusPeserta = 'Peserta Baru';
+            } else {
+                $statusPeserta = 'Daftar Ulang';
+            }
             // dd($kelas->user->nik);
             // Populate the row with kelas data
             $sheet->setCellValue('A' . $row, $kelas->user->nik ?? '');
@@ -122,7 +155,9 @@ class ExportController extends Controller
             $sheet->setCellValue('F' . $row, $kelas->batch);
             $sheet->setCellValue('G' . $row, $kelas->gelombang);
             $sheet->setCellValue('H' . $row, $kelas->class);
-            $sheet->setCellValue('I' . $row, $kelas->status);
+            $sheet->setCellValue('I' . $row, $statusPeserta);
+            $sheet->setCellValue('J' . $row, $statusPayment);
+            $sheet->setCellValue('K' . $row, $kelas->status);
             $row++;
         }
 
@@ -146,7 +181,7 @@ class ExportController extends Controller
         $headers = [
             'A' => 'NIK', 'B' => 'Nama', 'C' => 'Email', 'D' => 'WhatsApp',
             'E' => 'Program', 'F' => 'Angkatan', 'G' => 'Gelombang',
-            'H' => 'Tipe Kelas', 'I' => 'Status',
+            'H' => 'Tipe Kelas', 'I' => 'Status Peserta', 'J' => 'Status Pembayaran', 'K' => 'Status Kelas',
         ];
 
         // Set the headers in the first row of the sheet
@@ -155,10 +190,23 @@ class ExportController extends Controller
         }
 
         // Retrieve all users (assumption: User model includes necessary relationships)
-        $kelasData = Kelas::where('program_id', $id)->where('batch', $batch)->where('gelombang', $gelombang)->get();
+        if (empty($gelombang)) {
+            $kelasData = Kelas::where('program_id', $id)->where('batch', $batch)->get();
+        } else {
+            $kelasData = Kelas::where('program_id', $id)->where('batch', $batch)->where('gelombang', $gelombang)->get();
+        }
+
 
         $row = 2;
         foreach ($kelasData as $kelas) {
+            foreach ($kelas->payments as $payment) {
+                $statusPayment = $payment->status;
+            }
+            if ($kelas->is_new) {
+                $statusPeserta = 'Peserta Baru';
+            } else {
+                $statusPeserta = 'Daftar Ulang';
+            }
             // dd($kelas->user->nik);
             // Populate the row with kelas data
             $sheet->setCellValue('A' . $row, $kelas->user->nik ?? '');
@@ -169,7 +217,9 @@ class ExportController extends Controller
             $sheet->setCellValue('F' . $row, $kelas->batch);
             $sheet->setCellValue('G' . $row, $kelas->gelombang);
             $sheet->setCellValue('H' . $row, $kelas->class);
-            $sheet->setCellValue('I' . $row, $kelas->status);
+            $sheet->setCellValue('I' . $row, $statusPeserta);
+            $sheet->setCellValue('J' . $row, $statusPayment);
+            $sheet->setCellValue('K' . $row, $kelas->status);
             $row++;
         }
 
@@ -282,6 +332,72 @@ class ExportController extends Controller
 
         // Retrieve all users (assumption: User model includes necessary relationships)
         $paymentData = Payment::all();
+        $row = 2;
+        foreach ($paymentData as $payment) {
+            // Populate the row with payment data
+            $sheet->setCellValue('A' . $row, $payment->external_id);
+            $sheet->setCellValue('B' . $row, $payment->payer_name);
+            $sheet->setCellValue('C' . $row, $payment->payer_email);
+            $sheet->setCellValue('D' . $row, $payment->user->phone ?? '');
+            $sheet->setCellValue('E' . $row, $payment->amount);
+            $sheet->setCellValue('F' . $row, $payment->description);
+            $sheet->setCellValue('G' . $row, $payment->method);
+            $sheet->setCellValue('H' . $row, $payment->status);
+            $sheet->setCellValue('I' . $row, $payment->note);
+
+            $row++;
+        }
+
+        // Write the file to a temporary location
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Data Transaksi - Mahad Abu Ubaidah.xlsx';
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+
+        // Return the file as a download response
+        return response()->download($temp_file, $fileName, ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'])->deleteFileAfterSend(true);
+    }
+
+    public function exportPaymentData($id, $batch, $gelombang): BinaryFileResponse
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Define the headers for the spreadsheet
+        $headers = [
+            'A' => 'No. Invoice',
+            'B' => 'Nama user',
+            'C' => 'Email',
+            'D' => 'WhatsApp',
+            'E' => 'Jumlah',
+            'F' => 'Deskripsi',
+            'G' => 'Metode',
+            'H' => 'Status',
+            'I' => 'Catatan',
+        ];
+
+        // Set the headers in the first row of the sheet
+        foreach ($headers as $column => $header) {
+            $sheet->setCellValue($column . '1', $header);
+        }
+
+        // Retrieve payment data based on the given parameters
+        $paymentQuery = Payment::query();
+
+        if (!empty($id)) {
+            $paymentQuery->where('program_id', $id);
+        }
+
+        if (!empty($batch)) {
+            $paymentQuery->where('batch', $batch);
+        }
+
+        if (!empty($gelombang)) {
+            $paymentQuery->where('gelombang', $gelombang);
+        }
+
+        $paymentData = $paymentQuery->get();
+
         $row = 2;
         foreach ($paymentData as $payment) {
             // Populate the row with payment data

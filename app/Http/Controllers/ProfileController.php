@@ -97,7 +97,7 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        // Handle file uploads
+        // Handle file uploads with error handling
         $this->handleFileUpload($request, $user, 'url_pas_foto', 'profile-photos');
         $this->handleFileUpload($request, $user, 'url_ktp', 'upload-image');
         $this->handleFileUpload($request, $user, 'url_kk', 'upload-image');
@@ -110,13 +110,13 @@ class ProfileController extends Controller
         // Update user data
         $user->update($updateData);
 
-        return redirect(session('previous_url', '/dashboard'))->with('success', 'Profile updated successfully!');
+        return redirect()->back()->with('success', 'Data profil berhasil diperbaharui!');
     }
 
     protected function handleFileUpload($request, $user, $fieldName, $storagePath)
     {
         if ($request->hasFile($fieldName)) {
-            $request->validate([$fieldName => 'image|mimes:jpeg,png,jpg|max:2048']);
+            $request->validate([$fieldName => 'mimes:jpeg,png,jpg,pdf|max:2048']);
 
             // Get the file from the request
             $file = $request->file($fieldName);
@@ -148,7 +148,6 @@ class ProfileController extends Controller
         }
     }
 
-
     protected function prepareUpdateData($request)
     {
         $fields = [
@@ -170,6 +169,7 @@ class ProfileController extends Controller
 
         return $updateData;
     }
+
 
 
     /**

@@ -36,6 +36,10 @@
               <label for="batch" class="form-label">Angkatan</label>
               <input type="number" class="form-control" id="batch" name="batch" value="{{ $tahsin->batch }}">
             </div>
+            <div class="mb-3">
+              <label for="gelombang" class="form-label">Gelombang</label>
+              <input type="number" class="form-control" id="gelombang" name="gelombang" value="{{ $tahsin->gelombang }}">
+            </div>
             <div class="mb-3 select2-primary">
               <label class="col-sm-3 col-form-label" for="option-select">Tipe Kelas</label>
               <div class="col-12">

@@ -5,7 +5,14 @@
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Kelas
       </h4>
-      <a href="{{ route('kelas.create') }}" class="btn btn-md btn-primary">Tambah Data</a>
+      <div>
+        <a href="{{ route('kelas.create') }}" class="btn btn-md btn-primary mb-2 float-end">Tambah Data</a>
+        <form action="{{ route('kelas.import') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <input type="file" name="excel_file" required>
+          <button type="submit" class="btn btn-md btn-info">Import</button>
+        </form>
+      </div>
     </div>
 
 
@@ -92,7 +99,8 @@
                     <div class="d-flex gap-2 align-items-center">
                       <h6 class="mb-0">Export Data Kelas ke Excel</h6>
                     </div>
-                    <a href="/export-kelas/{{ $program_id }}/{{ $batch }}/{{ $gelombang }}" class="btn btn-md btn-primary mb-2 mt-3">Export</a>
+                    <a href="/export-kelas/{{ $program_id }}/{{ $batch }}/{{ $gelombang }}"
+                      class="btn btn-md btn-primary mb-2 mt-3">Export</a>
                     {{-- <a href="/export-all-kelas" class="btn btn-md btn-outline-primary mb-2 mt-3">Export Semua Data</a> --}}
                     <div class="progress w-100" style="height:4px">
                       <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100"
@@ -124,7 +132,8 @@
           <div class="card-title-elements ms-auto">
             <form action="{{ route('kelas.filter') }}" method="POST">
               @csrf
-              <a href="/export-all-kelas" class="btn btn-sm btn-outline-primary mb-2 mt-3 float-end">Export Semua Data</a>
+              <a href="/export-kelas-all" class="btn btn-sm btn-outline-primary mb-2 mt-3 float-end">Export Semua
+                Data</a>
               <select id="program_id" name="program_id" class="form-select form-select-sm mb-2">
                 <option value="">Select Program</option>
                 @foreach ($programs as $program)
@@ -159,64 +168,74 @@
                 <th>WhatsApp</th>
                 <th>Program</th>
                 <th>Sesi</th>
-                <th>Tindakan</th>
+                <th>Pembayaran</th>
+                @if (!Auth::user()->hasRole('Accountant'))
+                  <th>Tindakan</th>
+                @endif
               </tr>
             </thead>
             <tbody>
-              @foreach ($kelas as $kelas)
+              @foreach ($kelas as $kelasItem)
                 <tr>
-                  <td>{{ $kelas->id }}</td>
-                  <td>{{ $kelas->user->name ?? '' }}</td>
-                  <td>{{ $kelas->user->nik ?? '' }}</td>
-                  <td>{{ $kelas->user->phone ?? '' }}</td>
-                  <td>{{ $kelas->program . ', Angkatan ' . $kelas->batch }}</td>
+                  <td>{{ $kelasItem->id }}</td>
+                  <td>{{ $kelasItem->user->name ?? '' }}</td>
+                  <td>{{ $kelasItem->user->nik ?? '' }}</td>
+                  <td>{{ $kelasItem->user->phone ?? '' }}</td>
+                  <td>{{ $kelasItem->program->programmable->title . ', Angkatan ' . $kelasItem->batch }}</td>
                   <td>
                     <ul style="margin-left: -16px" class="mt-3">
                       @php
-                        // Attempt to decode the session data
-                        $sessions = json_decode($kelas->session, true);
-
-                        // Check if decoding was successful and we have an array
-                        if (is_array($sessions)) {
-                            // If it's an array, we'll loop through it
-                            foreach ($sessions as $session) {
-                                echo "<li>{$session}</li>";
-                            }
-                        } else {
-                            // If it's not an array, display it directly
-                            // Check if session data is not empty or null
-                            if (!empty($kelas->session)) {
-                                echo "<li>{$kelas->session}</li>";
+                        if ($kelasItem->session != 'null') {
+                            $sessions = json_decode($kelasItem->session, true);
+                            if (is_array($sessions)) {
+                                foreach ($sessions as $session) {
+                                    echo "<li>{$session}</li>";
+                                }
+                            } else {
+                                if (!empty($kelasItem->session)) {
+                                    echo "<li>{$kelasItem->session}</li>";
+                                }
                             }
                         }
                       @endphp
                     </ul>
                   </td>
                   <td>
-                    <div class="d-inline-block">
-                      <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow"
-                        data-bs-toggle="dropdown" aria-expanded="false" style="box-shadow: none;">
-                        <i class="text-primary ti ti-dots-vertical"></i>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-end m-0" style="">
-                        <li>
-                          <a href="{{ route('kelas.edit', $kelas->id) }}" class="dropdown-item">Edit Data</a>
-                        </li>
-                        {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
-                        <div class="dropdown-divider"></div>
-                        <li>
-                          <form action="{{ route('kelas.destroy', $kelas->id) }}" method="POST"
-                            onsubmit="return confirm('Apakah kamu yakin ingin menghapus data ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
-                          </form>
-                        </li>
-                      </ul>
-                    </div>
-                    <a href="{{ route('kelas.edit', $kelas->id) }}" class="btn btn-sm btn-icon item-edit"
-                      style="box-shadow: none;"><i class="text-primary ti ti-pencil"></i></a>
+                    @if ($kelasItem->payments->isNotEmpty())
+                      <span
+                        class="badge @if ($kelasItem->payments->first()->status == 'PAID') bg-label-primary @else bg-label-warning @endif me-1">{{ $kelasItem->payments->first()->status }}</span>
+                    @else
+                      <span class="badge bg-label-warning me-1">EMPTY</span>
+                    @endif
                   </td>
+
+                  @if (!Auth::user()->hasRole('Accountant'))
+                    <td>
+                      <div class="d-inline-block">
+                        <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow"
+                          data-bs-toggle="dropdown" aria-expanded="false" style="box-shadow: none;">
+                          <i class="text-primary ti ti-dots-vertical"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end m-0">
+                          <li>
+                            <a href="{{ route('kelas.edit', $kelasItem->id) }}" class="dropdown-item">Edit
+                              Data</a>
+                          </li>
+                          <div class="dropdown-divider"></div>
+                          <li>
+                            <form action="{{ route('kelas.destroy', $kelasItem->id) }}" method="POST"
+                              onsubmit="return confirm('Apakah kamu yakin ingin menghapus data ini?');">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
+                            </form>
+                          </li>
+                        </ul>
+                      </div>
+                      <a href="{{ route('kelas.edit', $kelasItem->id) }}" class="btn btn-sm btn-icon item-edit"
+                        style="box-shadow: none;"><i class="text-primary ti ti-pencil"></i></a>
+                    </td>
+                  @endif
                 </tr>
               @endforeach
             </tbody>
@@ -228,7 +247,11 @@
                 <th>WhatsApp</th>
                 <th>Program</th>
                 <th>Sesi</th>
-                <th>Tindakan</th>
+                <th>Pembayaran</th>
+
+                @if (!Auth::user()->hasRole('Accountant'))
+                  <th>Tindakan</th>
+                @endif
               </tr>
             </tfoot>
           </table>
@@ -239,64 +262,6 @@
 @endsection
 
 @section('js')
-  <script>
-    document.getElementById('program_id').addEventListener('change', function() {
-      var programId = this.value;
-      if (!programId) {
-        document.getElementById('batch').style.display = 'none';
-        document.getElementById('gelombang').style.display = 'none';
-        return;
-      }
-
-      fetch('/get-angkatan/' + programId) // Adjust the endpoint as needed
-        .then(response => response.json())
-        .then(data => {
-          let batchSelect = document.getElementById('batch');
-          batchSelect.innerHTML = '<option value="">Select Angkatan</option>';
-          data.forEach(function(batch) {
-            batchSelect.innerHTML += `<option value="${batch.batchName}">${batch.batchName}</option>`;
-          });
-          batchSelect.style.display = 'block';
-        });
-
-      document.getElementById('batch').addEventListener('change', function() {
-        var batchId = this.value;
-        if (!batchId) {
-          document.getElementById('gelombang').style.display = 'none';
-          return;
-        }
-
-        fetch('/get-gelombang/' + batchId) // Adjust the endpoint as needed
-          .then(response => response.json())
-          .then(data => {
-            let gelombangSelect = document.getElementById('gelombang');
-            gelombangSelect.innerHTML = '<option value="">Select Gelombang</option>';
-            data.forEach(function(gelombang) {
-              gelombangSelect.innerHTML +=
-                `<option value="${gelombang.gelombang}">${gelombang.gelombang}</option>`;
-            });
-            gelombangSelect.style.display = 'block';
-          });
-      });
-    });
-  </script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var table = document.getElementById('kelas');
-      var filter = document.getElementById('programFilter');
-
-      filter.onchange = function() {
-        var filterValue = this.value.toLowerCase();
-        Array.from(table.getElementsByTagName('tr')).forEach(function(row) {
-          // Assumes program is in the 5th column (adjust index as needed)
-          var cell = row.cells[4] ? row.cells[4].textContent.toLowerCase() : '';
-          row.style.display = cell.includes(filterValue) || !filterValue ? '' : 'none';
-        });
-      };
-    });
-  </script>
-
   <script>
     $(document).ready(function() {
       $('#kelas').DataTable();

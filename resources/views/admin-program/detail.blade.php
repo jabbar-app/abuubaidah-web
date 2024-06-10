@@ -27,7 +27,7 @@
 
           <div class="mb-3">
             <small>Nama Program</small>
-            <h5>{{ $kelas->program }}</h5>
+            <h5>{{ $kelas->program->programmable->title}}</h5>
           </div>
           <div class="mb-4">
             <small>Tanggal Diupdate</small>
@@ -126,7 +126,7 @@
                   <tr>
                     <td>Program</td>
                     <td>
-                      <span class="fw-medium">{{ $kelas->program }}</span>
+                      <span class="fw-medium">{{ $kelas->program->programmable->title}}</span>
                     </td>
                   </tr>
                   <tr>

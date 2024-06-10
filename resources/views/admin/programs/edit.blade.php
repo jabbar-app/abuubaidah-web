@@ -164,6 +164,10 @@
               </div>
             </div>
 
+            <div class="mb-3">
+                <label for="deadline" class="form-label">Deadline Program</label>
+                <input type="date" name="deadline" class="form-control" value="{{ $program->deadline }}">
+              </div>
 
             <div class="mb-5">
               <label for="status" class="form-label">Status</label>
