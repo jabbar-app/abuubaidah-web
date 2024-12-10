@@ -2,29 +2,11 @@
 
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="d-flex justify-content-between">
-      <h4 class="text-primary mt-3">
-        <a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a>
-        Data Hasil Studi
-      </h4>
-      <div class="d-flex align-items-center">
-        <label for="batchFilter" class="me-2">Filter Angkatan:</label>
-        <select id="batchFilter" class="form-select" style="width: 200px;" onchange="filterByBatch()">
-          <option value="">Semua Angkatan</option>
-          @foreach ($batches as $batch)
-            <option value="{{ $batch }}">{{ $batch }}</option>
-          @endforeach
-        </select>
-      </div>
-    </div>
-    <hr>
-    <div class="d-flex justify-content-between mb-4">
-      <!-- Sinkronisasi Mata Kuliah Button -->
-      <form action="{{ route('students.synchronize') }}" method="POST" style="display: inline;">
-        @csrf
-        <button type="submit" class="btn btn-md btn-primary">Sinkronisasi Mata Kuliah</button>
-      </form>
+    <div class="d-flex justify-content-between align-items-center my-4">
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Hasil
+        Studi</h4>
       <div>
+        <a href="{{ route('students.export') }}" class="btn btn-md btn-outline-primary">Export Data</a>
         <!-- Import Data Form -->
         <form action="{{ route('admin.students.import') }}" method="POST" enctype="multipart/form-data"
           style="display: inline;">
@@ -33,7 +15,11 @@
             style="width: auto; display: inline-block;" required>
           <button type="submit" class="btn btn-md btn-outline-primary">Import Data</button>
         </form>
-        <a href="{{ route('students.export') }}" class="btn btn-md btn-outline-primary ms-2">Export Data</a>
+        <!-- Sinkronisasi Mata Kuliah Button -->
+        <form action="{{ route('students.synchronize') }}" method="POST" style="display: inline;">
+          @csrf
+          <button type="submit" class="btn btn-md btn-outline-primary">Sinkronisasi Mata Kuliah</button>
+        </form>
       </div>
     </div>
 
@@ -123,22 +109,6 @@
 
 @section('js')
   <script>
-    $(document).ready(function() {
-      $('#datatable').DataTable();
-    });
-  </script>
-  <script>
-    function filterByBatch() {
-      const selectedBatch = document.getElementById('batchFilter').value;
-      const table = $('#datatable').DataTable();
-
-      if (selectedBatch) {
-        table.column(5).search(selectedBatch).draw(); // Kolom ke-5 adalah kolom Angkatan
-      } else {
-        table.column(5).search('').draw(); // Hapus filter jika batch kosong
-      }
-    }
-
     $(document).ready(function() {
       $('#datatable').DataTable();
     });
