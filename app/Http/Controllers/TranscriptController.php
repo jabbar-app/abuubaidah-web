@@ -26,13 +26,20 @@ class TranscriptController extends Controller
      */
     public function index()
     {
-        $nim = Kelas::where('user_id', Auth::user()->id)->where('program_id', 13)->first();
+        // Muat data students dengan relasi program
+        $students = Student::with(['program.programmable'])->get();
+
+        // Ambil batch dari relasi morphs (programmable)
+        $batches = $students->pluck('program.programmable.batch')->filter()->unique()->sort();
+
+        // Kirim data ke view
         return view('admin.transcripts.index', [
-            'students' => Student::all(),
-            // 'batches' => Student::pluck('program.programmable.batch')->unique()->sort(),
-            'nim' => $nim,
+            'students' => $students,
+            'batches' => $batches,
+            'nim' => Kelas::where('user_id', Auth::user()->id)->where('program_id', 13)->first(),
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
