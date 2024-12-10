@@ -12,44 +12,79 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $loginMessage = session('login');
+
+        if ($loginMessage) {
+            return redirect()->route('spam.check');
+        }
+
         $user = Auth::user();
         $mahasiswa = User::all()->count() - 9;
+
         $programs = Program::where('status', 1)->get()->map(function ($program) {
-            $program->new_paid = Kelas::where('program_id', $program->id)->where('is_new', 1)->whereHas('payments', function ($query) {
-                $query->where('status', 'PAID');
-            })->count();
-            $program->new_pending = Kelas::where('program_id', $program->id)->where('is_new', 1)->whereHas('payments', function ($query) {
-                $query->where('status', 'PENDING');
-            })->count();
-            $program->new_expired = Kelas::where('program_id', $program->id)->where('is_new', 1)->whereHas('payments', function ($query) {
-                $query->where('status', 'EXPIRED');
-            })->count();
-            $program->new_no_payment = Kelas::where('program_id', $program->id)
-                ->where('is_new', 1)
-                ->doesntHave('payments') // Check for rows that don't have related payment records
-                ->get();
-            $program->new_total = $program->new_pending + $program->new_paid + $program->new_expired;
+            $program_id = $program->id;
 
-            $program->renew_paid = Kelas::where('program_id', $program->id)->where('is_new', 0)->whereHas('payments', function ($query) {
-                $query->where('status', 'PAID');
-            })->count();
-            $program->renew_pending = Kelas::where('program_id', $program->id)->where('is_new', 0)->whereHas('payments', function ($query) {
-                $query->where('status', 'PENDING');
-            })->count();
-            $program->renew_expired = Kelas::where('program_id', $program->id)->where('is_new', 0)->whereHas('payments', function ($query) {
-                $query->where('status', 'EXPIRED');
-            })->count();
-            $program->renew_total = $program->renew_pending + $program->renew_paid + $program->renew_expired;
+            // Get new classes with payments
+            $newClasses = Kelas::where('program_id', $program_id)->where('is_new', 1)->with('payments')->get();
 
+            $program->new_paid = $newClasses->filter(function ($kelas) {
+                return $kelas->payments->contains('status', 'PAID');
+            })->count();
+
+            $program->new_pending = $newClasses->filter(function ($kelas) {
+                return $kelas->payments->contains('status', 'PENDING');
+            })->count();
+
+            $program->new_expired = $newClasses->filter(function ($kelas) {
+                return $kelas->payments->contains('status', 'EXPIRED');
+            })->count();
+
+            $program->new_no_payment = $newClasses->filter(function ($kelas) {
+                return $kelas->payments->isEmpty();
+            })->count();
+
+            $program->new_total = $program->new_paid + $program->new_pending + $program->new_expired + $program->new_no_payment;
+
+            // Get renew classes with payments
+            $renewClasses = Kelas::where('program_id', $program_id)->where('is_new', 0)->with('payments')->get();
+
+            $program->renew_paid = $renewClasses->filter(function ($kelas) {
+                return $kelas->payments->contains('status', 'PAID');
+            })->count();
+
+            $program->renew_pending = $renewClasses->filter(function ($kelas) {
+                return $kelas->payments->contains('status', 'PENDING');
+            })->count();
+
+            $program->renew_expired = $renewClasses->filter(function ($kelas) {
+                return $kelas->payments->contains('status', 'EXPIRED');
+            })->count();
+
+            $program->renew_no_payment = $renewClasses->filter(function ($kelas) {
+                return $kelas->payments->isEmpty();
+            })->count();
+
+            $program->renew_total = $program->renew_paid + $program->renew_pending + $program->renew_expired + $program->renew_no_payment;
+
+            // Total counts
             $program->total_paid = $program->new_paid + $program->renew_paid;
             $program->total_pending = $program->new_pending + $program->renew_pending;
             $program->total_expired = $program->new_expired + $program->renew_expired;
             $program->total = $program->new_total + $program->renew_total;
+
+            // Debugging log for validation
+            Log::info("Program ID: {$program_id}, Total: {$program->total}, Expected Total: " . ($program->new_total + $program->renew_total));
+            Log::info("New Total: {$program->new_total}, Renew Total: {$program->renew_total}");
+            Log::info("New Paid: {$program->new_paid}, Renew Paid: {$program->renew_paid}");
+            Log::info("New Pending: {$program->new_pending}, Renew Pending: {$program->renew_pending}");
+            Log::info("New Expired: {$program->new_expired}, Renew Expired: {$program->renew_expired}");
+            Log::info("New No Payment: {$program->new_no_payment}, Renew No Payment: {$program->renew_no_payment}");
 
             return $program;
         });
@@ -195,7 +230,8 @@ class DashboardController extends Controller
                 'announcements' => Announcement::where('category', 'general')->where('program_id', '0')->get(),
                 'programs' => $programs,
                 'classActive' => Kelas::where('user_id', $user->id)->where('status', 'Aktif')->with('program')->get(),
-                'student' => Student::where('user_id', $user->id)->first(),
+                'student' => Student::where('user_id', auth()->user()->id)->first(),
+                'students' => Student::where('user_id', $user->id)->get(),
                 'statusKelas' => $statusKelas,
                 'payments' => $payments,
                 'activeKelasCount' => Kelas::where('user_id', $user->id)->count(),
@@ -209,6 +245,7 @@ class DashboardController extends Controller
         return view('student.kelas', [
             'kelas' => Kelas::where('user_id', auth()->user()->id)->get(),
             'student' => Student::where('user_id', auth()->user()->id)->first(),
+            'students' => Student::where('user_id', Auth::user()->id)->get(),
         ]);
     }
 
@@ -218,6 +255,7 @@ class DashboardController extends Controller
             'payment' => Payment::where('user_id', auth()->user()->id)->orderBy('updated_at', 'DESC')->get(),
             'invoices' => Payment::where('user_id', auth()->user()->id)->where('status', 'PENDING')->get(),
             'student' => Student::where('user_id', auth()->user()->id)->first(),
+            'students' => Student::where('user_id', Auth::user()->id)->get(),
         ]);
     }
 }

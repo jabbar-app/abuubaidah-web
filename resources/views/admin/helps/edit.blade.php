@@ -59,7 +59,7 @@
                   <option value="">Pilih</option>
                   @foreach ($programs as $program)
                     <option value="{{ $program->id }}" {{ $program->id == $help->program_id ? 'selected' : '' }}>
-                      {{ $program->programmable->title }}</option>
+                      {{ $program->programmable->title ?? 'No Program Title' }}</option>
                   @endforeach
                 </select>
               </div>

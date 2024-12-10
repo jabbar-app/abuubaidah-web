@@ -41,22 +41,22 @@
           <tbody>
             @foreach ($programs as $program)
               <tr>
-                <td>{{ $program->programmable->title }}</td>
-                <td>{{ $program->programmable->batch }}</td>
+                <td>{{ $program->programmable->title ?? 'No Program Title' }}</td>
+                <td>{{ $program->programmable->batch ?? 'No Program Batch' }}</td>
                 <td>
-                  @if ($program->price_pra > 0)
+                  @if (!empty($program->programmable->price_pra) && $program->programmable->price_pra > 0)
                     <li>
                       <span class="small text-primary">Seleksi: </span>
-                      Rp{{ number_format($program->price_pra, 0, ',', '.') }},-
+                      Rp{{ number_format($program->programmable->price_pra, 0, ',', '.') }},-
                     </li>
                   @endif
-                  @if ($program->price_alumni > 0)
+                  @if (!empty($program->programmable->price_alumni) && $program->programmable->price_alumni > 0)
                     <li>
                       <span class="small text-primary">Alumni: </span>
-                      Rp{{ number_format($program->price_alumni, 0, ',', '.') }},-
+                      Rp{{ number_format($program->programmable->price_alumni, 0, ',', '.') }},-
                     </li>
                   @endif
-                  @if ($program->price_normal > 0)
+                  @if (!empty($program->programmable->price_normal) && $program->programmable->price_normal > 0)
                     <li>
                       <span class="small text-primary">
                         @if (
@@ -68,24 +68,24 @@
                           Normal:
                         @endif
                       </span>
-                      Rp{{ number_format($program->price_normal, 0, ',', '.') }},-
+                      Rp{{ number_format($program->programmable->price_normal, 0, ',', '.') }},-
                     </li>
                   @endif
-                  @if ($program->price_mahad > 0)
+                  @if (!empty($program->programmable->price_mahad) && $program->programmable->price_mahad > 0)
                     <li>
                       <span class="small text-primary">BP Ma'had: </span>
-                      Rp{{ number_format($program->price_mahad, 0, ',', '.') }},-
+                      Rp{{ number_format($program->programmable->price_mahad, 0, ',', '.') }},-
                     </li>
                   @endif
-                  @if ($program->price_s1 > 0)
+                  @if (!empty($program->programmable->price_s1) && $program->programmable->price_s1 > 0)
                     <li>
                       <span class="small text-primary">BP S1: </span>
-                      Rp{{ number_format($program->price_s1, 0, ',', '.') }},-
+                      Rp{{ number_format($program->programmable->price_s1, 0, ',', '.') }},-
                     </li>
                   @endif
                 </td>
                 <td>
-                  @if ($program->programmable->option)
+                  @if (!empty($program->programmable->option) && $program->programmable->option)
                     @php
                       $options = json_decode($program->programmable->option);
                     @endphp

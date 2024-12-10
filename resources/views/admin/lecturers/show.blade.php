@@ -34,7 +34,7 @@
               <label for="program_id" class="form-label">Program</label>
               <select name="program_id" id="program_id" class="form-select">
                 @foreach ($programs as $program)
-                  <option value="{{ $program->id }}">{{ $program->programmable->title }}</option>
+                  <option value="{{ $program->id }}">{{ $program->programmable->title ?? 'No Program Title' }}</option>
                 @endforeach
               </select>
             </div>

@@ -62,7 +62,8 @@
             </div>
             <div class="mb-3">
               <label for="price_normal" class="form-label">Biaya SPP</label>
-              <input type="number" class="form-control" id="price_normal" name="price_normal" value="{{ $fai->price_normal }}">
+              <input type="number" class="form-control" id="price_normal" name="price_normal"
+                value="{{ $fai->price_normal }}">
             </div>
             <div class="mb-3">
               <label for="price_mahad" class="form-label">Biaya Pembangunan Ma'had</label>
@@ -72,6 +73,25 @@
             <div class="mb-3">
               <label for="price_s1" class="form-label">Biaya Pembangunan S1</label>
               <input type="number" class="form-control" id="price_s1" name="price_s1" value="{{ $fai->price_s1 }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_pra_nim" class="form-label">Biaya Pendaftaran/Seleksi (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_pra_nim" name="price_pra_nim" value="{{ $fai->price_pra_nim }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_normal_nim" class="form-label">Biaya SPP (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_normal_nim" name="price_normal_nim"
+                value="{{ $fai->price_normal_nim }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_mahad_nim" class="form-label">Biaya Pembangunan Ma'had (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_mahad_nim" name="price_mahad_nim"
+                value="{{ $fai->price_mahad_nim }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_s1_nim" class="form-label">Biaya Pembangunan S1 (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_s1_nim" name="price_s1_nim"
+                value="{{ $fai->price_s1_nim }}">
             </div>
             {{-- <div class="mb-3 select2-primary">
               <label class="form-label">Sesi Belajar</label>

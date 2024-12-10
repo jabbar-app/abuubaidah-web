@@ -29,6 +29,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // dd($request->all());
         // $request->validate([
         //     'name' => ['required', 'string', 'max:255'],
         //     'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -40,6 +41,7 @@ class RegisteredUserController extends Controller
         //     'email' => $request->email,
         //     'password' => Hash::make($request->password),
         // ]);
+        // dd($request->all());
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -53,6 +55,10 @@ class RegisteredUserController extends Controller
             'tanggal_lahir' => 'required|date',
             'status_perkawinan' => 'required|string',
             'suku' => 'required|string',
+            'address' => 'required|string',
+            'province' => 'required|string',
+            'regency' => 'required|string',
+            'district' => 'required|string',
         ], [
             'name.required' => 'Nama wajib diisi.',
             'nik.required' => 'NIK wajib diisi.',
@@ -72,12 +78,12 @@ class RegisteredUserController extends Controller
             // Add more custom messages as needed
         ]);
 
-        $validatedData['address'] = json_encode([
-            'address' => $request->address,
-            'province' => $request->province,
-            'regency' => $request->regency,
-            'district' => $request->district
-        ]);
+        // $validatedData['address'] = json_encode([
+        //     'address' => $request->address,
+        //     'province' => $request->province,
+        //     'regency' => $request->regency,
+        //     'district' => $request->district
+        // ]);
 
         $validatedData['password'] = bcrypt($validatedData['password']); // Encrypt password
 

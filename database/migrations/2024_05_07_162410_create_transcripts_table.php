@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('course_id');
-            $table->foreign('student_id')->references('id')->on('students');
-            $table->foreign('course_id')->references('id')->on('courses');
             $table->string('grade');
+            $table->string('mustawa'); // Add this column to determine which mustawa table to reference
             $table->timestamps();
+
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

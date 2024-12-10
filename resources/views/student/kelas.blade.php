@@ -45,8 +45,14 @@
                   </ul>
                 </td> --}}
 
-                <td class="text-center"><a href="/kelas/detail/{{ $k->id }}" class="btn btn-sm btn-light">Lihat
-                    Detail</a></td>
+                <td class="text-center">
+                    @if ($k->status == 'Selesai')
+                    <a href="/kelas/detail/{{ $k->id }}" class="btn btn-sm btn-info">Lihat Hasil</a>
+                    @else
+                    <a href="/kelas/detail/{{ $k->id }}" class="btn btn-sm btn-light">Lihat Detail</a>
+                    @endif
+
+                </td>
                 <td class="text-center">
                   <a href="{{ $k->link_whatsapp ? $k->link_whatsapp : '#' }}" target="_blank" class="fw-medium"
                     id="wa-link">Join Group WhatsApp</a>

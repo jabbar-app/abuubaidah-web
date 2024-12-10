@@ -3,12 +3,15 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
 
-    <h4 class="py-3 mb-4"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard </a>/ Kartu Hasil Studi
-    </h4>
+    <div class="d-flex justify-content-between align-items-center my-4">
+      <h4 class="py-3 mb-4"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard </a>/ Kartu Hasil Studi
+      </h4>
+      <a href="{{ route('transcripts.index') }}" class="btn btn-md btn-light">Kembali</a>
+    </div>
 
     <div class="row invoice-preview">
       <!-- Invoice -->
-      <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
+      <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4 mx-auto">
         <div class="card invoice-preview-card">
           <div class="card-body">
             <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column m-sm-3 m-0">
@@ -85,11 +88,11 @@
                   $grade = 0;
                 @endphp
                 @foreach ($transcripts as $transcript)
-                @php
+                  @php
                     $count++;
-                    $credit = $credit+$transcript->course->credits;
-                    $grade = $grade+$transcript->grade;
-                @endphp
+                    $credit = $credit + $transcript->course->credits;
+                    $grade = $grade + $transcript->grade;
+                  @endphp
                   <tr>
                     <td>{{ $count++ }}</td>
                     <td class="text-nowrap">{{ $transcript->course->title }}</td>
@@ -99,9 +102,9 @@
                   </tr>
                 @endforeach
                 <tr>
-                    <td colspan="3"><span class="float-end">Total</span></td>
-                    <td>{{ $credit }}</td>
-                    <td>{{ $grade }}</td>
+                  <td colspan="3"><span class="float-end">Total</span></td>
+                  <td>{{ $credit }}</td>
+                  <td>{{ $grade }}</td>
                 </tr>
               </tbody>
             </table>
@@ -109,7 +112,7 @@
 
           <div class="card-body mx-3">
             <div class="row mb-5">
-                <div class="col-8"></div>
+              <div class="col-8"></div>
               <div class="col-4">
                 <h5>Mahasiswa</h5>
                 <br><br>
@@ -123,7 +126,7 @@
       <!-- /Invoice -->
 
       <!-- Invoice Actions -->
-      <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+      {{-- <div class="col-xl-3 col-md-4 col-12 invoice-actions">
         <div class="card">
           <div class="card-body">
             <button class="btn btn-primary d-grid w-100 mb-2 waves-effect">
@@ -131,7 +134,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- /Invoice Actions -->
     </div>
   </div>

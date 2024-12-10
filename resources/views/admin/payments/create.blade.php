@@ -29,7 +29,6 @@
             </div>
           @endif
 
-
           <form method="POST" action="{{ route('payments.store') }}">
             @csrf
             <div class="row mb-3">
@@ -38,7 +37,7 @@
                 <select id="multicol-user" class="select2 form-select" name="user_id" data-allow-clear="true" required>
                   <option value="">Pilih</option>
                   @foreach ($users as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    <option value="{{ $user->id }}">{{ $user->name }} | {{ $user->phone }}</option>
                   @endforeach
                 </select>
               </div>
@@ -51,7 +50,7 @@
                   required>
                   <option value="">Pilih</option>
                   @foreach ($programs as $program)
-                    <option value="{{ $program->id }}">{{ $program->programmable->title }}</option>
+                    <option value="{{ $program->id }}">{{ $program->programmable->title ?? 'No Program Title' }}, {{ $program->programmable->batch }}</option>
                   @endforeach
                 </select>
               </div>

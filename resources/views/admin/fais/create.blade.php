@@ -37,7 +37,20 @@
               <label for="batch" class="form-label">Angkatan</label>
               <input type="number" class="form-control" id="batch" name="batch" placeholder="0">
             </div>
-
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" name="description"></textarea>
+            </div>
+            <div class="mb-3 select2-primary">
+              <label class="col-sm-3 col-form-label" for="option-select">Tipe Kelas</label>
+              <div class="col-12">
+                <select id="option-select" class="select2 form-select" multiple name="option[]">
+                  <option value="Kelas Online (Daring)">Kelas Online (Daring)</option>
+                  <option value="Kelas Offline (Luring)">Kelas Offline (Luring)</option>
+                </select>
+                <div class="form-text">Bisa pilih lebih dari satu, klik lagi untuk memilih opsi lainnya. </div>
+              </div>
+            </div>
             <div class="mb-3">
               <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
               <input type="number" class="form-control" id="price_pra" name="price_pra" value="0">
@@ -53,6 +66,23 @@
             <div class="mb-3">
               <label for="price_s1" class="form-label">Biaya Pembangunan S1</label>
               <input type="number" class="form-control" id="price_s1" name="price_s1" value="0">
+            </div>
+
+            <div class="mb-3">
+              <label for="price_pra_nim" class="form-label">Biaya Pendaftaran/Seleksi (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_pra_nim" name="price_pra_nim" value="0">
+            </div>
+            <div class="mb-3">
+              <label for="price_normal_nim" class="form-label">Biaya SPP (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_normal_nim" name="price_normal_nim" value="0">
+            </div>
+            <div class="mb-3">
+              <label for="price_mahad_nim" class="form-label">Biaya Pembangunan Ma'had (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_mahad_nim" name="price_mahad_nim" value="0">
+            </div>
+            <div class="mb-3">
+              <label for="price_s1_nim" class="form-label">Biaya Pembangunan S1 (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_s1_nim" name="price_s1_nim" value="0">
             </div>
 
             <div class="mb-5">

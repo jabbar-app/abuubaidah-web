@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price_normal', 10, 0)->default(0);
             $table->decimal('price_alumni', 10, 0)->default(0);
-            $table->string('session');
+            $table->string('session')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

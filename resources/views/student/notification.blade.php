@@ -61,7 +61,8 @@
   <span class="alert-icon text-info me-2">
     <i class="ti ti-bell ti-xs"></i>
   </span>
-  Apabila kamu memiliki kendala, silakan klik <a href="{{ route('student.helps.create') }}" class="text-primary" style="font-weight: 600;">di sini untuk buat laporan kendala</a>.
+  Apabila kamu memiliki kendala, silakan klik <a href="{{ route('student.helps.create') }}" class="text-primary"
+    style="font-weight: 600;">di sini untuk buat laporan kendala</a>.
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 
@@ -88,4 +89,36 @@
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   @endforeach
+@endif
+
+@if (session('login'))
+  <div class="col-12">
+    <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Berhasil!
+      </strong> {{ session('login') }}
+      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+@endif
+
+@if (session('success'))
+  <div class="col-12">
+    <div class="alert alert-success dark alert-dismissible fade show" role="alert"><strong>Berhasil!
+      </strong> {{ session('success') }}
+      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+@elseif(session('info'))
+  <div class="col-12">
+    <div class="alert alert-info dark alert-dismissible fade show" role="alert"><strong>Info!
+      </strong> {{ session('info') }}
+      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
+@elseif(session('danger'))
+  <div class="col-12">
+    <div class="alert alert-danger dark alert-dismissible fade show" role="alert"><strong>Gagal!
+      </strong> {{ session('danger') }}
+      <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  </div>
 @endif

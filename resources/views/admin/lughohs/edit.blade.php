@@ -58,6 +58,11 @@
             </div>
 
             <div class="mb-3">
+              <label for="last_nim" class="form-label">NIM Terakhir</label>
+              <input type="number" class="form-control" id="last_nim" name="last_nim" value="{{ $lughoh->last_nim }}">
+            </div>
+
+            <div class="mb-3">
               <label for="price_pra" class="form-label">Biaya Pendaftaran/Seleksi</label>
               <input type="number" class="form-control" id="price_pra" name="price_pra" value="{{ $lughoh->price_pra }}">
             </div>
@@ -68,7 +73,23 @@
             </div>
             <div class="mb-3">
               <label for="price_mahad" class="form-label">Biaya Pembangunan Ma'had</label>
-              <input type="number" class="form-control" id="price_mahad" name="price_mahad" value="{{ $lughoh->price_mahad }}">
+              <input type="number" class="form-control" id="price_mahad" name="price_mahad"
+                value="{{ $lughoh->price_mahad }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_pra_nim" class="form-label">Biaya Pendaftaran/Seleksi (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_pra_nim" name="price_pra_nim"
+                value="{{ $lughoh->price_pra_nim }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_normal_nim" class="form-label">Biaya SPP (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_normal_nim" name="price_normal_nim"
+                value="{{ $lughoh->price_normal_nim }}">
+            </div>
+            <div class="mb-3">
+              <label for="price_mahad_nim" class="form-label">Biaya Pembangunan Ma'had (NIM Valid)</label>
+              <input type="number" class="form-control" id="price_mahad_nim" name="price_mahad_nim"
+                value="{{ $lughoh->price_mahad_nim }}">
             </div>
 
             {{-- <div class="mb-3 select2-primary">

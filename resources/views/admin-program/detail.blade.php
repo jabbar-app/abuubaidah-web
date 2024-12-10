@@ -4,7 +4,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /
-        </a>{{ $program->programmable->title }}</h4>
+        </a>{{ $program->programmable->title ?? 'No Program Title' }}</h4>
     </div>
 
     {{-- <hr class="mb-5"> --}}

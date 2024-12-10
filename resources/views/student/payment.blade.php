@@ -27,14 +27,16 @@
                   <li>
                     <hr class="dropdown-divider">
                   </li>
-                  <li>
-                    <form action="{{ route('invoice.regenerate', ['externalId' => $invoice->external_id]) }}"
-                      method="POST">
-                      @csrf
-                      <input type="hidden" name="amount" value="{{ $invoice->amount }}">
-                      <input type="submit" class="dropdown-item" value="Buat Ulang">
-                    </form>
-                  </li>
+                  @if ($invoice->method == 'Xendit')
+                    <li>
+                      <form action="{{ route('invoice.regenerate', ['externalId' => $invoice->external_id]) }}"
+                        method="POST">
+                        @csrf
+                        <input type="hidden" name="amount" value="{{ $invoice->amount }}">
+                        <input type="submit" class="dropdown-item" value="Buat Ulang">
+                      </form>
+                    </li>
+                  @endif
                 </ul>
               </div>
             </div>
@@ -109,47 +111,43 @@
                     class="badge @if ($p->status == 'PAID') bg-label-success @else bg-label-warning @endif">{{ $p->status }}</span>
                 </td>
                 <td>
-                  @if ($p->status == 'PAID')
-                    <span class="badge bg-label-success">LUNAS</span>
-                  @else
-                    <div class="btn-group dropstart">
-                      <button class="btn btn-sm btn-primary dropdown-toggle waves-effect waves-light" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Pilih</button>
-                      <ul class="dropdown-menu" style="">
-                        <li><a class="dropdown-item" href="{{ $p->invoice_url }}" target="_blank">Lihat</a></li>
-                        <li><a class="dropdown-item" href="javascript:void(0);" onclick="location.reload();">Cek
-                            Status</a>
-                        </li>
-                        <li>
-                          <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                          <form action="{{ route('invoice.regenerate', ['externalId' => $p->external_id]) }}"
-                            method="POST">
-                            @csrf
-                            <input type="hidden" name="amount" value="{{ $p->amount }}">
-                            <input type="submit" class="dropdown-item" value="Buat Ulang">
-                          </form>
-                        </li>
-                      </ul>
-                    </div>
-                  @endif
-                </td>
-                {{-- <td class="d-flex" style="height: 100%">
-                  @if ($p->status == 'PAID')
-                    @if ($p->method == 'Xendit')
-                      <a href="{{ $p->invoice_url }}" target="_blank" class="btn btn-sm btn-info me-2">Lihat</a>
+                  <div class="d-flex">
+                    @if ($p->status == 'PAID')
+                      <span class="badge bg-label-success">LUNAS</span>
                     @else
-                      <div class="btn btn-sm btn-info me-2">Pembayaran Offline</div>
+                      <div class="btn-group dropstart">
+                        <button class="btn btn-sm btn-primary dropdown-toggle waves-effect waves-light" type="button"
+                          data-bs-toggle="dropdown" aria-expanded="false">Pilih</button>
+                        <ul class="dropdown-menu" style="">
+
+                          @if ($p->status == 'CICILAN')
+                            <li><a class="dropdown-item" href="{{ route('detail.transaction', $p) }}">Lihat</a></li>
+                          @else
+                            <li><a class="dropdown-item" href="{{ $p->invoice_url }}" target="_blank">Lihat</a></li>
+                          @endif
+                          <li><a class="dropdown-item" href="javascript:void(0);" onclick="location.reload();">Cek
+                              Status</a>
+                          </li>
+                          <li>
+                            <hr class="dropdown-divider">
+                          </li>
+                          @if ($p->method == 'Xendit')
+                            <li>
+                              <form action="{{ route('invoice.regenerate', ['externalId' => $p->external_id]) }}"
+                                method="POST">
+                                @csrf
+                                <input type="hidden" name="amount" value="{{ $p->amount }}">
+                                <input type="submit" class="dropdown-item" value="Buat Ulang">
+                              </form>
+                            </li>
+                          @endif
+                        </ul>
+                      </div>
                     @endif
-                  @else
-                    <a href="{{ $p->invoice_url }}" target="_blank" class="btn btn-sm btn-danger me-2">Bayar</a>
-                    <form action="{{ route('invoice.regenerate', ['externalId' => $p->external_id]) }}" method="POST">
-                      @csrf
-                      <button type="submit" class="btn btn-sm btn-primary">Buat Ulang</button>
-                    </form>
-                  @endif
-                </td> --}}
+                    <a href="{{ route('invoice.download', ['externalId' => $p->external_id]) }}"
+                      class="btn btn-sm btn-outline-primary ms-2">Unduh PDF</a>
+                  </div>
+                </td>
               </tr>
             @endforeach
           </tbody>

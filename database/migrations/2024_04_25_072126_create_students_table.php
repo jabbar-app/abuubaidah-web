@@ -16,8 +16,19 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('program_id');
             $table->unsignedBigInteger('kelas_id');
-            $table->integer('nim')->unique();
+            $table->integer('nim'); // Removed unique constraint
+            $table->string('mustawa')->nullable();
+            $table->string('nilai_comphre')->default(0);
             $table->timestamps();
+
+            // Define foreign keys
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->foreign('kelas_id')->references('id')->on('kelas')->onDelete('cascade');
+        });
+
+        Schema::table('students', function (Blueprint $table) {
+            $table->unique(['user_id', 'program_id', 'mustawa'], 'unique_student_mustawa');
         });
     }
 

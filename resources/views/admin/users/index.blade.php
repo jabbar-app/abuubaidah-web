@@ -58,6 +58,9 @@
                       aria-expanded="false"><i class="text-primary ti ti-dots-vertical"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
                       <li><a href="{{ route('users.show', $user->id) }}" class="dropdown-item">Details</a></li>
+                      <li>
+                        <a href="{{ route('user.pdf', $user->id) }}" class="dropdown-item">Download PDF</a>
+                      </li>
                       <li><a href="{{ route('users.edit', $user->id) }}" class="dropdown-item">Edit Data</a></li>
                       @if (Auth::user()->hasRole('Super Admin'))
                         <li><a href="/users/{{ $user->id }}/roles" class="dropdown-item">Roles</a></li>

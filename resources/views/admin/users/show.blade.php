@@ -5,7 +5,10 @@
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data User
       </h4>
-      <a href="{{ route('users.edit', $user->id) }}" class="btn btn-md btn-primary">Edit Data</a>
+      <div class="g-3">
+        <a href="{{ route('user.pdf', $user->id) }}" class="btn btn-md btn-primary">Download PDF</a>
+        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-md btn-primary">Edit Data</a>
+      </div>
     </div>
 
     {{-- <hr class="mb-5"> --}}

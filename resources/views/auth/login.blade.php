@@ -4,7 +4,6 @@
   <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
       <div class="authentication-inner py-4">
-        <!-- Login -->
         <div class="card">
           <div class="card-body">
             <!-- Logo -->
@@ -79,12 +78,12 @@
 
             <div class="d-flex justify-content-center">
               {{-- <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
-                                <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
-                            </a>
+                                        <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
+                                    </a>
 
-                            <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
-                                <i class="tf-icons fa-brands fa-google fs-5"></i>
-                            </a> --}}
+                                    <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
+                                        <i class="tf-icons fa-brands fa-google fs-5"></i>
+                                    </a> --}}
 
               <a href="https://abuubaidah.com/" class="small">
                 {{-- <i class="tf-icons fa-brands fa-twitter fs-5"></i> --}}
@@ -93,7 +92,6 @@
             </div>
           </div>
         </div>
-        <!-- /Register -->
       </div>
     </div>
   </div>

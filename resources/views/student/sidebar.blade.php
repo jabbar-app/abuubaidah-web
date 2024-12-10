@@ -34,14 +34,41 @@
         <div data-i18n="Data Kelas">Data Kelas</div>
       </a>
     </li>
-    @if (!empty($student->nim))
-      <li class="menu-item {{ Request::is('kartu-hasil-studi*') ? 'active' : '' }}">
-        <a href="{{ route('khs') }}" class="menu-link">
-          <i class="menu-icon tf-icons ti ti-notebook"></i>
+    @if (!empty($student->mustawa))
+      <li class="menu-item {{ Request::is('kartu-hasil-studi*') ? 'open' : '' }}">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons ti ti-file-dollar"></i>
           <div data-i18n="Kartu Hasil Studi">Kartu Hasil Studi</div>
         </a>
+        <ul class="menu-sub">
+          @php
+            $mustawas = ['Tamhidy', 'Robi', 'Awwal', 'Tsani', 'Tsalits'];
+          @endphp
+          @foreach ($students as $student)
+          {{-- {{ dd($student->mustawa) }} --}}
+            @foreach ($mustawas as $mustawa)
+              @if ($student->mustawa == $mustawa)
+                <li class="menu-item {{ Request::query('mustawa') == strtolower($mustawa) ? 'active' : '' }}">
+                  <a href="{{ route('khs', ['mustawa' => strtolower($mustawa)]) }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-notebook"></i>
+                    <div data-i18n="Mustawa {{ $mustawa }}">Mustawa {{ $mustawa }}</div>
+                  </a>
+                </li>
+              @endif
+            @endforeach
+            @if ($student->nilai_comphre > 0)
+              <li class="menu-item {{ Route::is('transcripts*') ? 'active' : '' }}">
+                <a href="{{ route('transcripts', $student) }}" class="menu-link">
+                  <i class="menu-icon tf-icons ti ti-notebook"></i>
+                  <div data-i18n="Unduh Transkrip">Unduh Transkrip</div>
+                </a>
+              </li>
+            @endif
+          @endforeach
+        </ul>
       </li>
     @endif
+
     <li class="menu-item {{ Request::routeIs('my.transaction') ? 'active' : '' }}">
       <a href="{{ route('my.transaction') }}" class="menu-link">
         <i class="menu-icon tf-icons ti ti-file-dollar"></i>
@@ -49,12 +76,12 @@
       </a>
     </li>
 
-    <li class="menu-item {{ Request::is('laporan*') ? 'active' : '' }}">
+    {{-- <li class="menu-item {{ Request::is('laporan*') ? 'active' : '' }}">
       <a href="{{ route('student.helps.index') }}" class="menu-link">
         <i class="menu-icon tf-icons ti ti-file-description"></i>
         <div data-i18n="Laporan Kendala">Laporan Kendala</div>
       </a>
-    </li>
+    </li> --}}
 
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text" data-i18n="Akun">Akun</span>

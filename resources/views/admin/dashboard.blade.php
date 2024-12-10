@@ -54,7 +54,11 @@
               <option value="" selected disabled>- Pilih Program -</option>
               <option value="0">Semua Program</option>
               @foreach ($programs as $program)
-                <option value="{{ $program->id }}">{{ $program->programmable->title }}</option>
+                @if (isset($program->programmable) && isset($program->programmable->title))
+                  <option value="{{ $program->id }}">{{ $program->programmable->title ?? 'No Program Title' }}</option>
+                @else
+                  <option value="">No Program Title</option>
+                @endif
               @endforeach
             </select>
             <input type="text" class="form-control mb-1" id="title" name="title" placeholder="Judul">
@@ -292,7 +296,11 @@
               <div class="badge p-2 bg-label-success mb-2 rounded">
                 <i class="ti ti-notebook ti-md"></i>
               </div>
-              <h5 class="card-title mb-1 pt-2" style="height: 60px;">{{ $program->programmable->title }}</h5>
+              @if (isset($program->programmable) && isset($program->programmable->title))
+                <h5 class="card-title mb-1 pt-2" style="height: 60px;">{{ $program->programmable->title ?? 'No Program Title' }}</h5>
+              @else
+                <h5 class="card-title mb-1 pt-2" style="height: 60px;">No Program Title</h5>
+              @endif
               <hr>
               <table class="table table-borderless">
                 <tbody>
@@ -359,10 +367,6 @@
                   </tr>
                 </tbody>
               </table>
-
-              {{-- <div class="pt-1">
-                <a href="#" class="btn btn-sm btn-primary">Detail</a>
-              </div> --}}
             </div>
           </div>
         </div>

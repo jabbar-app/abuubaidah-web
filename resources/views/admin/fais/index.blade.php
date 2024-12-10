@@ -3,7 +3,8 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data {{ $fais->first()->title }}</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
+        {{ $fais->first()->title }}</h4>
       <a href="{{ route('fais.create') }}" class="btn btn-md btn-primary">Tambah Data</a>
     </div>
 
@@ -44,9 +45,11 @@
                 <td>{{ $fai->title }}</td>
                 <td>{{ $fai->description }}</td>
                 <td>
-                  @foreach (json_decode($fai->option) as $option)
-                    <li style="display: inline;">{{ $option }}</li>
-                  @endforeach
+                  @if (!is_null(json_decode($fai->option)))
+                    @foreach (json_decode($fai->option) as $option)
+                      <li style="display: inline;">{{ $option }}</li>
+                    @endforeach
+                  @endif
                 </td>
                 <td><span class="badge @if ($fai->status) bg-label-primary @else bg-label-warning @endif">
                     @if ($fai->status)
@@ -57,7 +60,8 @@
                   </span></td>
                 <td>
                   <div class="d-inline-block">
-                    <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false" style="box-shadow: none;">
+                    <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow"
+                      data-bs-toggle="dropdown" aria-expanded="false" style="box-shadow: none;">
                       <i class="text-primary ti ti-dots-vertical"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end m-0" style="">
@@ -68,7 +72,8 @@
                       {{-- <li><a href="javascript:;" class="dropdown-item">Archive</a></li> --}}
                       <div class="dropdown-divider"></div>
                       <li>
-                        <form action="{{ route('fais.destroy', $fai->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this fai?');">
+                        <form action="{{ route('fais.destroy', $fai->id) }}" method="POST"
+                          onsubmit="return confirm('Are you sure you want to delete this fai?');">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="dropdown-item text-danger delete-record">Delete</button>
@@ -76,7 +81,8 @@
                       </li>
                     </ul>
                   </div>
-                  <a href="{{ route('fais.edit', $fai->id) }}" class="btn btn-sm btn-icon item-edit" style="box-shadow: none;"><i class="text-primary ti ti-pencil"></i></a>
+                  <a href="{{ route('fais.edit', $fai->id) }}" class="btn btn-sm btn-icon item-edit"
+                    style="box-shadow: none;"><i class="text-primary ti ti-pencil"></i></a>
                 </td>
               </tr>
             @endforeach

@@ -18,9 +18,56 @@ class Student extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class);
+        return $this->belongsToMany(Course::class)->withPivot('grade')->withTimestamps();
     }
 
+    protected static function booted()
+    {
+        static::saving(function ($student) {
+            if ($student->isDirty('mustawa')) {
+                $student->assignCourses();
+            }
+        });
+    }
+
+    public function transcripts()
+    {
+        return $this->hasMany(Transcript::class);
+    }
+
+    public function assignCourses()
+    {
+        $mustawa = $this->mustawa;
+
+        switch ($mustawa) {
+            case 'Robi':
+                $courses = MustawaRobi::all();
+                break;
+            case 'Tamhidy':
+                $courses = MustawaTamhidy::all();
+                break;
+            case 'Awwal':
+                $courses = MustawaAwwal::all();
+                break;
+            case 'Tsani':
+                $courses = MustawaTsani::all();
+                break;
+            case 'Tsalits':
+                $courses = MustawaTsalits::all();
+                break;
+            default:
+                $courses = collect();
+                break;
+        }
+
+        // Sync courses with mustawa
+        foreach ($courses as $course) {
+            $this->transcripts()->updateOrCreate(
+                ['course_id' => $course->id, 'mustawa' => $mustawa],
+                ['grade' => null]
+            );
+        }
+    }
 
     public function program()
     {

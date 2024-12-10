@@ -1,8 +1,9 @@
 @extends('student.main')
 
+
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Program /</span> {{ $program->programmable->title }}</h4>
+    <h4 class="py-3 mb-4"><span class="text-muted fw-light">Program /</span> {{ $program->programmable->title ?? 'No Program Title' }}</h4>
 
     <div class="row">
       <!-- Form Separator -->
@@ -54,13 +55,13 @@
               <label class="col-sm-3 col-form-label" for="multicol-program">Program</label>
               <div class="col-sm-9">
                 <input type="text" id="multicol-program" class="form-control"
-                  value="{{ $program->programmable->title }}" name="program" readonly />
+                  value="{{ $program->programmable->title ?? 'No Program Title' }}" name="program" readonly />
               </div>
             </div>
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-batch">Angkatan</label>
               <div class="col-sm-9">
-                <input type="text" id="multicol-batch" class="form-control" value="{{ $program->programmable->batch }}"
+                <input type="text" id="multicol-batch" class="form-control" value="{{ $program->programmable->batch ?? 'No Program Batch' }}"
                   name="batch" readonly />
               </div>
             </div>
@@ -117,13 +118,13 @@
                       </td>
                       @php
                         if (empty($step->status)) {
-                            $total = $program->price_pra;
+                            $total = $program->programmable->price_pra;
                         } else {
                             $total =
-                                $program->price_pra +
-                                $program->price_normal +
-                                $program->price_mahad +
-                                $program->price_s1;
+                                $program->programmable->price_pra +
+                                $program->programmable->price_normal +
+                                $program->programmable->price_mahad +
+                                $program->programmable->price_s1;
                         }
                       @endphp
                       <td colspan="2" class="text-center fw-bold bg-light">
@@ -134,7 +135,7 @@
               </div>
             </div>
 
-            @if (!empty($status->nama_sma))
+            @if (!empty($status->nama_sma) || empty($step->nim_temp))
               <hr class="my-4 mx-n4" />
               <h6>3. Data NIM</h6>
               <div class="row mb-3">
@@ -187,7 +188,7 @@
       $('#checkNIMButton').click(function() {
         var nim = $('#nim').val();
         $.ajax({
-          url: '/check-nim',
+          url: '{{ route('check-nim') }}',
           method: 'POST',
           data: {
             nim: nim,
@@ -209,10 +210,10 @@
       function updatePricesWithNim(isRegistered) {
         var program = @json($program);
         var updatedPrices = {
-          price_pra: isRegistered ? 0 : Number(program.price_pra_nim),
-          price_normal: Number(program.price_normal_nim),
-          price_mahad: Number(program.price_mahad_nim),
-          price_s1: isRegistered ? 0 : Number(program.price_s1_nim)
+          price_pra: isRegistered ? 0 : Number(program.programmable.price_pra_nim),
+          price_normal: Number(program.programmable.price_normal_nim),
+          price_mahad: Number(program.programmable.price_mahad_nim),
+          price_s1: isRegistered ? 0 : Number(program.programmable.price_s1_nim)
         };
 
         console.log('Updated Prices:', updatedPrices);
@@ -236,10 +237,10 @@
       function resetPrices() {
         var program = @json($program);
         var originalPrices = {
-          price_pra: Number(program.price_pra),
-          price_normal: Number(program.price_normal),
-          price_mahad: Number(program.price_mahad),
-          price_s1: Number(program.price_s1)
+          price_pra: Number(program.programmable.price_pra),
+          price_normal: Number(program.programmable.price_normal),
+          price_mahad: Number(program.programmable.price_mahad),
+          price_s1: Number(program.programmable.price_s1)
         };
 
         console.log('Original Prices:', originalPrices);
@@ -253,7 +254,8 @@
         $('td:contains("Biaya Pembangunan S1")').next().text('Rp' + number_format(originalPrices.price_s1, 0, ',',
           '.') + ',-');
 
-        var total = originalPrices.price_pra;
+        var total = originalPrices.price_pra + originalPrices.price_normal + originalPrices.price_mahad +
+          originalPrices.price_s1;
         console.log('Total:', total);
         $('.fw-bold.bg-light').text('Rp' + number_format(total, 0, ',', '.') + ',-');
         $('input[name="amount"]').val(total);
@@ -282,7 +284,6 @@
       }
     });
   </script>
-
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const inputSection = document.getElementById('inputNIM');

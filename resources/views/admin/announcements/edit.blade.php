@@ -35,7 +35,7 @@
               <select name="program_id" id="program_id" class="form-select">
                 <option value="0">Semua Program</option>
                 @foreach ($programs as $program)
-                  <option value="{{ $program->id }}" {{ $program->id == $announcement->program_id ? 'selected' : '' }}>{{ $program->programmable->title }}</option>
+                  <option value="{{ $program->id }}" {{ $program->id == $announcement->program_id ? 'selected' : '' }}>{{ $program->programmable->title ?? 'No Program Title' }}</option>
                 @endforeach
               </select>
             </div>

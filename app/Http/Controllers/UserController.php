@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\Payment;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -162,10 +163,6 @@ class UserController extends Controller
         $districtId = $district ? $district->id : null;
         $districtName = $district ? $district->name : null;
 
-        // dd(
-        //     $provinceName
-        // );
-
         return view('admin.users.edit', compact('user', 'provinceName', 'regencyName', 'regencyId', 'districtName', 'districtId', 'provinces', 'regencies', 'districts'));
     }
 
@@ -237,6 +234,25 @@ class UserController extends Controller
             // Update the user's field with the new file path
             $user->update([$fieldName => $filePath]);
         }
+    }
+
+    public function generatePDF($id)
+    {
+        $user = User::findOrFail($id);
+        $province = Province::find($user->province);
+        $regency = Regency::find($user->regency);
+        $district = District::find($user->district);
+
+        $pdf = FacadePdf::loadView('admin.exports.user', [
+            'user' => $user,
+            'programs' => Kelas::where('user_id', $user->id)->get(),
+            'payments' => Payment::where('user_id', $user->id)->get(),
+            'provinceName' => $province->name ?? '-',
+            'regencyName' => $regency->name ?? '-',
+            'districtName' => $district->name ?? '-',
+        ]);
+
+        return $pdf->download('user_data.pdf');
     }
 
     protected function prepareUpdateData($request)

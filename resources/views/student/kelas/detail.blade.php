@@ -4,7 +4,7 @@
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /
-        </a>{{ $program->programmable->title }}</h4>
+        </a>{{ $program->programmable->title ?? 'No Program Title' }}</h4>
     </div>
 
     {{-- <hr class="mb-5"> --}}
@@ -55,7 +55,11 @@
                   <tr>
                     <td>Status</td>
                     <td>
-                      <span class="fw-medium">{{ $kelas->status }}</span>
+                      @if ($kelas->status == 'Selesai')
+                        <a href="{{ route('certificatePdf', $kelas->id) }}" class="btn btn-sm btn-outline-primary">Unduh</a>
+                      @else
+                        <span class="fw-medium">{{ $kelas->status }}</span>
+                      @endif
                     </td>
                   </tr>
                 </tbody>
@@ -79,7 +83,11 @@
                 <tr>
                   <td>Status</td>
                   <td>
-                    <span class="fw-medium">{{ $kelas->status }}</span>
+                    @if ($kelas->status == 'Selesai')
+                      <a href="{{ route('certificatePdf', $kelas->id) }}" class="btn btn-sm btn-outline-primary">Unduh</a>
+                    @else
+                      <span class="fw-medium">{{ $kelas->status }}</span>
+                    @endif
                   </td>
                 </tr>
               </tbody>
@@ -137,9 +145,19 @@
                     </td>
                   </tr>
                   <tr>
+                    <td>Level Selanjutnya</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->next ?? '-' }}</span>
+                    </td>
+                  </tr>
+                  <tr>
                     <td>Status</td>
                     <td>
-                      <span class="fw-medium">{{ $kelas->status }}</span>
+                      @if ($kelas->status == 'Selesai')
+                        <a href="{{ route('certificatePdf', $kelas->id) }}" class="btn btn-sm btn-outline-primary">Unduh</a>
+                      @else
+                        <span class="fw-medium">{{ $kelas->status }}</span>
+                      @endif
                     </td>
                   </tr>
                   <tr>
@@ -245,9 +263,19 @@
                     </td>
                   </tr>
                   <tr>
+                    <td>Level Selanjutnya</td>
+                    <td>
+                      <span class="fw-medium">{{ $kelas->next ?? '-' }}</span>
+                    </td>
+                  </tr>
+                  <tr>
                     <td>Status</td>
                     <td>
-                      <span class="fw-medium">{{ $kelas->status }}</span>
+                      @if ($kelas->status == 'Selesai')
+                        <a href="{{ route('certificatePdf', $kelas->id) }}" class="btn btn-sm btn-outline-primary">Unduh</a>
+                      @else
+                        <span class="fw-medium">{{ $kelas->status }}</span>
+                      @endif
                     </td>
                   </tr>
                   <tr>

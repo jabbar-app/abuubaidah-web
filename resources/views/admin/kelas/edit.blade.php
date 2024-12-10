@@ -89,6 +89,13 @@
               </div>
             </div>
 
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="multicol-level">Rekomendasi Level Selanjutnya</label>
+              <div class="col-sm-9">
+                <input type="text" name="next" class="form-control" value="{{ $kelas->next }}">
+              </div>
+            </div>
+
             <div class="row mb-3 select2-primary">
               <label class="col-sm-3 col-form-label" for="session-select">Sesi Belajar</label>
               <div class="col-sm-9">
@@ -143,6 +150,25 @@
                   <select name="nim_valid" id="nim_valid" class="form-select" required>
                     <option value="1" @if ($kelas->nim_valid == true) selected @endif>Valid</option>
                     <option value="0" @if ($kelas->nim_valid == false) selected @endif>Tidak Valid</option>
+                  </select>
+                </div>
+              </div>
+            @endif
+
+            @if (!empty($kelas->user->url_bilhaq))
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="multicol-nim_temp">Sertifikat BILHAQ</label>
+                <div class="col-sm-9">
+                    <a href="{{ asset($kelas->user->url_bilhaq) }}" target="_blank" class="btn btn-outline-primary">Lihat Sertifikat</a>
+                </div>
+              </div>
+
+              <div class="row mb-5">
+                <label class="col-sm-3 col-form-label" for="multicol-nim_valid">Validasi BILHAQ</label>
+                <div class="col-sm-9">
+                  <select name="nim_valid" id="nim_valid" class="form-select" required>
+                    <option value="1">Valid</option>
+                    <option value="0">Tidak Valid</option>
                   </select>
                 </div>
               </div>

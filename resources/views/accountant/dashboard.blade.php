@@ -154,7 +154,7 @@
               <div class="badge p-2 bg-label-success mb-2 rounded">
                 <i class="ti ti-notebook ti-md"></i>
               </div>
-              <h5 class="card-title mb-1 pt-2" style="height: 60px;">{{ $program->programmable->title }}</h5>
+              <h5 class="card-title mb-1 pt-2" style="height: 60px;">{{ $program->programmable->title ?? 'No Program Title' }}</h5>
               <hr>
               <table class="table table-borderless">
                 <tbody>

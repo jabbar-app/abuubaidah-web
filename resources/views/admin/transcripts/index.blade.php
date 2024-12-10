@@ -5,7 +5,22 @@
     <div class="d-flex justify-content-between align-items-center my-4">
       <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Hasil
         Studi</h4>
-      <a href="{{ route('transcripts.create') }}" class="btn btn-md btn-primary">Tambah Data</a>
+      <div>
+        <a href="{{ route('students.export') }}" class="btn btn-md btn-outline-primary">Export Data</a>
+        <!-- Import Data Form -->
+        <form action="{{ route('admin.students.import') }}" method="POST" enctype="multipart/form-data"
+          style="display: inline;">
+          @csrf
+          <input type="file" name="file" class="form-control d-inline-block"
+            style="width: auto; display: inline-block;" required>
+          <button type="submit" class="btn btn-md btn-outline-primary">Import Data</button>
+        </form>
+        <!-- Sinkronisasi Mata Kuliah Button -->
+        <form action="{{ route('students.synchronize') }}" method="POST" style="display: inline;">
+          @csrf
+          <button type="submit" class="btn btn-md btn-outline-primary">Sinkronisasi Mata Kuliah</button>
+        </form>
+      </div>
     </div>
 
     @if (session('success'))
@@ -29,29 +44,50 @@
         <table id="datatable" class="table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>NIM</th>
               <th>Nama Mahasiswa</th>
               <th>Program</th>
+              <th>Mustawa</th>
               <th>Angkatan</th>
+              <th>Nilai Komprehensif</th>
               <th>Tindakan</th>
             </tr>
           </thead>
           <tbody>
             @foreach ($students as $student)
               <tr>
+                <td>{{ $student->id }}</td>
                 <td>{{ $student->nim }}</td>
-                <td>{{ $student->user->name }}</td>
-                <td>{{ $student->program->programmable->title }}</td>
-                <td>{{ $student->program->programmable->batch }}</td>
-                <td>
-                  <div class="btn-group dropstart">
-                    <button class="btn btn-sm btn-primary dropdown-toggle waves-effect waves-light" type="button"
-                      data-bs-toggle="dropdown" aria-expanded="false">Pilih</button>
-                    <ul class="dropdown-menu" style="">
-                      <li><a class="dropdown-item" href="/students/{{ $student->id }}/assign">Atur Mata Kuliah</a></li>
-                      <li><a class="dropdown-item" href="/students/{{ $student->id }}/grades">Atur Nilai KHS</a></li>
-                    </ul>
-                  </div>
+                <td>{{ $student->user->name ?? 'Data tidak ditemukan' }}</td>
+                <td>{{ $student->program->programmable->title ?? '' }}</td>
+                <td>{{ $student->mustawa }}</td>
+                <td>{{ $student->program->programmable->batch ?? '' }}</td>
+                <td class="text-center">{{ $student->nilai_comphre ?? '' }}</td>
+                <td class="d-flex">
+                  @if (empty($student->user))
+                    <form action="{{ route('students.destroy', $student->id) }}" method="POST">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                    </form>
+                  @else
+                    <a href="{{ route('students.khs', $student) }}" class="btn btn-sm btn-outline-primary">Lihat</a>
+                    <a href="{{ route('students.edit', $student) }}" class="btn btn-sm btn-outline-info ms-2">Edit</a>
+                    {{-- <div class="btn-group dropstart">
+                      <button class="btn btn-sm btn-primary dropdown-toggle waves-effect waves-light" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">Pilih</button>
+                      <ul class="dropdown-menu" style="">
+                        <li>
+                          <a class="dropdown-item" href="{{ route('students.assign', $student->id) }}">Atur Mata
+                            Kuliah</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="{{ route('students.grades', $student->id) }}">Atur Nilai KHS</a>
+                        </li>
+                      </ul>
+                    </div> --}}
+                  @endif
                 </td>
               </tr>
             @endforeach

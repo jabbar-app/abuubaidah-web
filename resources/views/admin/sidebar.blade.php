@@ -36,17 +36,101 @@
         </a>
       </li>
     @endif
-    <li class="menu-item {{ Request::is('payments*') ? 'active' : '' }}">
-      <a href="{{ route('payments.index') }}" class="menu-link">
+    <li class="menu-item {{ Route::is('admin.payments*', 'payments*') ? 'open' : '' }}">
+      <a href="javascript:void(0)" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ti ti-file-dollar"></i>
         <div data-i18n="Data Transaksi">Data Transaksi</div>
       </a>
+      <ul class="menu-sub">
+        <li class="menu-item {{ Route::is('admin.payments.index') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.index') }}" class="menu-link">
+            <div data-i18n="Semua Data">Semua Data</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.payments.tahsin*') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.tahsin') }}" class="menu-link">
+            <div data-i18n="Tahsin">Tahsin</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.payments.tahfiz*') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.tahfiz') }}" class="menu-link">
+            <div data-i18n="Tahfiz">Tahfiz</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.payments.bilhaq*') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.bilhaq') }}" class="menu-link">
+            <div data-i18n="Bilhaq">Bilhaq</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.payments.kiba*') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.kiba') }}" class="menu-link">
+            <div data-i18n="KIBA">KIBA</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.payments.lughoh*') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.lughoh') }}" class="menu-link">
+            <div data-i18n="Lughoh">Lughoh</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.payments.fai*') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.fai') }}" class="menu-link">
+            <div data-i18n="Integrasi S-1 FAI">Integrasi S-1 FAI</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.payments.stebis*') ? 'active' : '' }}">
+          <a href="{{ route('admin.payments.stebis') }}" class="menu-link">
+            <div data-i18n="Integrasi S-1 Stebis">Integrasi S-1 Stebis</div>
+          </a>
+        </li>
+      </ul>
     </li>
-    <li class="menu-item {{ Request::is('kelas*', 'admin/kelas*') ? 'active' : '' }}">
-      <a href="{{ route('admin.kelas.index') }}" class="menu-link">
+    <li class="menu-item {{ Request::is('kelas*', 'kelas/program/*', 'admin/kelas') ? 'open' : '' }}">
+      <a href="javascript:void(0)" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ti ti-book"></i>
         <div data-i18n="Data Kelas">Data Kelas</div>
       </a>
+      <ul class="menu-sub">
+        <li class="menu-item {{ Route::is('admin.kelas.index') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.index') }}" class="menu-link">
+            <div data-i18n="Semua Data">Semua Data</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.kelas.tahsin*') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.tahsin') }}" class="menu-link">
+            <div data-i18n="Tahsin">Tahsin</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.kelas.tahfiz*') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.tahfiz') }}" class="menu-link">
+            <div data-i18n="Tahfiz">Tahfiz</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.kelas.bilhaq*') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.bilhaq') }}" class="menu-link">
+            <div data-i18n="Bilhaq">Bilhaq</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.kelas.kiba*') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.kiba') }}" class="menu-link">
+            <div data-i18n="KIBA">KIBA</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.kelas.lughoh*') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.lughoh') }}" class="menu-link">
+            <div data-i18n="Lughoh">Lughoh</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.kelas.fai*') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.fai') }}" class="menu-link">
+            <div data-i18n="Integrasi S-1 FAI">Integrasi S-1 FAI</div>
+          </a>
+        </li>
+        <li class="menu-item {{ Route::is('admin.kelas.stebis*') ? 'active' : '' }}">
+          <a href="{{ route('admin.kelas.stebis') }}" class="menu-link">
+            <div data-i18n="Integrasi S-1 Stebis">Integrasi S-1 Stebis</div>
+          </a>
+        </li>
+      </ul>
     </li>
     @if (Auth::user()->hasRole('Super Admin'))
       <li class="menu-item {{ Request::is('programs*') ? 'active' : '' }}">
@@ -73,25 +157,25 @@
         <span class="menu-header-text">Manajemen Program</span>
       </li>
 
-      <li class="menu-item {{ Request::is('courses*', 'transcripts*', 'lecturers*', 'students*') ? 'open' : '' }}">
+      <li class="menu-item {{ Route::is('mustawa.index', 'transcripts.index', 'students.khs') ? 'open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons ti ti-notebook"></i>
           <div data-i18n="Data Studi">Data Studi</div>
         </a>
         <ul class="menu-sub">
-          <li class="menu-item {{ Request::is('lecturers*') ? 'active' : '' }}">
+          {{-- <li class="menu-item {{ Request::is('lecturers*') ? 'active' : '' }}">
             <a href="{{ route('lecturers.index') }}" class="menu-link">
               <div data-i18n="Pengajar">Pengajar</div>
             </a>
-          </li>
-          <li class="menu-item {{ Request::is('transcripts*', 'students*') ? 'active' : '' }}">
-            <a href="{{ route('transcripts.index') }}" class="menu-link">
-              <div data-i18n="Kartu Hasil Studi">Kartu Hasil Studi</div>
+          </li> --}}
+          <li class="menu-item {{ Route::is('mustawa.index') ? 'active' : '' }}">
+            <a href="{{ route('mustawa.index') }}" class="menu-link">
+              <div data-i18n="Mustawa">Mustawa</div>
             </a>
           </li>
-          <li class="menu-item {{ Request::is('courses*') ? 'active' : '' }}">
-            <a href="{{ route('courses.index') }}" class="menu-link">
-              <div data-i18n="Mata Kuliah">Mata Kuliah</div>
+          <li class="menu-item {{ Route::is('transcripts*', 'students*', 'students.khs') ? 'active' : '' }}">
+            <a href="{{ route('transcripts.index') }}" class="menu-link">
+              <div data-i18n="Mahasiswa">Mahasiswa</div>
             </a>
           </li>
         </ul>
@@ -144,6 +228,12 @@
         <a href="{{ route('helps.index') }}" class="menu-link">
           <i class="menu-icon tf-icons ti ti-file-description"></i>
           <div data-i18n="Laporan Kendala">Laporan Kendala</div>
+        </a>
+      </li>
+      <li class="menu-item {{ Route::is('edit.whatsapp.key') ? 'active' : '' }}">
+        <a href="{{ route('edit.whatsapp.key') }}" class="menu-link">
+          <i class="menu-icon tf-icons ti ti-brand-whatsapp"></i>
+          <div data-i18n="Edit Woowa Key">Edit Woowa Key</div>
         </a>
       </li>
     @endif

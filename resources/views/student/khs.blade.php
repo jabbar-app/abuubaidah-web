@@ -8,7 +8,7 @@
 
     <div class="row invoice-preview">
       <!-- Invoice -->
-      <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4">
+      <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-4 mx-auto">
         <div class="card invoice-preview-card">
           <div class="card-body">
             <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column m-sm-3 m-0">
@@ -55,13 +55,23 @@
                 <table>
                   <tbody>
                     <tr>
-                      <td class="pe-4">Program:</td>
-                      <td class="fw-medium">{{ $student->program->programmable->title }}</td>
+                      <td class="pe-4">Program</td>
+                      <td class="fw-medium">: {{ $student->program->programmable->title }}</td>
                     </tr>
                     <tr>
-                      <td class="pe-4">Angkatan:</td>
-                      <td>{{ $student->program->programmable->batch }}</td>
+                      <td class="pe-4">Angkatan</td>
+                      <td>: {{ $student->program->programmable->batch }}</td>
                     </tr>
+                    <tr>
+                      <td class="pe-4">Mustawa</td>
+                      <td>: {{ $transcripts->first()->mustawa }}</td>
+                    </tr>
+                    @if (!empty($status))
+                      <tr>
+                        <td class="pe-4">Status</td>
+                        <td>: {{ $status }}</td>
+                      </tr>
+                    @endif
                   </tbody>
                 </table>
               </div>
@@ -72,10 +82,10 @@
               <thead>
                 <tr>
                   <th style="width: 40px;">No.</th>
+                  <th class="text-center">Kode</th>
                   <th>Mata Kuliah</th>
-                  <th>Pengajar</th>
-                  <th>SKS</th>
-                  <th>Nilai</th>
+                  <th class="text-center">SKS</th>
+                  <th class="text-center">Nilai</th>
                 </tr>
               </thead>
               <tbody>
@@ -85,31 +95,32 @@
                   $grade = 0;
                 @endphp
                 @foreach ($transcripts as $transcript)
-                @php
+                  @php
                     $count++;
-                    $credit = $credit+$transcript->course->credits;
-                    $grade = $grade+$transcript->grade;
-                @endphp
+                    $credit = $credit + $transcript->course->credits;
+                    $grade = $grade + $transcript->grade;
+                  @endphp
                   <tr>
                     <td>{{ $count++ }}</td>
-                    <td class="text-nowrap">{{ $transcript->course->title }}</td>
-                    <td>{{ $transcript->course->lecturer->user->name }}</td>
-                    <td>{{ $transcript->course->credits }}</td>
-                    <td>{{ $transcript->grade }}</td>
+                    <td class="text-center">{{ $transcript->course->kode_mk }}</td>
+                    <td class="text-nowrap">{{ $transcript->course->mk }}</td>
+                    <td class="text-center">{{ $transcript->course->sks }}</td>
+                    {{-- <td>{{ $transcript->course->lecturer->user->name }}</td> --}}
+                    <td class="text-center" @if (!empty($status) && $transcript->grade < 60) style="color: red" @endif>{{ $transcript->grade }}</td>
                   </tr>
                 @endforeach
-                <tr>
+                {{-- <tr>
                     <td colspan="3"><span class="float-end">Total</span></td>
-                    <td>{{ $credit }}</td>
-                    <td>{{ $grade }}</td>
-                </tr>
+                    <td class="text-center">{{ $credit }}</td>
+                    <td class="text-center">{{ $grade }}</td>
+                </tr> --}}
               </tbody>
             </table>
           </div>
 
           <div class="card-body mx-3">
             <div class="row mb-5">
-                <div class="col-8"></div>
+              <div class="col-8"></div>
               <div class="col-4">
                 <h5>Mahasiswa</h5>
                 <br><br>
@@ -123,7 +134,7 @@
       <!-- /Invoice -->
 
       <!-- Invoice Actions -->
-      <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+      {{-- <div class="col-xl-3 col-md-4 col-12 invoice-actions">
         <div class="card">
           <div class="card-body">
             <button class="btn btn-primary d-grid w-100 mb-2 waves-effect">
@@ -131,7 +142,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- /Invoice Actions -->
     </div>
   </div>

@@ -1,5 +1,6 @@
 @extends('admin.main')
 
+
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
@@ -84,7 +85,4 @@
       </div>
     </div>
   </div>
-@endsection
-
-@section('js')
 @endsection

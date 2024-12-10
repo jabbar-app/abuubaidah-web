@@ -3,87 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Jobs\SendWhatsappNotification;
 
 class WhatsappController extends Controller
 {
-    public $key = '6b2be15d876d75abbb23251d1b637a1c24e4e9f4d519934f';
+    public $key;
+
+    public function __construct()
+    {
+        $this->key = Setting::where('key', 'whatsapp_key')->value('value');
+    }
 
     public function index()
     {
-        return view('admin.whatsapp');
+        return view('whatsapp.test');
     }
 
     public function sendWhatsapp(Request $request)
     {
-        $message = "Halo $request->name, ini pesan kamu ya $request->message.";
+        $key = Setting::where('key', 'whatsapp_key')->value('value');
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json'
-        ])->withOptions([
-            'debug' => false,
-            'connect_timeout' => false,
-            'timeout' => false,
-            'verify' => false,
         ])->post('http://116.203.191.58/api/send_message', [
             'phone_no' => $request->phone,
-            'message' => $message,
-            'key' => $this->key,
+            'message' => $request->message,
+            'key' => $key,
             'skip_link' => true
         ]);
 
-        if ($response->successful()) {
-            return 'Pesan berhasil dikirim';
+        if ($response->failed()) {
+            return response()->json(['error' => 'Failed to send message'], 500);
         }
 
-        return 'Gagal';
+        return response()->json(['success' => 'Message sent successfully']);
+    }
+
+
+    public function editKey()
+    {
+        return view('admin.settings.woowa', [
+            'key' => $this->key
+        ]);
+    }
+
+    public function updateKey(Request $request)
+    {
+        // Validate the new key input
+        $request->validate([
+            'key' => 'required|string|max:255',
+        ]);
+
+        // Update the key in the settings table
+        Setting::updateOrCreate(
+            ['key' => 'whatsapp_key'],  // Where condition
+            ['value' => $request->input('key')]  // Update with the new key
+        );
+
+        // Set a success message and redirect back
+        return redirect()->back()->with('success', 'WhatsApp key updated successfully.');
     }
 
     public function waPayment(Payment $payment)
     {
-        $message = "Ma'had Abu Ubaidah bin Al Jarrah\n";
-        $message .= "Assalamu'alaikum Warahmatullahi Wabarakatuh\n\n";
-        $message .= "-----------------------------\n";
-        $message .= "                 I  N  V  O  I  C  E\n";
-        $message .= "-----------------------------\n\n";
-        $message .= "Berikut Rincian Pendaftaran\n\n";
-        $message .= "No Invoice: {$payment->external_id}\n";
-        $message .= "Nama: {$payment->payer_name}\n";
-        $message .= "Jenis Kelamin: {$payment->user->gender}\n";
-        $message .= "Email: {$payment->payer_email}\n\n";
-        $message .= "Rincian Pembayaran:\n";
-        $message .= "{$payment->description}\n";
-        $message .= "Nominal Tagihan: Rp " . number_format($payment->amount, 0, ',', '.') . "\n\n";
-        $message .= "Batas Pembayaran:\n";
-        $message .= "2x24 jam setelah mendapatkan pesan ini\n\n";
-        $message .= "Silahkan Lakukan Pembayaran Melalui\n";
-        $message .= "{$payment->invoice_url}\n";
-        $message .= "-----------------------------\n";
-        $message .= "NB. Jika link tidak bisa di klik, save nomor ini dan buka kembali pesan ini\n\n";
-        $message .= "INI PESAN OTOMATIS\n";
-        $message .= "sistem hanya menjawab sesuai ketentuan balas pesan,\n";
-        $message .= "balas ya untuk menampilkan kontak Staff Support kami\n\n";
-        $message .= "Jazakumullahu Khairan Katsiran\n";
+        dispatch(new SendWhatsappNotification($payment, 'PENDING'));
+        return redirect()->back()->with('success', 'Silakan lakukan pembayaran!');
+    }
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->withOptions([
-            'debug' => false,
-            'connect_timeout' => false,
-            'timeout' => false,
-            'verify' => false,
-        ])->post('http://116.203.191.58/api/send_message', [
-            'phone_no' => $payment->user->phone,
-            'message' => $message,
-            'key' => $this->key,
-            'skip_link' => true
-        ]);
+    public function waPaymentExprired(Payment $payment)
+    {
+        dispatch(new SendWhatsappNotification($payment, 'EXPIRED'));
+        return redirect()->back()->with('success', 'Pembayaran expired.');
+    }
 
-        if ($response->successful()) {
-            return redirect()->route('my.transaction')->with('success', 'Silakan lakukan pembayaran!');
-        }
-
-        return redirect()->route('dashboard')->with('danger', 'Gagal!');
+    public function waPaymentPaid(Payment $payment)
+    {
+        dispatch(new SendWhatsappNotification($payment, 'PAID'));
+        return redirect()->back()->with('success', 'Pembayaran berhasil!');
     }
 }

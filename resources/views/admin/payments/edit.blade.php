@@ -3,20 +3,15 @@
 @section('content')
   <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center my-4">
-      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data
-        Transaksi</h4>
+      <h4 class="text-primary mt-3"><a href="{{ route('dashboard') }}" class="text-muted fw-light">Dashboard /</a> Data Transaksi</h4>
       <a href="{{ route('payments.index') }}" class="btn btn-md btn-light">Kembali</a>
     </div>
-
-    {{-- <hr class="mb-5"> --}}
 
     <div class="d-flex justify-content-center">
       <div class="card col-xl-8 col-md-10 col-sm-12">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Tambah Data</h5>
-          <small class="text-muted float-end">
-            إضافة البيانات
-          </small>
+          <small class="text-muted float-end">إضافة البيانات</small>
         </div>
         <div class="card-body">
           @if ($errors->any())
@@ -29,12 +24,11 @@
             </div>
           @endif
 
-
           <form method="POST" action="{{ route('payments.update', $payment->id) }}">
             @csrf
             @method('PUT')
             <div class="row mb-3">
-              <label class="col-sm-3 col-form-label" for="multicol-program">Nama User</label>
+              <label class="col-sm-3 col-form-label" for="multicol-user">Nama User</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" value="{{ $payment->payer_name }}" disabled>
               </div>
@@ -57,7 +51,7 @@
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label" for="multicol-program">Status Saat Ini</label>
               <div class="col-sm-9">
-                <input type="text" name="amount" class="form-control" value="{{ $payment->status }}" disabled>
+                <input type="text" class="form-control" value="{{ $payment->status }}" disabled>
               </div>
             </div>
 
@@ -87,7 +81,7 @@
             @if ($payment->status == 'CICILAN')
               <div class="row mb-3" id="installment-row">
                 <label class="col-sm-3 col-form-label" for="installment">Update Cicilan</label>
-                <div class="col-sm-9">
+                <div class="col-sm-12">
                   <div class="table-responsive">
                     <table class="table">
                       <thead>
@@ -119,6 +113,13 @@
               </div>
             @endif
 
+            <div class="row mb-3" id="installments-container" style="display: none;">
+              <label class="col-sm-3 col-form-label">Pembayaran Cicilan</label>
+              <div class="col-sm-9">
+                <button type="button" class="btn btn-secondary" onclick="addInstallmentRow()">Tambah Cicilan</button>
+              </div>
+            </div>
+
             <div class="row mb-3" id="note-row">
               <label class="col-sm-3 col-form-label" for="note">Catatan</label>
               <div class="col-sm-9">
@@ -135,6 +136,68 @@
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const paymentMethod = document.getElementById('method').value;
+      const paymentStatus = document.getElementById('status').value;
+      toggleInstallmentSection(paymentMethod, paymentStatus);
+    });
+
+    document.getElementById('method').addEventListener('change', function() {
+      const paymentMethod = this.value;
+      const paymentStatus = document.getElementById('status').value;
+      toggleInstallmentSection(paymentMethod, paymentStatus);
+    });
+
+    document.getElementById('status').addEventListener('change', function() {
+      const paymentMethod = document.getElementById('method').value;
+      const paymentStatus = this.value;
+      toggleInstallmentSection(paymentMethod, paymentStatus);
+    });
+
+    function toggleInstallmentSection(method, status) {
+      const installmentSection = document.getElementById('installment-row');
+      const addInstallmentSection = document.getElementById('installments-container');
+      if (method === 'Offline' && status === 'CICILAN') {
+        installmentSection.style.display = 'block';
+        addInstallmentSection.style.display = 'block';
+      } else {
+        installmentSection.style.display = 'none';
+        addInstallmentSection.style.display = 'none';
+      }
+    }
+
+    function addInstallmentRow() {
+      const container = document.getElementById('installment-row').querySelector('tbody');
+      const count = container.children.length;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>
+            <input type="number" name="installments[${count}][amount]" class="form-control" placeholder="Jumlah Cicilan" required>
+        </td>
+        <td>
+            <input type="date" name="installments[${count}][due_date]" class="form-control" placeholder="Tanggal Jatuh Tempo" required>
+        </td>
+        <td>
+            <select name="installments[${count}][status]" class="form-select" required>
+                <option value="">Select Status</option>
+                <option value="PENDING">PENDING</option>
+                <option value="PAID">PAID</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="removeInstallmentRow(this)">Hapus</button>
+        </td>
+      `;
+      container.appendChild(row);
+    }
+
+    function removeInstallmentRow(button) {
+      button.closest('tr').remove();
+    }
+  </script>
 @endsection
 
 @section('js')

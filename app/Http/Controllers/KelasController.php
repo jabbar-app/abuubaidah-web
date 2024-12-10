@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sesi;
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\Kiba;
 use App\Models\Nim;
 use App\Models\Payment;
 use App\Models\Result;
@@ -87,12 +88,19 @@ class KelasController extends Controller
             'allOptions' => Sesi::pluck('jadwal')->toArray(),
         ]);
     }
+
     public function register($id)
     {
         $program = Program::where("id", $id)->first();
 
         if (!$program) {
             return redirect()->back()->with('error', 'Program not found.');
+        }
+
+        $kelas = Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first();
+
+        if (!empty($kelas) && $kelas->status == 'Menunggu Update') {
+            return redirect()->route('dashboard');
         }
 
         if ($program->programmable_type === 'App\Models\Tahsin') {
@@ -116,13 +124,23 @@ class KelasController extends Controller
 
     public function tahsin(Program $program)
     {
-        // dd($program->programmable->price_alumni);
+        $tahsins = Program::where('programmable_type', 'App\Models\Tahsin')->get();
+        $kelasAll = Kelas::where('user_id', Auth::user()->id)->get();
+        $isAlumni = false;
+        $level = '-';
 
-        $isAlumniResult = Result::where('program', 'TAHSIN')->where('phone', Auth::user()->phone)->first();
-        $isAlumni = $isAlumniResult !== null;
+        foreach ($tahsins as $tahsin) {
+            foreach ($kelasAll as $kelas) {
+                if ($tahsin->id == $kelas->program_id && $kelas->status == 'Selesai') {
+                    $isAlumni = true;
+                    $level = $kelas->next;
+                    break;
+                }
+            }
+        }
+
         $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
-        $price = $isAlumni ? $program->price_alumni : $program->price_normal;
-        $level = $isAlumni ? $isAlumniResult->next : 'TAMHIDY';
+        $price = $isAlumni ? $program->programmable->price_alumni : $program->programmable->price_normal;
 
         return view('student.kelas.tahsin', compact('program', 'alumni', 'price', 'level'));
     }
@@ -206,14 +224,31 @@ class KelasController extends Controller
         }
     }
 
+    public function daftarBilhaq($program)
+    {
+        $program = Program::where('programmable_type', $program)->where('status', 1)->first();
+        return $this->bilhaq($program);
+    }
+
     public function kiba(Program $program)
     {
-        $isAlumniResult = Result::where('program', 'KIBA')->where('phone', Auth::user()->phone)->first();
-        $isAlumni = $isAlumniResult !== null;
+        $kibas = Program::where('programmable_type', 'App\Models\Kiba')->get();
+        $kelasAll = Kelas::where('user_id', Auth::user()->id)->get();
+        $isAlumni = false;
+        $level = '-';
+
+        foreach ($kibas as $kiba) {
+            foreach ($kelasAll as $kelas) {
+                if ($kiba->id == $kelas->program_id) {
+                    $isAlumni = true;
+                    $level = $kelas->next;
+                    break;
+                }
+            }
+        }
+
         $alumni = $isAlumni ? 'Alumni' : 'Peserta Baru';
         $price = $isAlumni ? $program->programmable->price_alumni : $program->programmable->price_normal;
-        $level = $isAlumni ? $isAlumniResult->next : '-';
-
         return view('student.kelas.kiba', compact('program', 'alumni', 'price', 'level'));
     }
 
@@ -229,16 +264,19 @@ class KelasController extends Controller
             'step' => Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first(),
             'status' => User::where('id', auth()->user()->id)->first(),
             'student' => Student::where('user_id', auth()->user()->id)->first(),
+            'students' => Student::where('user_id', Auth::user()->id)->get(),
         ]);
     }
 
     public function fai(Program $program)
     {
+        $step = Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first();
         return view('student.kelas.fai', [
             'program' => $program,
-            'step' => Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first(),
+            'step' => $step,
             'status' => User::where('id', auth()->user()->id)->first(),
             'student' => Student::where('user_id', auth()->user()->id)->first(),
+            'students' => Student::where('user_id', Auth::user()->id)->get(),
         ]);
     }
 
@@ -249,6 +287,7 @@ class KelasController extends Controller
             'step' => Kelas::where('user_id', auth()->user()->id)->where('program_id', $program->id)->first() ?? '',
             'status' => User::where('id', auth()->user()->id)->first(),
             'student' => Student::where('user_id', auth()->user()->id)->first(),
+            'students' => Student::where('user_id', Auth::user()->id)->get(),
         ]);
     }
 
@@ -267,6 +306,46 @@ class KelasController extends Controller
     {
         $kelas = Kelas::where('id', $id)->first();
         $program = Program::where("id", $kelas->program_id)->first();
+
+        if ($kelas->program->programmable_type == 'App\Models\Fai' || $kelas->program->programmable_type == 'App\Models\Stebis') {
+            $lughoh = Program::where('programmable_type', 'App\Models\Lughoh')->where('status', 1)->first();
+            $isRegisteredLughoh = Kelas::where('user_id', Auth::user()->id)->where('program_id', $lughoh->id)->first();
+            if (empty($isRegisteredLughoh)) {
+                $payment = Payment::where('kelas_id', $kelas->id)->first();
+                // dd($payment);
+                $create_kelas = Kelas::create([
+                    'user_id' => Auth::user()->id,
+                    'program_id' => $lughoh->id,
+                    'title' => $lughoh->programmable->title,
+                    'batch' => $lughoh->programmable->batch,
+                    'level' => '',
+                    'class' => '',
+                    'room' => '',
+                    'score' => '',
+                    'lecturer' => '',
+                    'session' => '',
+                    'status' => 'Aktif',
+                    'is_new' => false,
+                ]);
+
+                Payment::create([
+                    'program_id' => $lughoh->id,
+                    'kelas_id' => $create_kelas->id,
+                    'external_id' => $payment->external_id,
+                    'user_id' => $payment->user_id,
+                    'payer_name' => $payment->payer_name,
+                    'payer_email' => $payment->payer_email,
+                    'description' => 'Pembayaran untuk #Program Bahasa Arab & Studi Islam, Angkatan #' . $lughoh->programmable->batch . ' Jenis Pembayaran #Daftar Ulang Program Integrasi',
+                    'type' => 'Daftar Ulang',
+                    'amount' => $payment->amount,
+                    'method' => $payment->method,
+                    'invoice_url' => $payment->invoice_url,
+                    'status' => $payment->status,
+                ]);
+
+                return redirect()->route('my.program');
+            }
+        }
 
         return view('student.kelas.detail', [
             'kelas' => $kelas,
@@ -318,7 +397,7 @@ class KelasController extends Controller
         return view('admin.kelas.edit', [
             'kelas' => $kelas,
             'users' => User::where('nik', '>', 100)->get(),
-            'programs' => Program::where('status', 1)->get(),
+            'programs' => Program::all(),
             'allOptions' => Sesi::pluck('jadwal')->toArray(),
         ]);
     }
@@ -363,7 +442,6 @@ class KelasController extends Controller
         if (empty($request->phone)) {
             $results = Result::where('program', $program)->where('nim', $request->input('nim'))->get();
         } else {
-            return 'hai';
             $results = Result::where('program', $program)->where('phone', $request->input('phone'))->get();
         }
 
@@ -390,5 +468,114 @@ class KelasController extends Controller
         } else {
             return response()->json(['status' => 'invalid']);
         }
+    }
+
+    public function tahsinView(Request $request)
+    {
+        return $this->getKelasByProgram('App\Models\Tahsin', 'admin.kelas.tahsin', $request);
+    }
+
+    public function bilhaqView(Request $request)
+    {
+        return $this->getKelasByProgram('App\Models\Bilhaq', 'admin.kelas.bilhaq', $request);
+    }
+
+    public function tahfizView(Request $request)
+    {
+        return $this->getKelasByProgram('App\Models\Tahfiz', 'admin.kelas.tahfiz', $request);
+    }
+
+    public function lughohView(Request $request)
+    {
+        return $this->getKelasByProgram('App\Models\Lughoh', 'admin.kelas.lughoh', $request);
+    }
+
+    public function kibaView(Request $request)
+    {
+        return $this->getKelasByProgram('App\Models\Kiba', 'admin.kelas.kiba', $request);
+    }
+
+    public function faiView(Request $request)
+    {
+        return $this->getKelasByProgram('App\Models\Fai', 'admin.kelas.fai', $request);
+    }
+
+    public function stebisView(Request $request)
+    {
+        return $this->getKelasByProgram('App\Models\Stebis', 'admin.kelas.stebis', $request);
+    }
+
+    private function getKelasByProgram($programmableType, $viewName, Request $request)
+    {
+        $batch = $request->input('batch');
+        $gelombang = $request->input('gelombang');
+
+        // Retrieve the program based on programmable type
+        $program = Program::where('programmable_type', $programmableType)->first();
+        $programId = $program ? $program->id : null;
+
+        $programsQuery = Program::where('programmable_type', $programmableType)
+            ->when($batch, function ($query, $batch) {
+                return $query->whereHas('programmable', function ($q) use ($batch) {
+                    $q->where('batch', $batch);
+                });
+            });
+
+        $batches = Program::where('programmable_type', $programmableType)
+            ->with('programmable')
+            ->get()
+            ->pluck('programmable.batch')
+            ->unique()
+            ->values();
+
+        $programs = $programsQuery->get();
+        $allKelas = collect();
+
+        foreach ($programs as $program) {
+            $kelasQuery = Kelas::where('program_id', $program->id);
+
+            if (!empty($batch)) {
+                $kelasQuery->where('batch', $batch);
+            }
+
+            if (!empty($gelombang)) {
+                $kelasQuery->where('gelombang', $gelombang);
+            }
+
+            $kelas = $kelasQuery->get();
+            $allKelas = $allKelas->merge($kelas);
+        }
+
+        $newCountQuery = Kelas::where('program_id', $programId)->where('is_new', 1);
+        $renewedCountQuery = Kelas::where('program_id', $programId)->where('is_new', 0);
+
+        if (!empty($batch)) {
+            $newCountQuery->where('batch', $batch);
+            $renewedCountQuery->where('batch', $batch);
+        }
+
+        if (!empty($gelombang)) {
+            $newCountQuery->where('gelombang', $gelombang);
+            $renewedCountQuery->where('gelombang', $gelombang);
+        }
+
+        $newCount = $newCountQuery->count();
+        $renewedCount = $renewedCountQuery->count();
+        $totalCount = Kelas::where('program_id', $programId)->count();
+        $programsList = Program::all();
+
+        return view($viewName, [
+            'kelas' => $allKelas,
+            'new' => $newCount,
+            'renewed' => $renewedCount,
+            'total' => $totalCount,
+            'programs' => $programsList,
+            'program' => $program,
+            'program_id' => $programId,
+            'batches' => $batches,
+            'selectedBatch' => $batch,
+            'gelombang' => $gelombang,
+            'programmableType' => $programmableType,
+        ]);
     }
 }

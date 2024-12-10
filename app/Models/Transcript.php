@@ -18,6 +18,19 @@ class Transcript extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class);
+        switch ($this->mustawa) {
+            case 'Robi':
+                return $this->belongsTo(MustawaRobi::class, 'course_id');
+            case 'Tamhidy':
+                return $this->belongsTo(MustawaTamhidy::class, 'course_id');
+            case 'Awwal':
+                return $this->belongsTo(MustawaAwwal::class, 'course_id');
+            case 'Tsani':
+                return $this->belongsTo(MustawaTsani::class, 'course_id');
+            case 'Tsalits':
+                return $this->belongsTo(MustawaTsalits::class, 'course_id');
+            default:
+                return null;
+        }
     }
 }

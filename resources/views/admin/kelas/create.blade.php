@@ -38,7 +38,7 @@
                 <select id="multicol-user" class="select2 form-select" name="user_id" data-allow-clear="true" required>
                   <option value="">Pilih</option>
                   @foreach ($users as $user)
-                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    <option value="{{ $user->id }}">{{ $user->name }}&nbsp;|&nbsp; {{ $user->phone }}</option>
                   @endforeach
                 </select>
               </div>
@@ -49,7 +49,7 @@
                 <select id="multicol-program" class="select2 form-select" name="program_id" data-allow-clear="true" required>
                   <option value="">Pilih</option>
                   @foreach ($programs as $program)
-                    <option value="{{ $program->id }}">{{ $program->programmable->title }}, Angkatan: {{ $program->programmable->batch }}</option>
+                    <option value="{{ $program->id }}">{{ $program->programmable->title ?? 'No Program Title' }}, Angkatan: {{ $program->programmable->batch ?? 'No Program Batch' }}</option>
                   @endforeach
                 </select>
               </div>

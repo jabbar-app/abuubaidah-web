@@ -36,7 +36,7 @@
       <div class="card mb-4">
         <div class="card-header d-flex justify-content-between mb-lg-n4">
           <div class="card-title">
-            <h5 class="mb-0">Program: {{ $program->programmable->title }}</h5>
+            <h5 class="mb-0">Program: {{ $program->programmable->title ?? 'No Program Title' }}</h5>
             <small class="text-muted">Angkatan: {{ $batch }} | Gelombang:
               {{ $gelombang }}</small>
           </div>
@@ -138,7 +138,7 @@
                 <option value="">Select Program</option>
                 @foreach ($programs as $program)
                   <option value="{{ $program->id }}">
-                    {{ $program->programmable->title }}
+                    {{ $program->programmable->title ?? 'No Program Title' }}
                   </option>
                 @endforeach
               </select>
