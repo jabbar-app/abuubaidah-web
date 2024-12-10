@@ -29,6 +29,7 @@ class TranscriptController extends Controller
         $nim = Kelas::where('user_id', Auth::user()->id)->where('program_id', 13)->first();
         return view('admin.transcripts.index', [
             'students' => Student::all(),
+            'batches' => Student::pluck('program.programmable.batch')->unique()->sort(),
             'nim' => $nim,
         ]);
     }
