@@ -78,7 +78,7 @@
                 <td>{{ $student->mustawa }}</td>
                 <td>{{ $student->program->programmable->batch ?? '' }}</td>
                 <td class="text-center">{{ $student->nilai_comphre ?? '' }}</td>
-                <td class="d-flex">
+                <td class="d-flex align-items-center h-100">
                   @if (empty($student->user))
                     <form action="{{ route('students.destroy', $student->id) }}" method="POST">
                       @csrf
@@ -106,15 +106,6 @@
               </tr>
             @endforeach
           </tbody>
-          <tfoot>
-            <tr>
-              <th>NIM</th>
-              <th>Nama Mahasiswa</th>
-              <th>Program</th>
-              <th>Angkatan</th>
-              <th>Tindakan</th>
-            </tr>
-          </tfoot>
         </table>
       </div>
     </div>
