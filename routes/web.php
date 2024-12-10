@@ -65,7 +65,7 @@ Route::get('/spam-check-redirect', [SpamCheckController::class, 'redirectToDashb
 
 require __DIR__ . '/auth.php';
 
-Route::middleware('auth', CheckSiteStatus::class)->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/my-program', [DashboardController::class, 'myProgram'])->name('my.program');
     Route::get('/my-transaction', [DashboardController::class, 'myTransaction'])->name('my.transaction');
