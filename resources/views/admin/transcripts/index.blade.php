@@ -71,38 +71,35 @@
           <tbody>
             @foreach ($students as $student)
               <tr>
-                <td>{{ $student->id }}</td>
-                <td>{{ $student->nim }}</td>
-                <td>{{ $student->user->name ?? 'Data tidak ditemukan' }}</td>
-                <td>{{ $student->program->programmable->title ?? '' }}</td>
-                <td>{{ $student->mustawa }}</td>
-                <td>{{ $student->program->programmable->batch ?? '' }}</td>
-                <td class="text-center">{{ $student->nilai_comphre ?? '' }}</td>
-                <td class="d-flex align-items-center h-100">
-                  @if (empty($student->user))
-                    <form action="{{ route('students.destroy', $student->id) }}" method="POST">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                    </form>
-                  @else
-                    <a href="{{ route('students.khs', $student) }}" class="btn btn-sm btn-outline-primary">Lihat</a>
-                    <a href="{{ route('students.edit', $student) }}" class="btn btn-sm btn-outline-info ms-2">Edit</a>
-                    {{-- <div class="btn-group dropstart">
-                      <button class="btn btn-sm btn-primary dropdown-toggle waves-effect waves-light" type="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">Pilih</button>
-                      <ul class="dropdown-menu" style="">
-                        <li>
-                          <a class="dropdown-item" href="{{ route('students.assign', $student->id) }}">Atur Mata
-                            Kuliah</a>
-                        </li>
-                        <li>
-                          <a class="dropdown-item" href="{{ route('students.grades', $student->id) }}">Atur Nilai KHS</a>
-                        </li>
-                      </ul>
-                    </div> --}}
-                  @endif
-                </td>
+                  <td>{{ $student->id }}</td>
+                  <td>{{ $student->nim }}</td>
+                  <td>{{ $student->user->name ?? 'Data tidak ditemukan' }}</td>
+                  <td>{{ $student->program->programmable->title ?? '' }}</td>
+                  <td>{{ $student->mustawa }}</td>
+                  <td class="text-nowrap">{{ $student->program->programmable->batch ?? '' }}</td>
+                  <td class="text-center">{{ $student->nilai_comphre ?? '' }}</td>
+                  <td>
+                    @if (empty($student->user))
+                      <form action="{{ route('students.destroy', $student->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                      </form>
+                    @else
+                      <div class="btn-group dropstart">
+                        <button class="btn btn-sm btn-primary dropdown-toggle waves-effect waves-light" type="button"
+                          data-bs-toggle="dropdown" aria-expanded="false">Pilih</button>
+                        <ul class="dropdown-menu" style="">
+                          <li>
+                            <a class="dropdown-item" href="{{ route('students.khs', $student) }}">Lihat</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="{{ route('students.edit', $student) }}">Edit</a>
+                          </li>
+                        </ul>
+                      </div>
+                    @endif
+                  </td>
               </tr>
             @endforeach
           </tbody>

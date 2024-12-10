@@ -10,49 +10,76 @@
         Aktif</h4>
       <hr class="mb-4">
       <div class="row mb-4 g-4">
-        @foreach ($classActive as $class)
-          <div class="col-12 col-xl-6">
-            <div class="card h-100 bg-label-primary">
-              <div class="card-body">
-                <div class="d-flex">
-                  <div class="bg-primary p-4 rounded-3 d-none d-md-block me-4">
-                    <img class="img-fluid p-1" src="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}"
-                      style="height: 120px;" />
-                  </div>
-                  <div class="w-100">
-                    @if (isset($class->program->programmable) && isset($class->program->programmable->title))
-                      <h4 class="mb-2 pb-1">{{ $class->program->programmable->title ?? 'No Program Title' }}</h4>
-                    @else
-                      <h4 class="mb-2 pb-1">No Program Title Available</h4>
-                    @endif
+        @php
+          $mustawas = ['Tamhidy', 'Robi', 'Awwal', 'Tsani', 'Tsalits'];
+        @endphp
 
-                    @if (isset($class->program->programmable) && isset($class->program->programmable->description))
-                      <p class="text-black">{{ $class->program->programmable->description }}</p>
-                    @else
-                      <p class="text-black">No Program Description Available</p>
-                    @endif
-                    <p>Angkatan: {{ $class->program->programmable->batch }}</p>
-                    @if ($class->program->programmable_type == 'App\Models\Lughoh')
-                      @if (empty($student->nim))
-                        <form action="{{ route('generate-nim') }}" method="POST">
-                          @csrf
-                          <input type="hidden" name="program_id" value="{{ $class->program->id }}">
-                          <input type="hidden" name="kelas_id" value="{{ $class->id }}">
-                          <button type="submit" class="btn btn-lg btn-primary">Kartu Hasil Studi</button>
-                        </form>
-                      @else
-                        <a href="{{ route('khs') }}" class="btn btn-lg btn-primary">Kartu Hasil Studi</a>
-                      @endif
-                    @else
-                      <a href="/kelas/detail/{{ $class->id }}" class="btn btn-lg btn-outline-primary">Lihat
-                        Kelas</a>
-                    @endif
+        @foreach ($classActive as $class)
+          @if ($class->program->programmable_type === 'App\Models\Lughoh')
+            @php
+              // Filter students sesuai kelas
+              $filteredStudents = $students->where('kelas_id', $class->id);
+              //   echo $filteredStudents;
+            @endphp
+
+            @foreach ($filteredStudents as $student)
+              <div class="col-12 col-xl-6">
+                <div class="card h-100 bg-label-primary">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="bg-primary p-4 rounded-3 d-none d-md-block me-4">
+                        <img class="img-fluid p-1" src="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}"
+                          style="height: 120px;" />
+                      </div>
+                      <div class="w-100">
+                        <h4 class="mb-2 pb-1">{{ $class->program->programmable->title ?? 'No Program Title' }}</h4>
+                        <p class="text-black">
+                          {{ $class->program->programmable->description ?? 'No Program Description Available' }}</p>
+                        <p>Angkatan: {{ $class->program->programmable->batch }}</p>
+
+                        @if (empty($student->nim))
+                          <form action="{{ route('generate-nim') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="program_id" value="{{ $class->program->id }}">
+                            <input type="hidden" name="lughoh_id" value="{{ $class->program->programmable->id }}">
+                            <input type="hidden" name="kelas_id" value="{{ $class->id }}">
+                            <button type="submit" class="btn btn-lg btn-primary">Kartu Hasil Studi</button>
+                          </form>
+                        @elseif (empty($student->mustawa))
+                          <button class="btn btn-lg btn-outline-primary">Belum Ada Mustawa</button>
+                        @else
+                          <a href="{{ route('khs', ['mustawa' => strtolower($student->mustawa)]) }}"
+                            class="btn btn-lg btn-primary">Kartu Hasil Studi</a>
+                        @endif
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            @endforeach
+          @else
+            <div class="col-12 col-xl-6">
+              <div class="card h-100 bg-label-primary">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="bg-primary p-4 rounded-3 d-none d-md-block me-4">
+                      <img class="img-fluid p-1" src="{{ asset('assets/img/mahad/abuubaidah_circle.svg') }}"
+                        style="height: 120px;" />
+                    </div>
+                    <div class="w-100">
+                      <h4 class="mb-2 pb-1">{{ $class->program->programmable->title ?? 'No Program Title' }}</h4>
+                      <p class="text-black">
+                        {{ $class->program->programmable->description ?? 'No Program Description Available' }}</p>
+                      <p>Angkatan: {{ $class->program->programmable->batch }}</p>
+                      <a href="/kelas/detail/{{ $class->id }}" class="btn btn-lg btn-outline-primary">Lihat Kelas</a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          @endif
         @endforeach
+
       </div>
     @endif
 

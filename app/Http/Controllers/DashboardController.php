@@ -223,6 +223,8 @@ class DashboardController extends Controller
             $filledFieldsCount = $totalFields - $emptyFieldsCount;
             $profileCompletenessPercentage = round(($filledFieldsCount / $totalFields) * 100);
 
+            $students = Student::where('user_id', $user->id)->get();
+            // dd($students);
 
             return view('student.dashboard', [
                 'user' => $user,
@@ -231,7 +233,7 @@ class DashboardController extends Controller
                 'programs' => $programs,
                 'classActive' => Kelas::where('user_id', $user->id)->where('status', 'Aktif')->with('program')->get(),
                 'student' => Student::where('user_id', auth()->user()->id)->first(),
-                'students' => Student::where('user_id', $user->id)->get(),
+                'students' => $students,
                 'statusKelas' => $statusKelas,
                 'payments' => $payments,
                 'activeKelasCount' => Kelas::where('user_id', $user->id)->count(),

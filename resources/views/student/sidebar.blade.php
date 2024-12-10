@@ -34,20 +34,26 @@
         <div data-i18n="Data Kelas">Data Kelas</div>
       </a>
     </li>
-    @if (!empty($student->mustawa))
+    @php
+      $mustawas = ['Tamhidy', 'Robi', 'Awwal', 'Tsani', 'Tsalits'];
+
+      // Filter students yang memiliki mustawa tidak null
+      $studentsWithMustawa = $students->filter(function ($student) {
+          return !empty($student->mustawa);
+      });
+    @endphp
+
+    @if ($studentsWithMustawa->isNotEmpty())
       <li class="menu-item {{ Request::is('kartu-hasil-studi*') ? 'open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons ti ti-file-dollar"></i>
           <div data-i18n="Kartu Hasil Studi">Kartu Hasil Studi</div>
         </a>
         <ul class="menu-sub">
-          @php
-            $mustawas = ['Tamhidy', 'Robi', 'Awwal', 'Tsani', 'Tsalits'];
-          @endphp
-          @foreach ($students as $student)
-          {{-- {{ dd($student->mustawa) }} --}}
+          @foreach ($studentsWithMustawa as $student)
+            {{-- Sub-menu berdasarkan mustawa --}}
             @foreach ($mustawas as $mustawa)
-              @if ($student->mustawa == $mustawa)
+              @if ($student->mustawa === $mustawa)
                 <li class="menu-item {{ Request::query('mustawa') == strtolower($mustawa) ? 'active' : '' }}">
                   <a href="{{ route('khs', ['mustawa' => strtolower($mustawa)]) }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-notebook"></i>
@@ -56,6 +62,8 @@
                 </li>
               @endif
             @endforeach
+
+            {{-- Sub-menu untuk transkrip jika nilai_comphre > 0 --}}
             @if ($student->nilai_comphre > 0)
               <li class="menu-item {{ Route::is('transcripts*') ? 'active' : '' }}">
                 <a href="{{ route('transcripts', $student) }}" class="menu-link">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Kelas;
+use App\Models\Lughoh;
 use App\Models\Payment;
 use App\Models\Program;
 use App\Models\Student;
@@ -135,31 +136,38 @@ class StudentController extends Controller
     {
         // dd($request->all());
         $user = Auth::user();
-        $programId = $request->program_id; // Set the correct program ID
+        $lughoh = Lughoh::where('id', $request->lughoh_id)->first();
 
-
+        // dd($lughoh);
         // Check if the student record already exists
-        $existingStudent = Student::where('user_id', $user->id)
-            ->where('program_id', $programId)
-            ->first();
+        $students = Student::where('user_id', $user->id)->with('program.programmable')->get();
 
-        if ($existingStudent) {
-            return redirect()->route('khs')->withErrors('A student record already exists for this user and program.');
+        foreach ($students as $student) {
+            if ($student->program && $student->program->programmable) {
+                if ($lughoh->description == $student->program->programmable->description) {
+                    return redirect()->route('khs')->withErrors('Sudah terdaftar di Program dan Angkatan yang sama.');
+                }
+            }
         }
 
-        // If no record exists, create a new one
+        // Mulai dari NIM yang dihasilkan
+        $studentNIM = $lughoh->last_nim;
+
+        // Cek apakah NIM sudah ada
+        while (Student::where('nim', $studentNIM)->where('user_id', '!=', $user->id)->exists()) {
+            $studentNIM++; // Tambah 1 jika sudah ada
+        }
+
+        $lughoh->update(['last_nim' => $studentNIM]);
+
+        // Setelah loop selesai, $studentNIM adalah nilai unik
+        // dd($lughoh->last_nim);
+
         $student = new Student();
-        $check_nim = Kelas::where('user_id', $user->id)->where('program_id', $programId)->first();
-        if (!empty($check_nim->nim_temp) && $check_nim->nim_valid) {
-            $studentNIM = $check_nim->nim_temp;
-        } else {
-            $studentNIM = $student->generateNIM();;
-        }
-
         $student->user_id = $user->id;
-        $student->program_id = $programId;
+        $student->program_id = $request->program_id;
         $student->kelas_id = $request->kelas_id;
-        $student->nim = $studentNIM; // Implement the generateNIM method in Student model
+        $student->nim = $studentNIM;
         $student->save();
 
         return redirect()->route('khs')->with('success', 'NIM generated: ' . $student->nim);
@@ -170,19 +178,15 @@ class StudentController extends Controller
         return view('student.payments.show', compact('payment'));
     }
 
-    public function khs()
+    public function khs(Request $request)
     {
-        $user = Auth::user();
-        $student = Student::where('user_id', $user->id)->first();
+        $mustawa = ucwords($request->query('mustawa'));
 
-        if (empty($student->mustawa)) {
-            // return 'hai';
+        if (empty($mustawa)) {
             return redirect()->route('dashboard')->with('info', 'Mohon menunggu Admin melakukan update Mata Kuliah!');
         }
 
-        // return 'halo';
-
-        return $this->khsByMustawa($student->mustawa);
+        return $this->khsByMustawa($mustawa);
     }
 
     public function khsByMustawa($mustawa)
