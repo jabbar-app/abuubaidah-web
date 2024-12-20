@@ -32,7 +32,7 @@
                 <option value="" selected disabled>- Pilih data -</option>
                 @if ($tahsins->isNotEmpty())
                   @foreach ($tahsins as $tahsin)
-                    <option value="App\Models\Tahsin">{{ $tahsin->title }} - Angkatan: {{ $tahsin->batch }}</option>
+                    <option value="{{ App\Models\Tahsin }}">{{ $tahsin->title }} - Angkatan: {{ $tahsin->batch }}</option>
                   @endforeach
                 @endif
                 @if ($tahfizs->isNotEmpty())
@@ -110,10 +110,14 @@
       var programmableIdSelect = document.getElementById('programmable_id');
 
       programTypeSelect.addEventListener('change', function() {
+        // Menghapus atribut disabled
         programmableIdSelect.removeAttribute('disabled');
-        programmableIdSelect.innerHTML = '';
+        programmableIdSelect.innerHTML = ''; // Menghapus opsi yang ada
+
         var selectedProgramType = this.value;
         var newOptions = [];
+
+        // Menentukan opsi baru berdasarkan tipe program yang dipilih
         switch (selectedProgramType) {
           case 'App\\Models\\Tahsin':
             newOptions = tahsins;
@@ -138,12 +142,20 @@
             break;
         }
 
+        // Menambahkan opsi baru ke dropdown
         newOptions.forEach(function(option) {
           var optionElement = document.createElement('option');
           optionElement.value = option.id;
-          optionElement.textContent = option.title + ' Angkatan ' + option.batch;
+          optionElement.textContent = option.title + ' - Angkatan ' + option.batch;
           programmableIdSelect.appendChild(optionElement);
         });
+
+        // Jika tidak ada opsi baru, tambahkan opsi default
+        if (newOptions.length === 0) {
+          var defaultOption = document.createElement('option');
+          defaultOption.textContent = 'Tidak ada program tersedia';
+          programmableIdSelect.appendChild(defaultOption);
+        }
       });
     });
   </script>
