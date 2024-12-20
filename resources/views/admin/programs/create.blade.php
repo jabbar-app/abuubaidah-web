@@ -32,7 +32,7 @@
                 <option value="" selected disabled>- Pilih data -</option>
                 @if ($tahsins->isNotEmpty())
                   @foreach ($tahsins as $tahsin)
-                    <option value="{{ App\Models\Tahsin }}">{{ $tahsin->title }} - Angkatan: {{ $tahsin->batch }}</option>
+                    <option value="App\Models\Tahsin">{{ $tahsin->title }} - Angkatan: {{ $tahsin->batch }}</option>
                   @endforeach
                 @endif
                 @if ($tahfizs->isNotEmpty())
