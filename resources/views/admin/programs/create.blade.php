@@ -28,42 +28,28 @@
             @csrf
             <div class="mb-3">
               <label class="form-label" for="programmable_type">Program</label>
-              <select class="form-select select2" name="programmable_type" id="programmable_type" required>
+              <select class="form-select" name="programmable_type" id="programmable_type" required>
                 <option value="" selected disabled>- Pilih data -</option>
-                @if ($tahsins->isNotEmpty())
-                  @foreach ($tahsins as $tahsin)
-                    <option value="App\Models\Tahsin">{{ $tahsin->title }} - Angkatan: {{ $tahsin->batch }}</option>
-                  @endforeach
+                @if($tahsins->isNotEmpty())
+                  <option value="App\Models\Tahsin">Tahsin Tilawah Al-Qur'an</option>
                 @endif
-                @if ($tahfizs->isNotEmpty())
-                  @foreach ($tahfizs as $tahfiz)
-                    <option value="App\Models\Tahfiz">{{ $tahfiz->title }} - Angkatan: {{ $tahfiz->batch }}</option>
-                  @endforeach
+                @if($tahfizs->isNotEmpty())
+                  <option value="App\Models\Tahfiz">{{ $tahfizs->first()->title }}</option>
                 @endif
-                @if ($bilhaqs->isNotEmpty())
-                  @foreach ($bilhaqs as $bilhaq)
-                    <option value="App\Models\Bilhaq">{{ $bilhaq->title }} - Angkatan: {{ $bilhaq->batch }}</option>
-                  @endforeach
+                @if($bilhaqs->isNotEmpty())
+                  <option value="App\Models\Bilhaq">{{ $bilhaqs->first()->title }}</option>
                 @endif
-                @if ($kiba->isNotEmpty())
-                  @foreach ($kiba as $data)
-                    <option value="App\Models\Kiba">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
-                  @endforeach
+                @if($kiba->isNotEmpty())
+                  <option value="App\Models\Kiba">{{ $kiba->first()->title }}</option>
                 @endif
-                @if ($lughoh->isNotEmpty())
-                  @foreach ($lughoh as $data)
-                    <option value="App\Models\Lughoh">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
-                  @endforeach
+                @if($lughoh->isNotEmpty())
+                  <option value="App\Models\Lughoh">{{ $lughoh->first()->title }}</option>
                 @endif
-                @if ($fai->isNotEmpty())
-                  @foreach ($fai as $data)
-                    <option value="App\Models\Fai">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
-                  @endforeach
+                @if($fai->isNotEmpty())
+                  <option value="App\Models\Fai">{{ $fai->first()->title }}</option>
                 @endif
-                @if ($stebis->isNotEmpty())
-                  @foreach ($stebis as $data)
-                    <option value="App\Models\Stebis">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
-                  @endforeach
+                @if($stebis->isNotEmpty())
+                  <option value="App\Models\Stebis">{{ $stebis->first()->title }}</option>
                 @endif
               </select>
             </div>
@@ -110,14 +96,10 @@
       var programmableIdSelect = document.getElementById('programmable_id');
 
       programTypeSelect.addEventListener('change', function() {
-        // Menghapus atribut disabled
         programmableIdSelect.removeAttribute('disabled');
-        programmableIdSelect.innerHTML = ''; // Menghapus opsi yang ada
-
+        programmableIdSelect.innerHTML = '';
         var selectedProgramType = this.value;
         var newOptions = [];
-
-        // Menentukan opsi baru berdasarkan tipe program yang dipilih
         switch (selectedProgramType) {
           case 'App\\Models\\Tahsin':
             newOptions = tahsins;
@@ -142,20 +124,12 @@
             break;
         }
 
-        // Menambahkan opsi baru ke dropdown
         newOptions.forEach(function(option) {
           var optionElement = document.createElement('option');
           optionElement.value = option.id;
-          optionElement.textContent = option.title + ' - Angkatan ' + option.batch;
+          optionElement.textContent = option.title + ' Angkatan ' + option.batch;
           programmableIdSelect.appendChild(optionElement);
         });
-
-        // Jika tidak ada opsi baru, tambahkan opsi default
-        if (newOptions.length === 0) {
-          var defaultOption = document.createElement('option');
-          defaultOption.textContent = 'Tidak ada program tersedia';
-          programmableIdSelect.appendChild(defaultOption);
-        }
       });
     });
   </script>
