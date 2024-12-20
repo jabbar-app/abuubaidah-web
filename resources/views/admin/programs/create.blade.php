@@ -28,28 +28,42 @@
             @csrf
             <div class="mb-3">
               <label class="form-label" for="programmable_type">Program</label>
-              <select class="form-select" name="programmable_type" id="programmable_type" required>
+              <select class="form-select select2" name="programmable_type" id="programmable_type" required>
                 <option value="" selected disabled>- Pilih data -</option>
-                @if($tahsins->isNotEmpty())
-                  <option value="App\Models\Tahsin">{{ $tahsins->first()->title }}</option>
+                @if ($tahsins->isNotEmpty())
+                  @foreach ($tahsins as $tahsin)
+                    <option value="App\Models\Tahsin">{{ $tahsin->title }} - Angkatan: {{ $tahsin->batch }}</option>
+                  @endforeach
                 @endif
-                @if($tahfizs->isNotEmpty())
-                  <option value="App\Models\Tahfiz">{{ $tahfizs->first()->title }}</option>
+                @if ($tahfizs->isNotEmpty())
+                  @foreach ($tahfizs as $tahfiz)
+                    <option value="App\Models\Tahfiz">{{ $tahfiz->title }} - Angkatan: {{ $tahfiz->batch }}</option>
+                  @endforeach
                 @endif
-                @if($bilhaqs->isNotEmpty())
-                  <option value="App\Models\Bilhaq">{{ $bilhaqs->first()->title }}</option>
+                @if ($bilhaqs->isNotEmpty())
+                  @foreach ($bilhaqs as $bilhaq)
+                    <option value="App\Models\Bilhaq">{{ $bilhaq->title }} - Angkatan: {{ $bilhaq->batch }}</option>
+                  @endforeach
                 @endif
-                @if($kiba->isNotEmpty())
-                  <option value="App\Models\Kiba">{{ $kiba->first()->title }}</option>
+                @if ($kiba->isNotEmpty())
+                  @foreach ($kiba as $data)
+                    <option value="App\Models\Kiba">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
+                  @endforeach
                 @endif
-                @if($lughoh->isNotEmpty())
-                  <option value="App\Models\Lughoh">{{ $lughoh->first()->title }}</option>
+                @if ($lughoh->isNotEmpty())
+                  @foreach ($lughoh as $data)
+                    <option value="App\Models\Lughoh">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
+                  @endforeach
                 @endif
-                @if($fai->isNotEmpty())
-                  <option value="App\Models\Fai">{{ $fai->first()->title }}</option>
+                @if ($fai->isNotEmpty())
+                  @foreach ($fai as $data)
+                    <option value="App\Models\Fai">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
+                  @endforeach
                 @endif
-                @if($stebis->isNotEmpty())
-                  <option value="App\Models\Stebis">{{ $stebis->first()->title }}</option>
+                @if ($stebis->isNotEmpty())
+                  @foreach ($stebis as $data)
+                    <option value="App\Models\Stebis">{{ $data->title }} - Angkatan: {{ $data->batch }}</option>
+                  @endforeach
                 @endif
               </select>
             </div>
