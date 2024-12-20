@@ -34,22 +34,22 @@
                   <option value="App\Models\Tahsin">Tahsin Tilawah Al-Qur'an</option>
                 @endif
                 @if($tahfizs->isNotEmpty())
-                  <option value="App\Models\Tahfiz">{{ $tahfizs->first()->title }}</option>
+                  <option value="App\Models\Tahfiz">Beasiswa Tahfiz Al-Qur'an</option>
                 @endif
                 @if($bilhaqs->isNotEmpty())
-                  <option value="App\Models\Bilhaq">{{ $bilhaqs->first()->title }}</option>
+                  <option value="App\Models\Bilhaq">Bimbingan Menghafal Al-Qur'an</option>
                 @endif
                 @if($kiba->isNotEmpty())
-                  <option value="App\Models\Kiba">{{ $kiba->first()->title }}</option>
+                  <option value="App\Models\Kiba">Kursus Intensif Bahasa Arab</option>
                 @endif
                 @if($lughoh->isNotEmpty())
-                  <option value="App\Models\Lughoh">{{ $lughoh->first()->title }}</option>
+                  <option value="App\Models\Lughoh">Program Bahasa Arab & Studi Islam</option>
                 @endif
                 @if($fai->isNotEmpty())
-                  <option value="App\Models\Fai">{{ $fai->first()->title }}</option>
+                  <option value="App\Models\Fai">Integrasi S1 Ma'had - FAI UMSU</option>
                 @endif
                 @if($stebis->isNotEmpty())
-                  <option value="App\Models\Stebis">{{ $stebis->first()->title }}</option>
+                  <option value="App\Models\Stebis">Integrasi S1 Ekonomi Syariah STEBIS AL ULUM Terpadu</option>
                 @endif
               </select>
             </div>
