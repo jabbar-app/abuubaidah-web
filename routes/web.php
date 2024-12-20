@@ -32,6 +32,7 @@ use App\Http\Controllers\SpamCheckController;
 use App\Http\Controllers\TranscriptController;
 use App\Http\Controllers\WhatsappController;
 use App\Http\Middleware\CheckSiteStatus;
+use App\Http\Middleware\ShareData;
 use App\Models\Kelas;
 use App\Models\Payment;
 use App\Models\Program;
@@ -39,7 +40,7 @@ use App\Models\Student;
 use App\Models\Transcript;
 use App\Models\User;
 
-Route::middleware(CheckSiteStatus::class)->group(function () {
+Route::middleware(CheckSiteStatus::class, ShareData::class)->group(function () {
     Route::get('/welcome', function () {
 
         $invoice = Payment::where('external_id', 'INV_1717388635')->first();
